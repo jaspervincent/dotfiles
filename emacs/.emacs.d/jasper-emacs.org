@@ -1,0 +1,1475 @@
+#+title: GNU Emacs 配置
+#+author: Jasper Hsu
+#+email: xcwhome@163.com
+#+options: ':t toc:nil num:t author:t email:t H:5
+#+startup: content indent
+#+macro: latest-export-date (eval (format-time-string "%F %T %z"))
+#+macro: word-count (eval (count-words (point-min) (point-max)))
+
+*最后修改时间 {{{latest-export-date}}}  {{{word-count}}}字.*
+
+
+在Org文件里，写好了代码块，保存文件的时候，Org mode是不会帮你自动写入文件的（未来我们可以通过配置实现），现在，我们需要通过  =C-c C-v C-t= or =M-x org-babel-tangle= 命令来触发 tangle 这个动作。
+
+#+begin_src emacs-lisp :tangle no :results none
+(org-babel-tangle)
+#+end_src
+
+xx.el 已经写好了，但并没有生效，需要重启一下Emacs，让Emacs重新加载这个配置文件，才会生效。
+
+*elisp代码执行* :
+- =C-x C-e= ： ~eval-last-sexp~ 这是最常用的，每次都要移动光标到要运行的代码后面。
+- =M-x eval-region= ：执行选中区域代码
+- =M-x eval-buffer= ：执行当前缓冲区代码
+- =M-x load-file <ENTER> FILE_NAME= ：执行指定文件代码
+- =C-j= : 执行最近距离代码，并打印输出以当前位置
+- =C-M-x= : runs the command eval-defun 执行整个代码块。写函数经常修改
+  然后运行，如果每次跑到最外面去 =C-x C-e= ，就很麻烦。光标只要在运行的代码块里就行了。
+- =M-:= : runs the command eval-expression
+- =M-x ielm= 类似于ipython交互式运行
+
+文本编辑：
+- =C-x C-s= 文件保存
+
+
++ Website: <https://xuchangwei.com/lisp/jasper-emacs.html>
+
+#+toc: headlines 8 insert TOC here, with eight headline levels
+
+* init.el(学习)
+:PROPERTIES:
+:HEADER-ARGS: :tangle no
+:END:
+
+开启学习
+#+begin_src sh :tangle no :results none
+  :PROPERTIES:
+  :HEADER-ARGS: :tangle init.el
+  :END:
+#+end_src
+
+** 改键
+
+- M(eta)：统一对应键盘按键(PC/Mac)：left windows/option
+- s(uper)：统一对应键盘按键(PC/Mac)：left Alt/command
+- C(trl)：统一对应键盘按键(PC/Mac): Caps Lock
+
+Mac 只需要改大写键，Windows 对齐mac的布局
+- MacOS :: 在 MacOS 中, 大家可以在 =system= -> =keyboard= ->  =function
+  al keys= 中调整所有功能键的键位.
+
+1.Windows SharpKeys 改键
+
+来把 Left Window 键改成 Left Alt 键，Left Alt 键改成 A
+pp 键，大小写键改成 Ctrl 键。
+
+官方下载：<https://github.com/randyrants/sharpkeys>，安装后 win 菜单搜
+索 sharpkey，修改完成后写入注册表重新开机生效。
+
+| 原键                 | 目标键               | 说明               |
+| Caps Lock(00_3A)    | Left Ctrl(01_1D)    | 大小写键改成Ctrl键  |
+| Left Alt(00_38)     | Application(E0_5D)  | 左Alt键改成App键    |
+| Left Windows(E0_5B) | Left Alt(00_38)     | 左视窗键改成左Alt键 |
+| Right Alt(E0_38)    | Left Windows(E0_5B) | 右Alt键改成左视窗键 |
+
+
+2.配置
+
+Emacs 默认 Alt 键就是 Meta，而 App 键我们改成 super 键，可以通过下面 的 Elisp 代码来完成。
+
+window 配置
+#+begin_src emacs-lisp
+  (setq w32-apps-modifier 'super)       ; 通过SharpKeys改成了 Application
+#+end_src
+
+mac 配置
+#+begin_src emacs-lisp :tangle no :results none
+;;  Opt -> meta : M, Cmd -> super : s
+(setq mac-option-modifier 'meta
+      mac-command-modifier 'super)
+#+end_src
+
+3.定义常用操作
+
+现在我们可以把 Mac 下面的复制、粘贴、剪切、全选等命令移植到 Emacs 中
+来了，并且这一套按键是跨平台的。
+
+#+begin_src emacs-lisp
+  (global-set-key (kbd "s-a") 'mark-whole-buffer) ;;对应Windows上面的Ctrl-a 全选
+  (global-set-key (kbd "s-c") 'kill-ring-save) ;;对应Windows上面的Ctrl-c 复制
+  (global-set-key (kbd "s-s") 'save-buffer) ;; 对应Windows上面的Ctrl-s 保存
+  (global-set-key (kbd "s-v") 'yank) ;对应Windows上面的Ctrl-v 粘贴
+  (global-set-key (kbd "s-z") 'undo) ;对应Windows上面的Ctrol-z 撤销
+#+end_src
+
+** 常用配置
+
+1.光标移动
+
+光标的移动是编辑器中最常用的操作所以必须熟知。
+
+- C-f 为前移一个字符， f 代表 forward。
+- C-b 为后移一个字符， b 代表 backward。
+- C-p 为上移至前一行， p 代表 previous。
+- C-n 为上移至下一行， n 代表 next。
+- C-a 为移至行首， a 代表 ahead。
+- C-e 为移至行尾， e 代表 end。
+
+同样适用于 Shell 终端里面。
+
+2.内置功能
+
+Emacs 功能强大，但是部分功能默认情况下并未开启。
+
+如编辑器内显示行号可使用 M-x linum-mode 来开启。
+
+配置文件
+#+begin_src emacs-lisp
+  (global-display-line-numbers-mode 1) ;显示行号 29版本。29之前用(global-linum-mode 1)
+  (setq inhibit-startup-screen t) ; 尝试关掉启动界面
+#+end_src
+
+3.帮助
+
+Emacs 是一个富文档编辑器（Self document, extensible editor）而下面的三种方法在学 习 Emacs 的过程中也非常重要。他们分别是，
+
+C-h k 寻找快捷键的帮助信息
+C-h v 寻找变量的帮助信息
+C-h f 寻找函数的帮助信息
+
+4.windows 右键菜单添加 Open With Emacs 功能
+
+创建注册表文件 emacs-context.reg
+
+#+begin_src sh :tangle no :results none
+Windows Registry Editor Version 5.00
+
+[HKEY_CLASSES_ROOT\*\shell]
+[HKEY_CLASSES_ROOT\*\shell\openwemacs]
+@="&Edit with Emacs"
+[HKEY_CLASSES_ROOT\*\shell\openwemacs\command]
+@="C:\\emax64\\bin\\emacsclientw.exe -n \"%1\""
+[HKEY_CLASSES_ROOT\Directory\shell\openwemacs]
+@="Edit &with Emacs"
+[HKEY_CLASSES_ROOT\Directory\shell\openwemacs\command]
+@="C:\\emax64\\bin\\emacsclientw.exe -n \"%1\""
+#+end_src
+
+
+使用这个 OpenWithEmacs 的功能，Emacs 需要开启 Server Mode，代码如下：
+#+begin_src emacs-lisp
+(server-mode 1)
+#+end_src
+
+双击注册文件。这时右键打开文件就可以选择emacs打开了。
+
+5.补全
+
+#+begin_src emacs-lisp
+  ;; 内置补全功能n
+  ;;(setq tab-always-indent 'complete)           ;; 使用 TAB 来列出当前补全选项
+  ;;(icomplete-mode t)                         ;; 开启的，在按 M-x 时就有可选的选项了。使用 vertico-mode，关闭此项
+#+end_src
+
+6.基础Elisp
+
+Emacs Lisp 是世界上第二古老高级编程语言 Lisp 专为 Emacs 打造的方言。官方提供了 Emacs Lisp 的[[https://www.gnu.org/software/emacs/manual/html_node/eintr/index.html][入门]]介绍和[[https://www.gnu.org/software/emacs/manual/html_node/elisp/index.html][参考手册]]。
+
+#+begin_src emacs-lisp :tangle no :results none
+  ;; 2 + 2
+  (+ 2 2)
+
+  ;; 2 + 3 * 4
+  (+ 2 (* 3 4))
+
+  ;; 定义变量
+  (setq name "username")
+  (message name) ; -> "username"
+
+  ;; 定义函数
+  (defun func ()
+    (message "Hello, %s" name))
+
+  ;; 执行函数
+  (func) ; C-x C-e -> Hello, username
+
+  ;; 设置快捷键
+  (global-set-key (kbd "<f1>") 'func)
+
+  ;; 使函数可直接被调用可添加 (interactive)
+  (defun func ()
+    (interactive)
+    (message "Hello, %s" name))
+#+end_src
+
+定义f4快速打开配置文件
+#+begin_src emacs-lisp
+  ;; 快速打开配置文件
+  (defun open-init-file()
+    (interactive)
+    (find-file "~/.emacs.d/init.el"))
+
+  ;; 这一行代码，将函数 open-init-file 绑定到 <f4> 键上
+  (global-set-key (kbd "<f4>") 'open-init-file)
+#+end_src
+
+7.外观配置
+
+#+begin_src emacs-lisp
+  ;;(toggle-frame-maximized)                     ; 全屏编辑器
+  (tool-bar-mode -1)                           ;; 关闭工具栏，tool-bar-mode 即为一个 Minor Mode
+  (scroll-bar-mode -1)                         ;; 关闭文件滑动控件
+  ;; (menu-bar-mode -1)                        ;; 关闭菜单栏 (不关闭，使用插件时会用到)
+
+  (setq-default cursor-type 'bar)              ; 更改光标的样式，默认比较粗. 更多C-h v 查询帮助
+  ;;(setq cursor-type 'bar)                    ;; 更改光标的样式。setq当前buffer生效，不能全局生效
+
+  ;;(set-face-attribute 'default nil :height 150) ; 修改字号，大小为16pt
+  ;;让鼠标滚动更好用。默认滚动很快
+  (setq mouse-wheel-scroll-amount '(3 ((shift) . 1) ((control) . nil)))
+  (setq mouse-wheel-progressive-speed nil)
+
+  (global-hl-line-mode t)                      ;; 高亮当前行
+  (setq make-backup-files nil)                 ; 关闭文件自动备份。如果是有git来管理文件，备份文件没有太大意义。~ 为后缀的文件为自动生成的备份文件
+  (setq auto-save-default nil)   ; 关闭自动保存文件，#为后缀的文件
+  (fset 'yes-or-no-p 'y-or-n-p)                ;; 某个命令时需要输入 (yes or no) 
+#+end_src
+
+** 关于 lexical binding
+
+#+begin_src emacs-lisp :tangle no :results none
+;; 默认没有激活。在文件最开头添加文件作用域的变量设置，设置变量的绑定方式。设置在当前文件作用域内是激活的。
+;; -*- lexical-binding: t -*-
+(let ((x 1))    ; x is lexically bound.
+  (+ x 3))
+     ⇒ 4       ; 1 + 3 的值为 4
+
+(defun getx ()
+  x)            ; x is used free in this function.
+
+(let ((x 1))    ; x is lexically bound. getx 是用不到 let 定义的 x 的
+  (getx))
+;;error→ Symbol's value as variable is void: x
+#+end_src
+
+关于[[https://www.gnu.org/software/emacs/manual/html_node/elisp/Lexical-Binding.html][lexical binding]]更多的细节，可以自行阅读 Emacs 的官方文档。程序代码使用 lexical binding 会更利于并发，编辑器会执行一些优化让代码执行的更快。很多插件要求安装 lexical binding。
+
+范例：init.el
+#+begin_src emacs-lisp :tangle no :results none
+;;; init.el --- Load the full configuration -*- lexical-binding: t -*-
+;;; Commentary:
+
+;; This file bootstraps the configuration, which is divided into
+;; a number of other files.
+
+;;; Code:
+
+(+ 1 2)
+
+;;; init.el ends here
+#+end_src
+
+三个分号开头的注释表示“节”，两个分号开头的注释表示“段落”。（一个分号开头的是一行代码后面的行内注释）。
+
+** 插件源
+
+#+begin_src emacs-lisp
+  (require 'package)
+  (setq package-check-signature nil 
+        load-prefer-newer t) ;; 个别时候会出现签名校验失败
+  (setq package-archives
+            '(("melpa"  . "https://melpa.org/packages/")
+              ("gnu"    . "https://elpa.gnu.org/packages/")
+              ("nongnu" . "https://elpa.nongnu.org/nongnu/")))
+
+  (unless (bound-and-true-p package--initialized)
+    (package-initialize)) ;; 刷新软件源索引
+
+  ;;防止反复调用 package-refresh-contents 会影响加载速度
+  (when (not package-archive-contents)
+    (package-refresh-contents))
+
+  ;;modeline上显示我的所有的按键和执行的命令
+  (package-install 'keycast) ;包会安装在elpa目录中
+  (keycast-mode-line-mode t)
+#+end_src
+
+** 安装补全插件
+
+*Company插件*
+
+他是一个用于代码补全的插件
+
+#+begin_src emacs-lisp
+  ;; 开启全局 Company 补全
+  (package-install 'company)
+  (global-company-mode 1)
+
+  ;; company mode 默认选择上一条和下一条候选项命令 M-n M-p
+  (define-key company-active-map (kbd "C-n") 'company-select-next)
+  (define-key company-active-map (kbd "C-p") 'company-select-previous)
+#+end_src
+
+*增强 minibuffer 补全：vertico 和 Orderless*
+
+#+begin_src emacs-lisp
+  (package-install 'vertico)
+  (vertico-mode t)
+
+  (package-install 'orderless)
+  (setq completion-styles '(orderless))
+#+end_src
+
+有了 vertico-mode，把之前的 icomplete-mode 关掉。 补全变为垂直，垂直对于我们是更友好的，所有 minibuffer 的行为的可以补全。如使用 =M-x= 补全变为垂直,  =C-x C-f= 增强显示目录下文件、 =C-x b= 变为垂直。
+
+orderless 支持 =M-x= 模糊搜索，可以无序的。 如 edebug-defun 函数搜索， =M-x fun debug=
+
+
+*配置 Marginalia 增强 minubuffer 的 annotation*
+
+#+begin_src emacs
+(package-install 'marginalia)
+(marginalia-mode t)
+#+end_src
+
+=M-x= 可以看到它会把命令的注释直接显示在minibuffer中
+
+=C-h v= 查看一个变量的内容，可以发现不用再按回车看到里面的值。直接显示在minibuffer中
+
+=C-h f= 键位绑定都已经在minibuffer中显示出来了
+
+=C-x C-f= 显示文件大小权限等， =C-x b= 显 buffer 大小状态， =C-h f= 显示函数快捷键等
+
+*minibuffer action 和自适应的 context menu：Embark*
+
+#+begin_src emacs-lisp
+(package-install 'embark)
+(global-set-key (kbd "C-;") 'embark-act)
+(setq prefix-help-command 'embark-prefix-help-command)
+#+end_src
+
+使用
+
+光标在函数位置，按 =C-;= 
+- RET 查看光标处函数定义文件位置，并打开
+- c 修改变量的值
+  - 如 C-h v 变量名，按 C-; c 修改变量的值
+
+优点：不需要记快捷键了
+- 以前查看函数的绑定键
+  - ~C-h b~ 查看函数快捷键绑定：
+  - 以前按 =C-x C-h= 时，会告诉你 =C-x= 绑定了哪些快捷键
+- 设置了 =(setq prefix-help-command #'embark-prefix-help-command)= 后
+  - 按 =C-x C-h= 模糊输入函数名可看到绑定的快捷键，按回车可直接执行命令，就不需要再记快捷键了
+
+*增强文件内搜索和跳转函数定义：Consult*
+
+#+begin_src emacs-lisp
+  (package-install 'consult)
+  ;;replace swiper 可以替代老的 ivy mode 的 swiper 功能
+  (global-set-key (kbd "C-s") 'consult-line)
+  (global-set-key (kbd "M-s i") 'consult-imenu)  ;跳转函数定义
+#+end_src
+
+使用 =C-s= 搜索的内容就会在minibuffer中垂直显示，使用C-p 或 C-n来上下选择
+
+使用 =M-s i= 跳转函数定义或者org-mode标题
+
+这些组合可以秒杀ivy helm这种一统的插件。
+
+*括号*
+
+#+begin_src emacs-lisp
+  (electric-pair-mode t)                       ; 括号补全
+  (add-hook 'prog-mode-hook #'show-paren-mode) ;; 编程模式下，光标在括号上时高亮另一个括号
+#+end_src
+
+** 手工安装插件
+
+以 [[https://github.com/manateelazycat/awesome-tab][awesome-tab]]  为例
+
+创建目录，使用内容Dir包。 =C-x d= 回车， =+= 创建目录输入目录名site-lisp 回车， =q= 退出
+
+使用 =M-x eshell= 克隆代码
+#+begin_src sh :tangle no :results none
+cd site-lisp
+git clone --depth=1 https://github.com/manateelazycat/awesome-tab.git
+#+end_src
+
+配置文件
+#+begin_src emacs-lisp :tangle no :results none
+(add-to-list 'load-path (expand-file-name "~/.emacs.d/site-lisp/awesome-tab/"))
+(require 'awesome-tab)
+(awesome-tab-mode t)
+
+(defun awesome-tab-buffer-groups ()
+"`awesome-tab-buffer-groups' control buffers' group rules.
+Group awesome-tab with mode if buffer is derived from `eshell-mode' `emacs-lisp-mode' `dired-mode' `org-mode' `magit-mode'.
+All buffer name start with * will group to \"Emacs\".
+Other buffer group by `awesome-tab-get-group-name' with project name."
+(list
+(cond
+    ((or (string-equal "*" (substring (buffer-name) 0 1))
+	(memq major-mode '(magit-process-mode
+			    magit-status-mode
+			    magit-diff-mode
+			    magit-log-mode
+			    magit-file-mode
+			    magit-blob-mode
+			    magit-blame-mode)))
+    "Emacs")
+    ((derived-mode-p 'eshell-mode)
+    "EShell")
+    ((derived-mode-p 'dired-mode)
+    "Dired")
+    ((memq major-mode '(org-mode org-agenda-mode diary-mode))
+    "OrgMode")
+    ((derived-mode-p 'eaf-mode)
+    "EAF")
+    (t
+    (awesome-tab-get-group-name (current-buffer))))))
+#+end_src
+
+** 其他小配置
+
+*最近打开文件*
+
+最近打开过文件的选项让我们更快捷的在图形界面的菜单中打开最近 编辑过的文件。
+
+#+begin_src emacs-lisp
+(require 'recentf)
+(recentf-mode 1)
+(setq recentf-max-menu-item 10)
+
+;; 这个快捷键绑定可以用之后的插件 counsel 代替
+;; (global-set-key (kbd "C-x C-r") 'recentf-open-files)
+#+end_src
+
+使用下面的配置文件将删除功能配置成与其他图形界面的编辑器相同，即当你选中一段文字 之后输入一个字符会替换掉你选中部分的文字。
+
+#+begin_src emacs-lisp
+  (delete-selection-mode t)                    ;; 选中文本后输入文本会替换文本（更符合我们习惯了的其它编辑器的逻辑。默认选中放后面
+#+end_src
+
+下面的这些函数可以让你找到不同函数，变量以及快捷键所定义的文件位置。 因为非常常用 所以我们建议将其设置为与查找文档类似的快捷键（如下所示），
+
+可以把它们绑定到配置中
+
+#+begin_src emacs-lisp
+  ;; 查询函数、变量、key 定义的文件位置
+  (global-set-key (kbd "C-h C-f") 'find-function)
+  (global-set-key (kbd "C-h C-v") 'find-variable)
+  (global-set-key (kbd "C-h C-k") 'find-function-on-key)
+#+end_src
+
+** Emacs作为超级前端
+
+可以非常快的找到文件或目录
+
+*** 使用 Emacs 来打开文件管理器
+
+windows 用户
+
+#+begin_src emacs-lisp :tangle no :results none
+  (shell-command-to-string "explorer.exe C:\\")
+
+  ;;(shell-command-to-string "explorer.exe ~/.emacs.d") ; windows 不识别~
+
+  (shell-command-to-string
+   (encode-coding-string
+    (replace-regexp-in-string "/" "\\\\\\\\"
+                  (format "explorer.exe %s" (expand-file-name "~/.emacs.d")))
+    'gbk))
+#+end_src
+
+#+begin_src emacs-lisp
+  (defun consult-directory-externally (file)
+    "Open FILE externally using the default application of the system."
+    (interactive "fOpen externally: ")
+    (if (and (eq system-type 'windows-nt)
+             (fboundp 'w32-shell-execute))
+        (shell-command-to-string (encode-coding-string (replace-regexp-in-string "/" "\\\\\\\\"
+              (format "explorer.exe %s" (file-name-directory (expand-file-name file)))) 'gbk))
+      (call-process (pcase system-type
+                      ('darwin "open")
+                      ('cygwin "cygstart")
+                      (_ "xdg-open"))
+                    nil 0 nil
+                    (file-name-directory (expand-file-name file)))))
+
+  (require 'embark)
+  (define-key embark-file-map (kbd "E") #'consult-directory-externally)
+
+
+  ;;打开当前文件的目录
+  (defun my-open-current-directory ()
+    (interactive)
+    (consult-directory-externally default-directory))
+#+end_src
+
+快速打开文件所在目录：
+- =M-x consult-directory-externally= 输入文件路径，如 =~/.emacs.d/auto-save-list/.saves-2000-JASPER~=
+- =C-x C-f= 选择文件时，可以用embark来打开， =C;= 选择E，用文件管理器打开对应目录的
+
+*** 增强 embark 和 consult，批量搜索替换大杀器
+
+性能： grep < ack < ag < ripgrep(rg)
+
+使用ripgrep来进行搜索, =M-x consult-ripqgrep= 搜索hello 会出现报错找不到rg命令。
+
+#+begin_example
+Error running timer: (file-missing "Searching for program" "No such file or directory" "rg")
+#+end_example
+
+下载ripgrep: <https://github.com/BurntSushi/ripgrep> msys2 <https://packages.msys2.org/base/mingw-w64-ripgrep>
+
+安装方式：
+- PC msys2 ~pacman -S mingw-w64-x86_64-ripgrep~
+- PC github release 下载windows包，解压并加入到PARH变量中
+- Arch Linux  ~sudo pacman -S ripgrep~
+- macOS ~brew install ripgrep~
+
+再使用ripgrep来进行搜索, =M-x consult-ripgrep= 搜索hello ，所有当前目录下包含hello字符串的信息都在minibuffer中展示出来了。 使用 =C-n= 或 =C-p= 来预览文件或进入文件里。
+
+*下面介绍批量修改插件*
+#+begin_src emacs-lisp
+  ;; 批量修改
+  (package-install 'embark-consult)
+  (package-install 'wgrep)
+  (setq wgrep-auto-save-buffer t)
+
+  (eval-after-load 'consult
+    '(eval-after-load 'embark
+       '(progn
+          (require 'embark-consult)
+          (add-hook 'embark-collect-mode-hook #'consult-preview-at-point-mode)))) ;hook 第一个参数执行前，先执行第2个参数的功能
+
+  (define-key minibuffer-local-map (kbd "C-c C-e") 'embark-export-write)
+
+  (defun embark-export-write ()
+    "Export the current vertico results to a writable buffer if possible.
+  Supports exporting consult-grep to wgrep, file to wdeired, and consult-location to occur-edit"
+    (interactive)
+    (require 'embark)
+    (require 'wgrep)
+    (pcase-let ((`(,type . ,candidates)
+                 (run-hook-with-args-until-success 'embark-candidate-collectors)))
+      (pcase type
+        ('consult-grep (let ((embark-after-export-hook #'wgrep-change-to-wgrep-mode))
+                         (embark-export)))
+        ('file (let ((embark-after-export-hook #'wdired-change-to-wdired-mode))
+                 (embark-export)))
+        ('consult-location (let ((embark-after-export-hook #'occur-edit-mode))
+                             (embark-export)))
+        (x (user-error "embark category %S doesn't support writable export" x)))))
+#+end_src
+
+批量替换操作
+- ~M-x consult-ripgrep~  默认会在以 git 为根目录搜索。如 =#hello= ，搜索包含hello字符的文件。 ~C-n/C-p~ 下上搜索同时可以预览。
+- ~C-c C-e~ 打开写
+- ~M-x query-replace-regexp~ 输入hello 回车， 替换为hello 回车。 按 y 同意当前行替换，n 不同意修改
+- ~C-c C-c~ 执行替换，按 q 退出
+
+
+当前buffer替换操作
+- =C-s= 搜索， 输入hello
+- =C-c C-e= 编辑
+- ~M-x query-replace-regexp~ 输入要替换的内容
+- ~C-c C-c~ 执行替换，按 q 退出
+
+*配置搜索中文文件*
+
+everythin工具可以快速搜索本地文件。下载地址： <https://www.voidtools.com/zh-cn/downloads/>
+
+安装好后，同时下载 ES.exe 客户端工具加入环境变量。
+
+
+#+begin_src emacs-lisp
+;;everyting
+;;consult-locate
+;; 配置搜索中文文件
+(progn
+  (setq consult-locate-args (encode-coding-string "es.exe -i -p -r" 'gbk))
+  (add-to-list 'process-coding-system-alist '("es" gbk . gbk))
+  )
+(eval-after-load 'consult
+  (progn
+      (setq
+        consult-narrow-key "<"
+        consult-line-numbers-widen t
+        consult-async-min-input 2         ;; 搜索 2 个字符显示输出。默认 3
+        consult-async-refresh-delay  0.15
+        consult-async-input-throttle 0.2
+        consult-async-input-debounce 0.1)
+    ))
+#+end_src
+
+操作：
+- 前提：PC 始终打开everything, 转为ES会调用everthing
+- =M-x consult-locate= 回车，输入要搜索的文件如 =#init.el= 。 可以看到minibuffer中显示的和everthing界面搜索的是一样的。
+- 再输入个#号就可以使用 orderless 的功能进行过滤。如只想看29.4中init.el文件 =#init.el#29.4= 选中回车即可打开对应文件
+
+使用外部程序打开：
+- =M-x consult-locate= 回车，输入要搜索的文件. 如搜索projeckt中的txt文件 =#\.txt#project=
+- 使用embark =C;=  按x使用外部程序打开txt文件
+
+中文搜索操作：
+- =M-x consult-locate= 回车，输入要搜索的文件. 如 =#学习=
+
+*** 使用拼音进行搜索
+
+#+begin_src emacs-lisp
+  ;; 使用拼音进行搜索
+  (package-install 'pyim)
+
+  (defun eh-orderless-regexp (orig_func component)
+    (let ((result (funcall orig_func component)))
+      (pyim-cregexp-build result)))
+
+
+  (defun toggle-chinese-search ()
+    (interactive)
+    (if (not (advice-member-p #'eh-orderless-regexp 'orderless-regexp))
+        (advice-add 'orderless-regexp :around #'eh-orderless-regexp)
+      (advice-remove 'orderless-regexp #'eh-orderless-regexp)))
+
+  (defun disable-py-search (&optional args)
+    (if (advice-member-p #'eh-orderless-regexp 'orderless-regexp)
+        (advice-remove 'orderless-regexp #'eh-orderless-regexp)))
+
+  ;; (advice-add 'exit-minibuffer :after #'disable-py-search)
+  (add-hook 'minibuffer-exit-hook 'disable-py-search) ;退出minibuffer时自动退出拼音搜索
+
+  (global-set-key (kbd "s-p") 'toggle-chinese-search) ;需要时打开拼音搜索。因为拼音搜索性能不稳定
+#+end_src
+
+中文拼音操作：
+- 前提：PC 始终打开everything, 转为ES会调用everthing
+- =M-x consult-locate= 回车，输入要搜索的文件. 如打包含“学习”的txt文件 =#\.txt#= 按 =s-p= 输入 =#\.txt#xx=  可以看到过滤学习的txt文件
+
+*** 更换主题
+
+customize theme 内置主题
+
+自带的主题颜色，可以使用 =M-x customize themes= 图形化来选择，或者使用命令 =load-theme 主题= 。如 =M-x load-theme light-blue=
+
+- leuven，我最喜欢的亮色主题之一了。其实它也有暗色主题，只是没有内置。
+- modus，应该是从Emacs 28开始内置的一款包含亮/暗色的主题。非常好，我很喜欢。暗色有的时候，我感觉眼睛有点累。
+
+#+begin_src emacs-lisp
+  (load-theme 'tango-dark)
+#+end_src
+
+** 模块化配置
+
+*** 使用多文件存储配置文件
+
+创建 custom.el 文件
+
+一些自动生成的配置会自动写到这里。默认是写到init.el文件结尾的。
+
+#+begin_src emacs-lisp
+  (setq custom-file (expand-file-name "~/custom.el")) ;没有则自动创建
+  (load custom-file 'no-error 'no-message)
+#+end_src
+
+拆分init.el文件
+
+#+begin_example
+  ├── init.el
+  ├── lisp
+  │  ├── init-basic.el      # 基础配置
+  │  ├── init-elpa.el       # 插件源
+  │  ├── init-org.el        # org mode
+  │  ├── init-recentf.el    # 最近打开文件  
+  │  ├── init-site-lisp.el  # 非 elpa 源
+  │  ├── init-themes.el     # 主题
+  │  └── init-utils.el      # 自定义工具
+
+  #----------
+  ├── custom.el
+  ├── early-init.el
+  ├── init.el
+  ├── lisp
+  │   ├── init-basic.el           #默认的配置
+  │   ├── init-c.el
+  │   ├── init-completion.el     #补全
+  │   ├── init-const.el
+  │   ├── init-custom.el
+  │   ├── init-funcs.el          #自定义函数
+  │   ├── init-keybindings.el
+  │   ├── init-lisp.el
+  │   ├── init-org.el
+  │   ├── init-package.el        #插件源
+  │   ├── init-tools.el
+  │   ├── init-ui.el             #视觉相关
+  │   └── init-writing.el
+#+end_example
+
+加载配置
+#+begin_src emacs-lisp
+(add-to-list 'load-path
+    (expand-file-name (concat user-emacs-directory "lisp")))
+#+end_src
+
+各个文件通过 provide 暴露对外调用的名称。如：
+#+begin_src emacs-lisp :tangle no :results none
+(provide 'init-basic)
+#+end_src
+
+然后在 init.el 文件中通过 `require` 调用：
+#+begin_src emacs-lisp :tangle no :results none
+require 'init-basic
+#+end_src
+
+*** 使用Org-mode 管理 Emacs 配置
+
+Org-mode 下的文学编程将颠覆你对于 Emacs 的看法。因为我们也可以使用 Org 来管理 Emacs 的配置文件。
+
+我们可以让我们的配置文件更加清晰有序，并且可以添加很多注释之外的资料、链接等，让我们的配置更加易读和可管理。
+
+
+- 创建org文件。如 =~/.emacs.d/emacs-config.org=
+- 代码块
+  它能够自动的将代码块里的代码，写入到指定的文件里去，不指定默认在当前目录生成与文件同名.el文件。
+  
+  而且它的配置方式也非常灵活：
+  - 代码块配置tangle
+  - 标题行配置tangle
+
+- 执行 ~M-x org-babel-tangle~ 命令来触发 tangle 这个动作。
+
+范例-代码块配置tangle
+
+#+begin_src sh :tangle no :results none
+  ,#+BEGIN_SRC emacs-lisp :tangle ~/.emacs.d/test.el
+    (+ 1 2)
+  ,#+END_SRC
+#+end_src
+
+执行 ~M-x org-babel-tangle~ ，代码 (+ 1 2) 将写入到 ~/.emacs.d/test.el 这个文件里。
+
+范例-标题行配置tangle
+#+begin_src sh :tangle no :results none
+  ,* early-init.el
+  :PROPERTIES:
+  :HEADER-ARGS: :tangle early-init.el
+  :END
+#+end_src
+
+不想写入文件
+- 直接在对应代码块或者标题参数行写上 :tangle no
+  
+*添加代码块*
+
+- 旧版使用快捷键 ~< + 快捷码 + TAB~ 。
+  - 如代码块 ~<s + Tab~ 可以直接插入代码块的代码片段（Snippet）
+- 从 orgmode 9.2 版本后， ~org-insert-structure-template~ 变为 ~C-c C-,~ 给出列表选择
+
+
+还想使用旧版快捷键
+
+#+begin_src emacs-lisp
+  (with-eval-after-load 'org
+    (require 'org-tempo))
+
+  ;; 禁用左尖括号
+  (setq electric-pair-inhibit-predicate
+        `(lambda (c)
+           (if (char-equal c ?\<) t (,electric-pair-inhibit-predicate c))))
+
+  (add-hook 'org-mode-hook
+            (lambda ()
+              (setq-local electric-pair-inhibit-predicate
+                          `(lambda (c)
+                             (if (char-equal c ?\<) t (,electric-pair-inhibit-predicate c))))))
+#+end_src
+
+** 清理学习内容
+#+begin_src emacs-lisp :tangle no
+  (write-region "" nil "~/.emacs.d/init.el")
+#+end_src
+
+
+* Emacs初始化 =early-init.el=
+:PROPERTIES:
+:HEADER-ARGS: :tangle early-init.el
+:END:
+
+这是 Emacs 在启动时读取的第一个文件。它应该包含不依赖于任何包或 Emacs 帧比例的代码。初始化文件是为了在 Emacs 生成初始帧之前设置一些基本的东西
+
+** =early-init.el= 对启动时间和垃圾回收的调整
+
+#+begin_src emacs-lisp :tangle "early-init.el"
+  (setq gc-cons-threshold (* 50 1000 1000))
+#+end_src
+
+** =early-init.el= 初始化包缓存
+:PROPERTIES:
+:CUSTOM_ID: h:package-cache
+:END:
+
+
+这里使用标准的 =package.el= 来管理我的Emacs包。
+([[#h:package.el][=init.el= 配置软件包]])
+
+
+* Emacs主配置文件 (=init.el=)
+
+#+begin_src emacs-lisp :tangle "init.el"
+  ;;; init.el --- The main init entry for Emacs -*- lexical-binding: t -*-
+  ;;; Commentary:
+
+  ;; This file bootstraps the configuration, which is divided into
+  ;; a number of other files.
+
+  ;;; Code:
+
+  
+#+end_src
+
+** =init.el= 基础配置禁用备份和锁定文件
+
+默认情况下，Emacs 会尝试锁定文件，以免它们被其他程序修改。它还保留备份。这些是我不需要的功能
+
+#+begin_src emacs-lisp :tangle "init.el"
+  ;; 禁用备份和锁定文件
+  (setq make-backup-files nil)
+  (setq backup-inhibited nil) ; Not sure if needed, given `make-backup-files'
+  (setq create-lockfiles nil)
+#+end_src
+
+
+** =init.el= 指定自定义文件 custom.el
+
+默认情况下，Emacs 将持久自定义写入用户的 init 文件末尾。当用户 =M-x customize= 或与之相关时，Emacs 都会写这些内容。指定自定义文件位置与init.el区分开。
+
+#+begin_src emacs-lisp :tangle "init.el"
+  ;; 指定自己义配置
+  (setq custom-file (make-temp-file "emacs-custom-")) ;没有则自动创建emacs-custom-开头随机文件
+  (load custom-file 'no-error 'no-message)
+#+end_src
+
+** =init.el= 始终从 =*scratch*= 缓冲区开始
+
+#+begin_src emacs-lisp :tangle "init.el"
+  ;; 始终从 *scratch* 缓冲区开始
+  (setq initial-buffer-choice t)
+#+end_src
+
+** =init.el= 加载目录
+:PROPERTIES:
+:CUSTOM_ID: h:i-dir
+:END:
+
+
+加载目录下所有配置
+- =list= 目录 :: 各种插件配置
+- =person= 目录 :: 个人的配置
+
+在 =init.el= 配置中调用插件[[#h:i-modules][(=init.el= 加载各模块)]]
+  
+
+#+begin_src emacs-lisp :tangle "init.el"
+  ;; 加载目录
+  (mapc
+   (lambda (string)
+     (add-to-list 'load-path (locate-user-emacs-file string)))
+   '("lisp" "person"))
+#+end_src
+
+** =init.el= 软件包 (=package.el=)
+:PROPERTIES:
+:CUSTOM_ID: h:package.el
+:END:
+
+package.el 内置于 Emacs 中。我们不需要显式加载它，在需要时会被 use-package 调用。
+early-init.el 处激活缓存[[#h:package-cache][(=early-init.el= 初始化包缓存)]]
+
+#+begin_src emacs-lisp :tangle "init.el"
+  ;;;; 软件包
+
+  (setq package-vc-register-as-project nil) ; Emacs 30
+
+  ;; 设置插件源优先级
+  (require 'package)
+  (setq package-check-signature nil 
+        load-prefer-newer t) ;; 个别时候会出现签名校验失败
+  (setq package-archives
+        '(("gnu-elpa" . "https://elpa.gnu.org/packages/")
+          ("gnu-elpa-devel" . "https://elpa.gnu.org/devel/")
+          ("nongnu" . "https://elpa.nongnu.org/nongnu/")
+          ("melpa" . "https://melpa.org/packages/")))
+
+  ;; 最大的数字优先（未提及的优先级为 0）
+  (setq package-archive-priorities
+        '(("gnu-elpa" . 2)
+          ("melpa" . 3)
+          ("nongnu" . 1)))
+
+  (unless (bound-and-true-p package--initialized)
+    (package-initialize)) ;; 刷新软件源索引
+
+  ;;防止反复调用 package-refresh-contents 会影响加载速度
+  (when (not package-archive-contents)
+    (package-refresh-contents))
+#+end_src
+
+强制指定某些软件的源
+#+begin_src emacs-lisp :tangle "init.el"
+  (defvar prot-emacs-my-packages
+    '(vertico tmr)
+    "List of symbols representing the packages I develop/maintain.")
+
+  ;; 指定某些软件使用特点源安装 
+  (setq package-pinned-packages
+        `(,@(mapcar
+             (lambda (package)
+               (cons package "gnu-elpa-devel"))
+             prot-emacs-my-packages)))
+#+end_src
+
+** =init.el= 加载各个模块
+:PROPERTIES:
+:CUSTOM_ID: h:i-modules
+:END:
+
+我把配置拆分为几个模块[[#h:i-dir][(=init.el= 加载目录)]]
+
+各个模块都记录在下面[[#h:modules][我的 Emacs 模块配置]]中
+
+
+#+begin_src emacs-lisp :tangle "init.el"
+  ;; 加载模块
+  (load (locate-user-emacs-file "jasper-emacs-pre-custom.el") :no-error :no-message)
+
+  (require 'init-basic)
+  (require 'init-funcs)
+  (require 'init-packages)
+  (use-package benchmark-init
+    :ensure t
+    :demand t
+    :config
+    ;; To disable collection of benchmark data after init is done.
+    (add-hook 'after-init-hook 'benchmark-init/deactivate))
+  (require 'init-evil)
+  (require 'init-completion)
+  (require 'init-tools)
+  (require 'init-ui)
+  (require 'init-org)
+  (require 'init-keybindings)
+  (require 'init-programming)
+  (require 'init-window)
+
+  (load (locate-user-emacs-file "jasper-emacs-post-custom.el") :no-error :no-message)
+#+end_src
+
+
+** =init.el= 计算启动时间
+
+#+begin_src emacs-lisp :tangle "init.el"
+  (defun efs/display-startup-time ()
+    (message "Emacs loaded in %s with %d garbage collections."
+             (format "%.2f seconds"
+                     (float-time
+                     (time-subtract after-init-time before-init-time)))
+             gcs-done))
+
+  (add-hook 'emacs-startup-hook #'efs/display-startup-time)
+
+
+  (setq gc-cons-threshold (* 2 1000 1000))
+#+end_src
+
+
+* 我的Emacs模块配置
+:PROPERTIES:
+:CUSTOM_ID: h:modules
+:END:
+
+=init.el= 部分中，通过 ~load-path~ 让 Emacs 可以运行他们的代码[[#h:i-dir][(=init.el= 加载目录)]]。本章的副标题定义了模块，每个模块都加载在我的 =init.el= 末尾调用[[#h:i-modules][(=init.el= 加载各模块)]]
+
+** =init-basic.el=
+
+*** =init-basic.el= 一些默认的配置
+
+#+begin_src emacs-lisp :tangle "lisp/init-basic.el" :mkdirp yes
+  ;;; 一些默认的配置
+
+  (setq w32-apps-modifier 'super)       ;PC 通过SharpKeys改成了 Application
+
+  ;;; 统一配置
+  (global-set-key (kbd "s-a") 'mark-whole-buffer) ;;对应Windows上面的Ctrl-a 全选
+  (global-set-key (kbd "s-c") 'kill-ring-save) ;;对应Windows上面的Ctrl-c 复制
+  (global-set-key (kbd "s-s") 'save-buffer) ;; 对应Windows上面的Ctrl-s 保存
+  (global-set-key (kbd "s-v") 'yank) ;对应Windows上面的Ctrl-v 粘贴
+  (global-set-key (kbd "s-z") 'undo) ;对应Windows上面的Ctrol-z 撤销
+
+  ;; 查询函数、变量、key 定义的文件位置
+  (global-set-key (kbd "C-h C-f") 'find-function)
+  (global-set-key (kbd "C-h C-v") 'find-variable)
+  (global-set-key (kbd "C-h C-k") 'find-function-on-key)
+
+  ;; 设置系统的编码，避免各处的乱码
+  (prefer-coding-system 'utf-8)
+  (set-default-coding-systems 'utf-8)
+  (set-terminal-coding-system 'utf-8)
+  (set-keyboard-coding-system 'utf-8)
+  (setq default-buffer-file-coding-system 'utf-8)
+
+  ;; 开启服务
+  (server-mode 1)
+
+  (electric-pair-mode t)                       ; 括号补全
+  (add-hook 'prog-mode-hook #'show-paren-mode) ; 编程模式下，光标在括号上时高亮另一个括号
+  (delete-selection-mode t)                    ; 选中文本后输入文本会替换文本（更符合我们习惯了的其它编辑器的逻辑。默认选中放后面
+  (global-auto-revert-mode t)                  ; 自动加载外部修改过的文件
+  (setq auto-save-default nil)                 ; 关闭自动保存文件，#为后缀的文件
+  (setq ring-bell-function 'ignore)            ; 关闭提示声音
+  (fset 'yes-or-no-p 'y-or-n-p)                ;; 某个命令时需要输入 (yes or no)
+#+end_src
+
+
+*** =init-basic.el= 最近编辑过的文件
+
+#+begin_src emacs-lisp :tangle "lisp/init-basic.el"
+  ;;; 最近编辑过的文件
+  (use-package recentf
+    :ensure nil
+    :bind (("C-x C-r" . recentf-open-files))
+    :hook (after-init . recentf-mode)
+    :init (setq recentf-max-saved-items 300
+                recentf-exclude
+                '("\\.?cache" ".cask" "url" "COMMIT_EDITMSG\\'" "bookmarks"
+                  "\\.\\(?:gz\\|gif\\|svg\\|png\\|jpe?g\\|bmp\\|xpm\\)$"
+                  "\\.?ido\\.last$" "\\.revive$" "/G?TAGS$" "/.elfeed/"
+                  "^/tmp/" "^/var/folders/.+$" "^/ssh:" "/persp-confs/"
+                  (lambda (file) (file-in-directory-p file package-user-dir))))
+    :config
+    (push (expand-file-name recentf-save-file) recentf-exclude)
+    (add-to-list 'recentf-filename-handlers #'abbreviate-file-name))
+#+end_src
+
+*** =init-basic.el= 保存会话
+
+#+begin_src emacs-lisp :tangle "lisp/init-basic.el"
+  ;;; Save and restore editor sessions between restarts
+  ;; 记住使用过的命令
+  (use-package savehist
+    :ensure nil
+    :hook (after-init . savehist-mode)
+    :init (setq enable-recursive-minibuffers t ; Allow commands in minibuffers
+                history-length 1000
+                savehist-additional-variables '(mark-ring
+                                                global-mark-ring
+                                                search-ring
+                                                regexp-search-ring
+                                                extended-command-history)
+                savehist-autosave-interval 300)
+    )
+
+  ;; 记住光标所在文件的位置
+  (use-package saveplace
+    :ensure nil
+    :hook (after-init . save-place-mode))
+#+end_src
+
+*** =init-basic.el= modeline上显示文件大小、列号
+
+#+begin_src emacs-lisp :tangle "lisp/init-basic.el"
+  ;;; modeline上显示文件大小、 列号
+  (use-package simple
+    :ensure nil
+    :hook (after-init . size-indication-mode)
+    :init
+    (progn
+      (setq column-number-mode t)
+      ))
+#+end_src
+
+*** =init-basic.el= 调用 provide
+
+#+begin_src emacs-lisp :tangle "lisp/init-basic.el"
+  (message "Load init-basic done...")
+  (provide 'init-basic)
+#+end_src
+
+** =init-funcs.el=
+
+
+#+begin_src emacs-lisp :tangle "lisp/init-funcs.el" :mkdirp yes
+  ;;; 快速打开配置文件
+  (defun open-init-file()
+    (interactive)
+    (find-file "~/.emacs.d/init.el"))
+
+  ;; 这一行代码，将函数 open-init-file 绑定到 <f4> 键上
+  (global-set-key (kbd "<f4>") 'open-init-file)
+
+
+  ;;; 批量写
+  (defun embark-export-write ()
+    "Export the current vertico results to a writable buffer if possible.
+  Supports exporting consult-grep to wgrep, file to wdeired, and consult-location to occur-edit"
+    (interactive)
+    (require 'embark)
+    (require 'wgrep)
+    (pcase-let ((`(,type . ,candidates)
+                 (run-hook-with-args-until-success 'embark-candidate-collectors)))
+      (pcase type
+        ('consult-grep (let ((embark-after-export-hook #'wgrep-change-to-wgrep-mode))
+                         (embark-export)))
+        ('file (let ((embark-after-export-hook #'wdired-change-to-wdired-mode))
+                 (embark-export)))
+        ('consult-location (let ((embark-after-export-hook #'occur-edit-mode))
+                             (embark-export)))
+        (x (user-error "embark category %S doesn't support writable export" x)))))
+
+
+  ;;; 使用 Emacs 来打开文件管理器
+  (defun consult-directory-externally (file)
+    "Open FILE externally using the default application of the system."
+    (interactive "fOpen externally: ")
+    (if (and (eq system-type 'windows-nt)
+             (fboundp 'w32-shell-execute))
+        (shell-command-to-string (encode-coding-string (replace-regexp-in-string "/" "\\\\\\\\"
+              (format "explorer.exe %s" (file-name-directory (expand-file-name file)))) 'gbk))
+      (call-process (pcase system-type
+                      ('darwin "open")
+                      ('cygwin "cygstart")
+                      (_ "xdg-open"))
+                    nil 0 nil
+                    (file-name-directory (expand-file-name file)))))
+
+  (require 'embark)
+  (define-key embark-file-map (kbd "E") #'consult-directory-externally)
+
+  ;;打开当前文件的目录
+  (defun my-open-current-directory ()
+    (interactive)
+    (consult-directory-externally default-directory))
+#+end_src
+
+*** =init-funcs.el= 调用 provide
+
+#+begin_src emacs-lisp :tangle "lisp/init-funcs.el"
+  (message "Load init-funcs done...")
+  (provide 'init-funcs)
+#+end_src
+
+
+** =init-packages.el=
+
+*** =init-packages.el= 安装
+
+#+begin_src emacs-lisp :tangle "lisp/init-packages.el" :mkdirp yes
+  ;; make use-package default behavior better
+  ;; with `use-package-always-ensure' you won't need ":ensure t" all the time
+  ;; with `use-package-always-defer' you won't need ":defer t" all the time
+  (setq use-package-always-ensure t
+        use-package-always-defer t
+        use-package-enable-imenu-support t
+        use-package-expand-minimally t)
+  (require 'use-package)
+
+
+  ;;; modeline上显示我的所有的按键和执行的命令
+  ;;---(package-install 'keycast) ;包会安装在elpa目录中
+  ;;----(keycast-mode-line-mode t)
+#+end_src
+
+*** =init-package.el= 调用 provide
+
+#+begin_src emacs-lisp :tangle "lisp/init-packages.el"
+  (message "Load init-packages done...")
+  (provide 'init-packages)
+#+end_src
+
+
+** =init-evil.el=
+
+*** =init-evil.el= 调用 provide
+
+#+begin_src emacs-lisp :tangle "lisp/init-evil.el"
+  (message "Load init-evil done...")
+  (provide 'init-evil)
+#+end_src
+
+
+** =init-completion.el=
+
+*** =init-completion.el= 配置
+
+#+begin_src emacs-lisp :tangle "lisp/init-completion.el" :mkdirp yes
+  ;; 内置补全功能n
+  ;;(setq tab-always-indent 'complete)           ;; 使用 TAB 来列出当前补全选项
+
+  (use-package company
+    :ensure t
+    :init
+    (global-company-mode t)                    ;; 全局开启 company 补全
+    :config
+    (setq company-idle-delay 0)                ;; 补全时间快些
+    (setq company-minimum-prefix-length 1)     ;; 最少输入1个字符开启
+    (setq company-show-numbers t)              ;; 给选项编号 (按快捷键 M-1、M-2 等等来进行选择)
+    (setq company-dabbrev-other-buffers 'all)  ;; 从所有缓冲区收集补全信息
+    (setq company-tooltip-align-annotations t) ;; 右侧附加注释
+    (setq company-selection-wrap-around t)
+    (setq company-transformers '(company-sort-by-occurrence)) ; 根据选择的频率进行排序，如果不喜欢可以去掉
+    :bind (:map company-active-map
+                ("C-n" . 'company-select-next)
+                ("C-p" . 'company-select-previous)))  ;; 使用 `C-n` 与 `C-p` 来选择补全项，默认选择上一条和下一条候选项命令 M-n M-p
+
+
+  ;;; 增强 minibuffer 补全：vertico 和 Orderless
+  (package-install 'vertico)
+  (vertico-mode t)
+
+  (package-install 'orderless)
+  (setq completion-styles '(orderless))
+
+  ;;; 配置 Marginalia 增强 minubuffer 的 annotation
+  (package-install 'marginalia)
+  (marginalia-mode t)
+
+  ;;; minibuffer action 和自适应的 context menu：Embark
+  (package-install 'embark)
+  (global-set-key (kbd "C-;") 'embark-act)
+  (setq prefix-help-command 'embark-prefix-help-command)
+
+  ;;; 增强文件内搜索和跳转函数定义：Consult
+  (package-install 'consult)
+  ;;replace swiper 可以替代老的 ivy mode 的 swiper 功能
+  (global-set-key (kbd "C-s") 'consult-line)
+  (global-set-key (kbd "M-s i") 'consult-imenu)  ;跳转函数定义
+
+  ;;; 配置搜索中文文件
+  ;; PC提前安装 everyting 及其客户端ES. 利用M-x consult-locate搜索
+  (progn
+    (setq consult-locate-args (encode-coding-string "es.exe -i -p -r" 'gbk))
+    (add-to-list 'process-coding-system-alist '("es" gbk . gbk))
+    )
+  (eval-after-load 'consult
+    (progn
+        (setq
+          consult-narrow-key "<"
+          consult-line-numbers-widen t
+          consult-async-min-input 2         ;; 搜索 2 个字符显示输出。默认 3
+          consult-async-refresh-delay  0.15
+          consult-async-input-throttle 0.2
+          consult-async-input-debounce 0.1)
+        ))
+
+  ;;; 批量修改文件内容
+  (package-install 'embark-consult)
+  (package-install 'wgrep)
+  (setq wgrep-auto-save-buffer t)
+
+  (eval-after-load 'consult
+    '(eval-after-load 'embark
+       '(progn
+          (require 'embark-consult)
+          (add-hook 'embark-collect-mode-hook #'consult-preview-at-point-mode)))) ;hook 第一个参数执行前，先执行第2个参数的功能
+
+  (define-key minibuffer-local-map (kbd "C-c C-e") 'embark-export-write)
+#+end_src
+
+*** =init-completion.el= 调用 provide
+
+#+begin_src emacs-lisp :tangle "lisp/init-completion.el"
+  (message "Load init-completion done...")
+  (provide 'init-completion)
+#+end_src
+
+** =init-tools.el=
+
+*** =init-tools.el= config
+
+#+begin_src emacs-lisp :tangle "lisp/init-tools.el" :mkdirp yes
+  ;;; 窗口标签
+  ;;(add-to-list 'load-path (expand-file-name "~/.emacs.d/site-lisp/awesome-tab/"))
+  ;;(require 'awesome-tab)
+  ;;(awesome-tab-mode t)
+
+  (defun awesome-tab-buffer-groups ()
+  "`awesome-tab-buffer-groups' control buffers' group rules.
+  Group awesome-tab with mode if buffer is derived from `eshell-mode' `emacs-lisp-mode' `dired-mode' `org-mode' `magit-mode'.
+  All buffer name start with * will group to \"Emacs\".
+  Other buffer group by `awesome-tab-get-group-name' with project name."
+  (list
+  (cond
+      ((or (string-equal "*" (substring (buffer-name) 0 1))
+          (memq major-mode '(magit-process-mode
+                              magit-status-mode
+                              magit-diff-mode
+                              magit-log-mode
+                              magit-file-mode
+                              magit-blob-mode
+                              magit-blame-mode)))
+      "Emacs")
+      ((derived-mode-p 'eshell-mode)
+      "EShell")
+      ((derived-mode-p 'dired-mode)
+      "Dired")
+      ((memq major-mode '(org-mode org-agenda-mode diary-mode))
+      "OrgMode")
+      ((derived-mode-p 'eaf-mode)
+      "EAF")
+      (t
+       (awesome-tab-get-group-name (current-buffer))))))
+
+  ;;; 使用拼音进行搜索
+  ;;ivy
+  ;; Encoding
+  ;; UTF-8 as the default coding system
+  (when (fboundp 'set-charset-priority)
+    (set-charset-priority 'unicode))
+
+  (set-language-environment 'chinese-gbk)
+  (prefer-coding-system 'utf-8-auto)
+
+
+  (package-install 'pyim)
+
+  (defun eh-orderless-regexp (orig_func component)
+    (let ((result (funcall orig_func component)))
+      (pyim-cregexp-build result)))
+
+
+  (defun toggle-chinese-search ()
+    (interactive)
+    (if (not (advice-member-p #'eh-orderless-regexp 'orderless-regexp))
+        (advice-add 'orderless-regexp :around #'eh-orderless-regexp)
+      (advice-remove 'orderless-regexp #'eh-orderless-regexp)))
+
+  (defun disable-py-search (&optional args)
+    (if (advice-member-p #'eh-orderless-regexp 'orderless-regexp)
+        (advice-remove 'orderless-regexp #'eh-orderless-regexp)))
+
+  ;; (advice-add 'exit-minibuffer :after #'disable-py-search)
+  (add-hook 'minibuffer-exit-hook 'disable-py-search) ;退出minibuffer时自动退出拼音搜索
+
+  (global-set-key (kbd "s-p") 'toggle-chinese-search) ;需要时打开拼音搜索。因为拼音搜索性能不稳定
+
+  ;;; modeline上显示我的所有的按键和执行的命令
+  (use-package keycast
+    :ensure t
+    :init (keycast-mode-line-mode 1)) ; 在标题显示
+#+end_src
+
+*** =init-tools.el= 调用 provide
+
+#+begin_src emacs-lisp :tangle "lisp/init-tools.el"
+  (message "Load init-tools done...")
+  (provide 'init-tools)
+#+end_src
+
+  
+** =init-ui.el=
+
+*** =init-ui.el= config
+#+begin_src emacs-lisp :tangle "lisp/init-ui.el" :mkdirp yes
+  (global-display-line-numbers-mode 1) ;显示行号 29版本。29之前用(global-linum-mode 1)
+  (setq inhibit-startup-screen t) ; 尝试关掉启动界面
+  ;;(toggle-frame-maximized)                     ; 全屏编辑器
+
+
+  ;;(set-face-attribute 'default nil :height 150) ; 修改字号，大小为16pt
+  ;;让鼠标滚动更好用。默认滚动很快
+  (setq mouse-wheel-scroll-amount '(3 ((shift) . 1) ((control) . nil)))
+  (setq mouse-wheel-progressive-speed nil)
+
+  (tool-bar-mode -1)                           ;; 关闭工具栏，tool-bar-mode 即为一个 Minor Mode
+  (scroll-bar-mode -1)                         ;; 关闭文件滑动控件
+  ;; (menu-bar-mode -1)                        ;; 关闭菜单栏 (不关闭，使用插件时会用到)
+
+  (setq-default cursor-type 'bar)              ; 更改光标的样式，默认比较粗. 更多C-h v 查询帮助
+  ;;(setq cursor-type 'bar)                    ;; 更改光标的样式。setq当前buffer生效，不能全局生效
+
+  (global-hl-line-mode t)                      ;; 高亮当前行
+
+  ;;主题
+  (load-theme 'tango-dark)
+#+end_src
+*** =init-ui.el= 调用 provide
+
+#+begin_src emacs-lisp :tangle "lisp/init-ui.el"
+  (message "Load init-ui done...")
+  (provide 'init-ui)
+#+end_src
+
+** =init-org.el=
+
+*** =init-org.el= config
+
+#+begin_src emacs-lisp :tangle "lisp/init-org.el" :mkdirp yes
+  ;;; config
+
+  ;;; 使用旧版快捷键<s +Tab
+  (with-eval-after-load 'org
+    (require 'org-tempo))
+
+  ;; 禁用左尖括号
+  (setq electric-pair-inhibit-predicate
+        `(lambda (c)
+           (if (char-equal c ?\<) t (,electric-pair-inhibit-predicate c))))
+
+  (add-hook 'org-mode-hook
+            (lambda ()
+              (setq-local electric-pair-inhibit-predicate
+                          `(lambda (c)
+                             (if (char-equal c ?\<) t (,electric-pair-inhibit-predicate c))))))
+#+end_src
+
+*** =init-org.el= 调用 provide
+
+#+begin_src emacs-lisp :tangle "lisp/init-org.el"
+  (message "Load init-org done...")
+  (provide 'init-org)
+#+end_src
+
+** =init-keybindings.el=
+
+*** =init-keybindings.el= config
+
+#+begin_src emacs-lisp :tangle "lisp/init-keybindings.el" :mkdirp yes
+  ;;; config
+
+#+end_src
+*** =init-keybindings.el= 调用 provide
+
+#+begin_src emacs-lisp :tangle "lisp/init-keybindings.el"
+  (message "Load init-keybindings done...")
+  (provide 'init-keybindings)
+#+end_src
+
+** =init-programming.el=
+
+*** =init-programming.el= config
+
+#+begin_src emacs-lisp :tangle "lisp/init-programming.el" :mkdirp yes
+  ;;; config
+
+#+end_src
+*** =init-programming.el= 调用 provide
+
+#+begin_src emacs-lisp :tangle "lisp/init-programming.el"
+  (message "Load init-programming done...")
+  (provide 'init-programming)
+#+end_src
+
+** =init-window.el=
+
+*** =init-window.el= config
+
+#+begin_src emacs-lisp :tangle "lisp/init-window.el" :mkdirp yes
+  ;;; config
+
+#+end_src
+*** =init-window.el= 调用 provide
+
+#+begin_src emacs-lisp :tangle "lisp/init-window.el"
+  (message "Load init-window done...")
+  (provide 'init-window)
+#+end_src
+
