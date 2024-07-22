@@ -813,7 +813,6 @@ Org-mode 下的文学编程将颠覆你对于 Emacs 的看法。因为我们也�
 这里使用标准的 =package.el= 来管理我的Emacs包。
 ([[#h:package.el][=init.el= 配置软件包]])
 
-
 * Emacs主配置文件 (=init.el=)
 
 #+begin_src emacs-lisp :tangle "init.el"
@@ -838,7 +837,6 @@ Org-mode 下的文学编程将颠覆你对于 Emacs 的看法。因为我们也�
   (setq backup-inhibited nil) ; Not sure if needed, given `make-backup-files'
   (setq create-lockfiles nil)
 #+end_src
-
 
 ** =init.el= 指定自定义文件 custom.el
 
@@ -964,7 +962,6 @@ early-init.el 处激活缓存[[#h:package-cache][(=early-init.el= 初始化包�
   (load (locate-user-emacs-file "jasper-emacs-post-custom.el") :no-error :no-message)
 #+end_src
 
-
 ** =init.el= 计算启动时间
 
 #+begin_src emacs-lisp :tangle "init.el"
@@ -990,7 +987,6 @@ early-init.el 处激活缓存[[#h:package-cache][(=early-init.el= 初始化包�
 =init.el= 部分中，通过 ~load-path~ 让 Emacs 可以运行他们的代码[[#h:i-dir][(=init.el= 加载目录)]]。本章的副标题定义了模块，每个模块都加载在我的 =init.el= 末尾调用[[#h:i-modules][(=init.el= 加载各模块)]]
 
 ** =init-basic.el=
-
 *** =init-basic.el= 一些默认的配置
 
 #+begin_src emacs-lisp :tangle "lisp/init-basic.el" :mkdirp yes
@@ -1028,7 +1024,6 @@ early-init.el 处激活缓存[[#h:package-cache][(=early-init.el= 初始化包�
   (setq ring-bell-function 'ignore)            ; 关闭提示声音
   (fset 'yes-or-no-p 'y-or-n-p)                ;; 某个命令时需要输入 (yes or no)
 #+end_src
-
 
 *** =init-basic.el= 最近编辑过的文件
 
@@ -1157,7 +1152,6 @@ early-init.el 处激活缓存[[#h:package-cache][(=early-init.el= 初始化包�
   (provide 'init-funcs)
 #+end_src
 
-
 ** =init-packages.el=
 
 *** =init-packages.el= 安装
@@ -1185,7 +1179,6 @@ early-init.el 处激活缓存[[#h:package-cache][(=early-init.el= 初始化包�
   (provide 'init-packages)
 #+end_src
 
-
 ** =init-evil.el=
 
 *** =init-evil.el= 调用 provide
@@ -1194,7 +1187,6 @@ early-init.el 处激活缓存[[#h:package-cache][(=early-init.el= 初始化包�
   (message "Load init-evil done...")
   (provide 'init-evil)
 #+end_src
-
 
 ** =init-completion.el=
 
@@ -1364,7 +1356,6 @@ early-init.el 处激活缓存[[#h:package-cache][(=early-init.el= 初始化包�
   (provide 'init-tools)
 #+end_src
 
-  
 ** =init-ui.el=
 
 *** =init-ui.el= config
