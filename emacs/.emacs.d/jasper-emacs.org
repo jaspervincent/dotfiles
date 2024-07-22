@@ -33,6 +33,8 @@ xx.el 已经写好了，但并没有生效，需要重启一下Emacs，让Emacs�
 
 
 + Website: <https://xuchangwei.com/lisp/jasper-emacs.html>
++ Git repositories:
+  - GitHub: <https://github.com/jaspervincent/dotfiles.git>
 
 #+toc: headlines 8 insert TOC here, with eight headline levels
 
