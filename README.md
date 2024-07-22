@@ -8,11 +8,13 @@
 stow -t "$HOME" emacs
 ```
 
-更新我的emacs
+反向同步， 在 `~/.emacs.d` 中的修改更我的emacs目录中
 
 ```bash
-stow -t "$HOME" -R emacs
+stow -R -t "$HOME" emacs
 ```
+
+PC中非符号链接反向同步追加 `--adopt`选项
 
 ## 许可证
 
