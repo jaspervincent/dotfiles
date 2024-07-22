@@ -839,7 +839,6 @@ Org-mode 下的文学编程将颠覆你对于 Emacs 的看法。因为我们也�
   (setq create-lockfiles nil)
 #+end_src
 
-
 ** =init.el= 指定自定义文件 custom.el
 
 默认情况下，Emacs 将持久自定义写入用户的 init 文件末尾。当用户 =M-x customize= 或与之相关时，Emacs 都会写这些内容。指定自定义文件位置与init.el区分开。
@@ -944,7 +943,6 @@ early-init.el 处激活缓存[[#h:package-cache][(=early-init.el= 初始化包�
   (load (locate-user-emacs-file "jasper-emacs-pre-custom.el") :no-error :no-message)
 
   (require 'init-basic)
-  (require 'init-funcs)
   (require 'init-packages)
   (use-package benchmark-init
     :ensure t
@@ -960,10 +958,10 @@ early-init.el 处激活缓存[[#h:package-cache][(=early-init.el= 初始化包�
   (require 'init-keybindings)
   (require 'init-programming)
   (require 'init-window)
+  (require 'init-funcs)
 
   (load (locate-user-emacs-file "jasper-emacs-post-custom.el") :no-error :no-message)
 #+end_src
-
 
 ** =init.el= 计算启动时间
 
@@ -1018,7 +1016,7 @@ early-init.el 处激活缓存[[#h:package-cache][(=early-init.el= 初始化包�
   (setq default-buffer-file-coding-system 'utf-8)
 
   ;; 开启服务
-  (server-mode 1)
+  ;;(server-mode 1)
 
   (electric-pair-mode t)                       ; 括号补全
   (add-hook 'prog-mode-hook #'show-paren-mode) ; 编程模式下，光标在括号上时高亮另一个括号
@@ -1028,7 +1026,6 @@ early-init.el 处激活缓存[[#h:package-cache][(=early-init.el= 初始化包�
   (setq ring-bell-function 'ignore)            ; 关闭提示声音
   (fset 'yes-or-no-p 'y-or-n-p)                ;; 某个命令时需要输入 (yes or no)
 #+end_src
-
 
 *** =init-basic.el= 最近编辑过的文件
 
@@ -1157,7 +1154,6 @@ early-init.el 处激活缓存[[#h:package-cache][(=early-init.el= 初始化包�
   (provide 'init-funcs)
 #+end_src
 
-
 ** =init-packages.el=
 
 *** =init-packages.el= 安装
@@ -1185,7 +1181,6 @@ early-init.el 处激活缓存[[#h:package-cache][(=early-init.el= 初始化包�
   (provide 'init-packages)
 #+end_src
 
-
 ** =init-evil.el=
 
 *** =init-evil.el= 调用 provide
@@ -1194,7 +1189,6 @@ early-init.el 处激活缓存[[#h:package-cache][(=early-init.el= 初始化包�
   (message "Load init-evil done...")
   (provide 'init-evil)
 #+end_src
-
 
 ** =init-completion.el=
 
@@ -1364,7 +1358,6 @@ early-init.el 处激活缓存[[#h:package-cache][(=early-init.el= 初始化包�
   (provide 'init-tools)
 #+end_src
 
-  
 ** =init-ui.el=
 
 *** =init-ui.el= config
