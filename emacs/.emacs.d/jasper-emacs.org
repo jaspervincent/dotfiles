@@ -944,7 +944,6 @@ early-init.el 处激活缓存[[#h:package-cache][(=early-init.el= 初始化包�
   (load (locate-user-emacs-file "jasper-emacs-pre-custom.el") :no-error :no-message)
 
   (require 'init-basic)
-  (require 'init-funcs)
   (require 'init-packages)
   (use-package benchmark-init
     :ensure t
@@ -960,6 +959,7 @@ early-init.el 处激活缓存[[#h:package-cache][(=early-init.el= 初始化包�
   (require 'init-keybindings)
   (require 'init-programming)
   (require 'init-window)
+  (require 'init-funcs)
 
   (load (locate-user-emacs-file "jasper-emacs-post-custom.el") :no-error :no-message)
 #+end_src
@@ -1018,7 +1018,7 @@ early-init.el 处激活缓存[[#h:package-cache][(=early-init.el= 初始化包�
   (setq default-buffer-file-coding-system 'utf-8)
 
   ;; 开启服务
-  (server-mode 1)
+  ;;(server-mode 1)
 
   (electric-pair-mode t)                       ; 括号补全
   (add-hook 'prog-mode-hook #'show-paren-mode) ; 编程模式下，光标在括号上时高亮另一个括号
