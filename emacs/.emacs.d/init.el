@@ -4,7 +4,7 @@
 ;; This file bootstraps the configuration, which is divided into
 ;; a number of other files.
 
-;;; Code:工aaaa
+;;; Code:
 
 ;; 禁用备份和锁定文件
 (setq make-backup-files nil)
@@ -66,7 +66,6 @@
 (load (locate-user-emacs-file "jasper-emacs-pre-custom.el") :no-error :no-message)
 
 (require 'init-basic)
-(require 'init-funcs)
 (require 'init-packages)
 (use-package benchmark-init
   :ensure t
@@ -82,6 +81,7 @@
 (require 'init-keybindings)
 (require 'init-programming)
 (require 'init-window)
+(require 'init-funcs)
 
 (load (locate-user-emacs-file "jasper-emacs-post-custom.el") :no-error :no-message)
 
