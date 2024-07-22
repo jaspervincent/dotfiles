@@ -40,8 +40,8 @@
 
 ;; 最大的数字优先（未提及的优先级为 0）
 (setq package-archive-priorities
-      '(("gnu-elpa" . 2)
-        ("melpa" . 3)
+      '(("gnu-elpa" . 3)
+        ("melpa" . 2)
         ("nongnu" . 1)))
 
 (unless (bound-and-true-p package--initialized)

@@ -7,10 +7,5 @@
       use-package-expand-minimally t)
 (require 'use-package)
 
-
-;;; modeline上显示我的所有的按键和执行的命令
-;;---(package-install 'keycast) ;包会安装在elpa目录中
-;;----(keycast-mode-line-mode t)
-
 (message "Load init-packages done...")
 (provide 'init-packages)

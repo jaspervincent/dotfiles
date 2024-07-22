@@ -25,7 +25,6 @@ Supports exporting consult-grep to wgrep, file to wdeired, and consult-location 
                            (embark-export)))
       (x (user-error "embark category %S doesn't support writable export" x)))))
 
-
 ;;; 使用 Emacs 来打开文件管理器
 (defun consult-directory-externally (file)
   "Open FILE externally using the default application of the system."

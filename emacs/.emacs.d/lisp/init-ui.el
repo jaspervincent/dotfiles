@@ -18,7 +18,20 @@
 (global-hl-line-mode t)                      ;; 高亮当前行
 
 ;;主题
-(load-theme 'tango-dark)
+;;(load-theme 'tango-dark) ;这里使用doom-theme
+
+;; 这里的执行顺序非常重要，doom-modeline-mode 的激活时机一定要在设置global-mode-string 之后‘
+(use-package doom-themes
+  :ensure t)
+(load-theme 'doom-one 1)
+
+(use-package doom-modeline
+  :ensure t
+  :custom-face
+  (mode-line ((t (:height 0.9))))
+  (mode-line-inactive ((t (:height 0.9))))
+  :init
+  (doom-modeline-mode t))
 
 (message "Load init-ui done...")
 (provide 'init-ui)

@@ -51,6 +51,12 @@ xx.el 已经写好了，但并没有生效，需要重启一下Emacs，让Emacs�
 #+end_src
 
 ** 改键
+:PROPERTIES:
+:CUSTOM_ID: h:learn-key
+:END:
+
+模块化配置中添加了键绑定[[#h:basic-default][(=init-basic.el= 一些默认的配置)]]
+
 
 - M(eta)：统一对应键盘按键(PC/Mac)：left windows/option
 - s(uper)：统一对应键盘按键(PC/Mac)：left Alt/command
@@ -166,6 +172,9 @@ Windows Registry Editor Version 5.00
 双击注册文件。这时右键打开文件就可以选择emacs打开了。
 
 5.补全
+<<h:learn-completion-built-in>>
+
+在我的配置中添加内置补全[[#h:completion-built-in][(=init-completion.el= 内置补全)]]
 
 #+begin_src emacs-lisp
   ;; 内置补全功能n
@@ -216,15 +225,18 @@ Emacs Lisp 是世界上第二古老高级编程语言 Lisp 专为 Emacs 打造�
 #+end_src
 
 7.外观配置
+<<h:learn-ui-built-in>>
+
+我的模块化配置[[#h:ui-built-in][(=init-ui.el= 内置配置)]]
 
 #+begin_src emacs-lisp
-  ;;(toggle-frame-maximized)                     ; 全屏编辑器
-  (tool-bar-mode -1)                           ;; 关闭工具栏，tool-bar-mode 即为一个 Minor Mode
-  (scroll-bar-mode -1)                         ;; 关闭文件滑动控件
-  ;; (menu-bar-mode -1)                        ;; 关闭菜单栏 (不关闭，使用插件时会用到)
+  ;;(toggle-frame-maximized)                   ; 全屏编辑器
+  (tool-bar-mode -1)                           ; 关闭工具栏，tool-bar-mode 即为一个 Minor Mode
+  (scroll-bar-mode -1)                         ; 关闭文件滑动控件
+  ;; (menu-bar-mode -1)                        ; 关闭菜单栏 (不关闭，使用插件时会用到)
 
   (setq-default cursor-type 'bar)              ; 更改光标的样式，默认比较粗. 更多C-h v 查询帮助
-  ;;(setq cursor-type 'bar)                    ;; 更改光标的样式。setq当前buffer生效，不能全局生效
+  ;;(setq cursor-type 'bar)                    ; 更改光标的样式。setq当前buffer生效，不能全局生效
 
   ;;(set-face-attribute 'default nil :height 150) ; 修改字号，大小为16pt
   ;;让鼠标滚动更好用。默认滚动很快
@@ -299,6 +311,9 @@ Emacs Lisp 是世界上第二古老高级编程语言 Lisp 专为 Emacs 打造�
 ** 安装补全插件
 
 *Company插件*
+<<h:learn-completion-company>>
+
+我的emacs模块配置[[#h:completion-company][(=init-completion.el= Company)]]
 
 他是一个用于代码补全的插件
 
@@ -313,6 +328,9 @@ Emacs Lisp 是世界上第二古老高级编程语言 Lisp 专为 Emacs 打造�
 #+end_src
 
 *增强 minibuffer 补全：vertico 和 Orderless*
+<<h:learn-completion-minibuffer-1>>
+
+我的emacs模块配置[[#h:completion-minibuffer-1][(=init-completion.el= 增强 minibuffer 补全：vertico 和 Orderless)]]
 
 #+begin_src emacs-lisp
   (package-install 'vertico)
@@ -328,6 +346,9 @@ orderless 支持 =M-x= 模糊搜索，可以无序的。 如 edebug-defun 函数
 
 
 *配置 Marginalia 增强 minubuffer 的 annotation*
+<<h:learn-completion-minibuffer-2>>
+
+我的emacs模块配置[[#h:completion-minibuffer-2][(=init-completion.el= 配置 Marginalia 增强 minubuffer 的 annotation)]]
 
 #+begin_src emacs
 (package-install 'marginalia)
@@ -343,6 +364,10 @@ orderless 支持 =M-x= 模糊搜索，可以无序的。 如 edebug-defun 函数
 =C-x C-f= 显示文件大小权限等， =C-x b= 显 buffer 大小状态， =C-h f= 显示函数快捷键等
 
 *minibuffer action 和自适应的 context menu：Embark*
+<<h:learn-completion-minibuffer-3>>
+
+我的emacs模块配置[[#h:completion-minibuffer-3][(=init-completion.el= minibuffer action 和自适应的 context menu：Embark)]]
+
 
 #+begin_src emacs-lisp
 (package-install 'embark)
@@ -365,6 +390,9 @@ orderless 支持 =M-x= 模糊搜索，可以无序的。 如 edebug-defun 函数
   - 按 =C-x C-h= 模糊输入函数名可看到绑定的快捷键，按回车可直接执行命令，就不需要再记快捷键了
 
 *增强文件内搜索和跳转函数定义：Consult*
+<<h:learn-completion-minibuffer-4>>
+
+我的emacs模块配置[[#h:completion-minibuffer-4][(=init-completion.el= 增强文件内搜索Consul)]]
 
 #+begin_src emacs-lisp
   (package-install 'consult)
@@ -469,6 +497,10 @@ Other buffer group by `awesome-tab-get-group-name' with project name."
 可以非常快的找到文件或目录
 
 *** 使用 Emacs 来打开文件管理器
+:PROPERTIES:
+:CUSTOM_ID: h:learn-funcs-front-explorer
+:END:
+我的emacs模块配置[[#h:funcs-front-explorer][(=init-funcs.el= 超级前端-打开PC文件管理)]]
 
 windows 用户
 
@@ -514,6 +546,11 @@ windows 用户
 - =C-x C-f= 选择文件时，可以用embark来打开， =C;= 选择E，用文件管理器打开对应目录的
 
 *** 增强 embark 和 consult，批量搜索替换大杀器
+:PROPERTIES:
+:CUSTOM_ID: h:learn-completion-minibuffer-4-1
+:END:
+
+我的emacs模块配置[[#h:completion-minibuffer-4-1][(=init-completion.el= 增强 embark 和 consult，批量搜索替换大杀)]]
 
 性能： grep < ack < ag < ripgrep(rg)
 
@@ -619,6 +656,11 @@ everythin工具可以快速搜索本地文件。下载地址： <https://www.voi
 - =M-x consult-locate= 回车，输入要搜索的文件. 如 =#学习=
 
 *** 使用拼音进行搜索
+:PROPERTIES:
+:CUSTOM_ID: h:learn-tools-search-pinyin
+:END:
+
+我的emacs模块配置[[#h:tools-search-pinyin][(=init-tools.el= 使用拼音进行搜索)]]
 
 #+begin_src emacs-lisp
   ;; 使用拼音进行搜索
@@ -787,6 +829,30 @@ Org-mode 下的文学编程将颠覆你对于 Emacs 的看法。因为我们也�
                              (if (char-equal c ?\<) t (,electric-pair-inhibit-predicate c))))))
 #+end_src
 
+** 模块列表
+
+*** 1
+
+*文件搜索键位绑定*
+
+[[#h:keybindings-search-file][我的emacs模块配置(=init-keybindings.el= 文件搜索)]]
+
+*** 2
+*一些好用的包*
+
+- restart-emacs
+
+- savehist 记住使用过的命令[[#h:basic-session][(=init-basic.el= 保存会话)]]
+
+- 显示文件行、列、大小 ，美化状态栏
+  - simple[[#h:basic-simple][(=init-basic.el= simple)]]
+  - keycast[[#h:tools-keycast][(=init-tools.el= keycast)]]
+  - doom-modeline [[#h:ui-doom-emacs][(=init-ui.el= doom-emacs)]]
+*** 3
+
+- org
+
+
 ** 清理学习内容
 #+begin_src emacs-lisp :tangle no
   (write-region "" nil "~/.emacs.d/init.el")
@@ -903,8 +969,8 @@ early-init.el 处激活缓存[[#h:package-cache][(=early-init.el= 初始化包�
 
   ;; 最大的数字优先（未提及的优先级为 0）
   (setq package-archive-priorities
-        '(("gnu-elpa" . 2)
-          ("melpa" . 3)
+        '(("gnu-elpa" . 3)
+          ("melpa" . 2)
           ("nongnu" . 1)))
 
   (unless (bound-and-true-p package--initialized)
@@ -990,6 +1056,11 @@ early-init.el 处激活缓存[[#h:package-cache][(=early-init.el= 初始化包�
 
 ** =init-basic.el=
 *** =init-basic.el= 一些默认的配置
+:PROPERTIES:
+:CUSTOM_ID: h:basic-default
+:END:
+
+这里涉及到改键[[#h:learn-key][(改键)]]
 
 #+begin_src emacs-lisp :tangle "lisp/init-basic.el" :mkdirp yes
   ;;; 一些默认的配置
@@ -1021,6 +1092,7 @@ early-init.el 处激活缓存[[#h:package-cache][(=early-init.el= 初始化包�
   (electric-pair-mode t)                       ; 括号补全
   (add-hook 'prog-mode-hook #'show-paren-mode) ; 编程模式下，光标在括号上时高亮另一个括号
   (delete-selection-mode t)                    ; 选中文本后输入文本会替换文本（更符合我们习惯了的其它编辑器的逻辑。默认选中放后面
+  
   (global-auto-revert-mode t)                  ; 自动加载外部修改过的文件
   (setq auto-save-default nil)                 ; 关闭自动保存文件，#为后缀的文件
   (setq ring-bell-function 'ignore)            ; 关闭提示声音
@@ -1048,6 +1120,14 @@ early-init.el 处激活缓存[[#h:package-cache][(=early-init.el= 初始化包�
 #+end_src
 
 *** =init-basic.el= 保存会话
+:PROPERTIES:
+:CUSTOM_ID: h:basic-session
+:END:
+
+savehist-mode  默认开启，重启 emacs 会记住使用过的命令，同时会保存到 =~/.emacs.d/history= 文件中。 history 文件还保存了 minibuffer 的变量、查找过的文件等。相当于记住了上次的工作状态。
+
+save-place-mode 开启后，会记住光标所在文件的位置，下次打开文件时自动光标指向这个位置
+
 
 #+begin_src emacs-lisp :tangle "lisp/init-basic.el"
   ;;; Save and restore editor sessions between restarts
@@ -1068,10 +1148,19 @@ early-init.el 处激活缓存[[#h:package-cache][(=early-init.el= 初始化包�
   ;; 记住光标所在文件的位置
   (use-package saveplace
     :ensure nil
-    :hook (after-init . save-place-mode))
+    :hook (after-init . save-place-mode)) ;在emacs配置完全加载好以后，执行save-place-mode
 #+end_src
 
-*** =init-basic.el= modeline上显示文件大小、列号
+测试：
+- 记住光标的位置，重启emacs
+- =C-x C-f= 重新打开该文件，可以看到光标是上次退出的位置。
+
+*** =init-basic.el= simple
+:PROPERTIES:
+:CUSTOM_ID: h:basic-simple
+:END:
+
+modeline上显示文件大小、列号
 
 #+begin_src emacs-lisp :tangle "lisp/init-basic.el"
   ;;; modeline上显示文件大小、 列号
@@ -1104,11 +1193,6 @@ early-init.el 处激活缓存[[#h:package-cache][(=early-init.el= 初始化包�
         use-package-enable-imenu-support t
         use-package-expand-minimally t)
   (require 'use-package)
-
-
-  ;;; modeline上显示我的所有的按键和执行的命令
-  ;;---(package-install 'keycast) ;包会安装在elpa目录中
-  ;;----(keycast-mode-line-mode t)
 #+end_src
 
 *** =init-package.el= 调用 provide
@@ -1129,12 +1213,29 @@ early-init.el 处激活缓存[[#h:package-cache][(=early-init.el= 初始化包�
 
 ** =init-completion.el=
 
-*** =init-completion.el= 配置
+*** =init-completion.el= 内置补全
+:PROPERTIES:
+:CUSTOM_ID: h:completion-built-in
+:END:
+
+在学习章节提到过[[h:learn-completion-built-in][(补全)]]
 
 #+begin_src emacs-lisp :tangle "lisp/init-completion.el" :mkdirp yes
   ;; 内置补全功能n
   ;;(setq tab-always-indent 'complete)           ;; 使用 TAB 来列出当前补全选项
+#+end_src
 
+*** =init-completion.el= Company
+:PROPERTIES:
+:CUSTOM_ID: h:completion-company
+:END:
+
+在学习章节提到过[[h:learn-completion-company][(Company插件)]]
+
+
+他是一个用于代码补全的插件
+
+#+begin_src emacs-lisp :tangle "lisp/init-completion.el"
   (use-package company
     :ensure t
     :init
@@ -1150,30 +1251,189 @@ early-init.el 处激活缓存[[#h:package-cache][(=early-init.el= 初始化包�
     :bind (:map company-active-map
                 ("C-n" . 'company-select-next)
                 ("C-p" . 'company-select-previous)))  ;; 使用 `C-n` 与 `C-p` 来选择补全项，默认选择上一条和下一条候选项命令 M-n M-p
+#+end_src
 
+*** =init-completion.el= 增强 minibuffer 补全：vertico 和 Orderless
+:PROPERTIES:
+:CUSTOM_ID: h:completion-minibuffer-1
+:END:
 
+在学习章节提到过[[h:learn-completion-minibuffer-1][(增强 minibuffer 补全：vertico 和 Orderless)]]
+
+#+begin_src emacs-lisp :tangle "lisp/init-completion.el"
   ;;; 增强 minibuffer 补全：vertico 和 Orderless
-  (package-install 'vertico)
-  (vertico-mode t)
 
-  (package-install 'orderless)
-  (setq completion-styles '(orderless))
+  (use-package vertico
+    :ensure t
+    :init (vertico-mode))
 
+  (use-package orderless
+    :ensure t
+    :after vertico
+    :init (setq completion-styles '(orderless)))
+#+end_src
+
+有了 vertico-mode，把之前的 icomplete-mode 关掉。 补全变为垂直，垂直对于我们是更友好的，所有 minibuffer 的行为的可以补全。如使用 =M-x= 补全变为垂直,  =C-x C-f= 增强显示目录下文件、 =C-x b= 变为垂直。
+
+orderless 支持 =M-x= 模糊搜索，可以无序的。 如 edebug-defun 函数搜索， =M-x fun debug=
+
+*** =init-completion.el= 配置 Marginalia 增强 minubuffer 的 annotation
+:PROPERTIES:
+:CUSTOM_ID: h:completion-minibuffer-2
+:END:
+
+在学习章节提到过[[h:learn-completion-minibuffer-2][(配置 Marginalia 增强 minubuffer 的 annotation)]]
+
+#+begin_src emacs-lisp :tangle "lisp/init-completion.el"
   ;;; 配置 Marginalia 增强 minubuffer 的 annotation
-  (package-install 'marginalia)
-  (marginalia-mode t)
+  (use-package marginalia
+    :ensure t
+    :init (marginalia-mode)
+  )
+#+end_src
 
+=M-x= 可以看到它会把命令的注释直接显示在minibuffer中
+
+=C-h v= 查看一个变量的内容，可以发现不用再按回车看到里面的值。直接显示在minibuffer中
+
+=C-h f= 键位绑定都已经在minibuffer中显示出来了
+
+=C-x C-f= 显示文件大小权限等， =C-x b= 显 buffer 大小状态， =C-h f= 显示函数快捷键等
+
+*** =init-completion.el= minibuffer action 和自适应的 context menu：Embark
+:PROPERTIES:
+:CUSTOM_ID: h:completion-minibuffer-3
+:END:
+
+在学习章节提到过[[h:learn-completion-minibuffer-3][(minibuffer action 和自适应的 context menu：Embar)]]
+
+#+begin_src emacs-lisp :tangle "lisp/init-completion.el"
   ;;; minibuffer action 和自适应的 context menu：Embark
-  (package-install 'embark)
-  (global-set-key (kbd "C-;") 'embark-act)
-  (setq prefix-help-command 'embark-prefix-help-command)
+  (use-package embark
+    :ensure t
+    :init
+    ;; Optionally replace the key help with a completing-read interface
+    (setq prefix-help-command #'embark-prefix-help-command)
+    :config
+    ;; Hide the mode line of the Embark live/completions buffers
+    (add-to-list 'display-buffer-alist
+                 '("\\`\\*Embark Collect \\(Live\\|Completions\\)\\*"
+                   nil
+                   (window-parameters (mode-line-format . none))))
+    :bind
+    (("C-;" . embark-act)         ;; pick some comfortable binding
+     )) ;; alternative for `describe-bindings'
+#+end_src
 
+使用
+
+光标在函数位置，按 =C-;= 
+- RET 查看光标处函数定义文件位置，并打开
+- c 修改变量的值
+  - 如 C-h v 变量名，按 C-; c 修改变量的值
+
+优点：不需要记快捷键了
+- 以前查看函数的绑定键
+  - ~C-h b~ 查看函数快捷键绑定：
+  - 以前按 =C-x C-h= 时，会告诉你 =C-x= 绑定了哪些快捷键
+- 设置了 =(setq prefix-help-command #'embark-prefix-help-command)= 后
+  - 按 =C-x C-h= 模糊输入函数名可看到绑定的快捷键，按回车可直接执行命令，就不需要再记快捷键了
+
+*** =init-completion.el= 增强文件内搜索Consult
+:PROPERTIES:
+:CUSTOM_ID: h:completion-minibuffer-4
+:END:
+
+在学习章节提到过[[h:learn-completion-minibuffer-4][(增强文件内搜索和跳转函数定义：Consult)]]
+
+#+begin_src emacs-lisp :tangle "lisp/init-completion.el"
   ;;; 增强文件内搜索和跳转函数定义：Consult
-  (package-install 'consult)
-  ;;replace swiper 可以替代老的 ivy mode 的 swiper 功能
-  (global-set-key (kbd "C-s") 'consult-line)
-  (global-set-key (kbd "M-s i") 'consult-imenu)  ;跳转函数定义
+  (use-package consult
+    :ensure t
+    ;;replace swiper 可以替代老的 ivy mode 的 swiper 功能
+    :bind (
+           ("C-s" . consult-line) ;; replace swipe
+           ("M-s i" . consult-imenu)  ;跳转函数定义
+           ;;("C-x b" .  consult-buffer) ;; 多显示最近打开文件。替换默认 C-x b buffer
+           ;;("C-c p s" . consult-ripgrep) ;;  查找文件内容，需要安装 ripgrep 命令
+           )
+    )
+#+end_src
 
+使用 =C-s= 搜索的内容就会在minibuffer中垂直显示，使用C-p 或 C-n来上下选择
+
+使用 =M-s i= 跳转函数定义或者org-mode标题
+
+这些组合可以秒杀ivy helm这种一统的插件。
+
+**** =init-completion.el= 增强 embark 和 consult，批量搜索替换大杀器
+:PROPERTIES:
+:CUSTOM_ID: h:completion-minibuffer-4-1
+:END:
+
+在学习章节提到过[[#h:learn-completion-minibuffer-4-1][(增强 embark 和 consult，批量搜索替换大杀器)]]
+
+性能： grep < ack < ag < ripgrep(rg)
+
+使用ripgrep来进行搜索, =M-x consult-ripqgrep= 搜索hello 会出现报错找不到rg命令。
+
+#+begin_example
+Error running timer: (file-missing "Searching for program" "No such file or directory" "rg")
+#+end_example
+
+下载ripgrep: <https://github.com/BurntSushi/ripgrep> msys2 <https://packages.msys2.org/base/mingw-w64-ripgrep>
+
+安装方式：
+- PC msys2 ~pacman -S mingw-w64-x86_64-ripgrep~
+- PC github release 下载windows包，解压并加入到PARH变量中
+- Arch Linux  ~sudo pacman -S ripgrep~
+- macOS ~brew install ripgrep~
+
+再使用ripgrep来进行搜索, =M-x consult-ripgrep= 搜索hello ，所有当前目录下包含hello字符串的信息都在minibuffer中展示出来了。 使用 =C-n= 或 =C-p= 来预览文件或进入文件里。
+
+*下面介绍批量修改插件*
+
+
+
+#+begin_src emacs-lisp :tangle "lisp/init-completion.el"
+  ;;; 批量修改文件内容
+  (use-package embark-consult
+    :ensure t)
+
+  (use-package wgrep
+    :ensure t)
+
+  (setq wgrep-auto-save-buffer t)
+
+  (eval-after-load 'consult
+    '(eval-after-load 'embark
+       '(progn
+          (require 'embark-consult)
+          (add-hook 'embark-collect-mode-hook #'consult-preview-at-point-mode)))) ;hook 第一个参数执行前，先执行第2个参数的功能
+
+  (define-key minibuffer-local-map (kbd "C-c C-e") 'embark-export-write)
+  #+end_src
+
+批量替换操作
+- ~M-x consult-ripgrep~  默认会在以 git 为根目录搜索。如 =#hello= ，搜索包含hello字符的文件。 ~C-n/C-p~ 下上搜索同时可以预览。
+- ~C-c C-e~ 打开写
+- ~M-x query-replace-regexp~ 输入hello 回车， 替换为hello 回车。 按 y 同意当前行替换，n 不同意修改
+- ~C-c C-c~ 执行替换，按 q 退出
+
+
+当前buffer替换操作
+- =C-s= 搜索， 输入hello
+- =C-c C-e= 编辑
+- ~M-x query-replace-regexp~ 输入要替换的内容
+- ~C-c C-c~ 执行替换，按 q 退出
+
+*配置搜索中文文件*
+
+everythin工具可以快速搜索本地文件。下载地址： <https://www.voidtools.com/zh-cn/downloads/>
+
+安装好后，同时下载 ES.exe 客户端工具加入环境变量。
+
+#+begin_src emacs-lisp :tangle "lisp/init-completion.el"
   ;;; 配置搜索中文文件
   ;; PC提前安装 everyting 及其客户端ES. 利用M-x consult-locate搜索
   (progn
@@ -1190,20 +1450,19 @@ early-init.el 处激活缓存[[#h:package-cache][(=early-init.el= 初始化包�
           consult-async-input-throttle 0.2
           consult-async-input-debounce 0.1)
         ))
-
-  ;;; 批量修改文件内容
-  (package-install 'embark-consult)
-  (package-install 'wgrep)
-  (setq wgrep-auto-save-buffer t)
-
-  (eval-after-load 'consult
-    '(eval-after-load 'embark
-       '(progn
-          (require 'embark-consult)
-          (add-hook 'embark-collect-mode-hook #'consult-preview-at-point-mode)))) ;hook 第一个参数执行前，先执行第2个参数的功能
-
-  (define-key minibuffer-local-map (kbd "C-c C-e") 'embark-export-write)
 #+end_src
+
+操作：
+- 前提：PC 始终打开everything, 转为ES会调用everthing
+- =M-x consult-locate= 回车，输入要搜索的文件如 =#init.el= 。 可以看到minibuffer中显示的和everthing界面搜索的是一样的。
+- 再输入个#号就可以使用 orderless 的功能进行过滤。如只想看29.4中init.el文件 =#init.el#29.4= 选中回车即可打开对应文件
+
+使用外部程序打开：
+- =M-x consult-locate= 回车，输入要搜索的文件. 如搜索projeckt中的txt文件 =#\.txt#project=
+- 使用embark =C;=  按x使用外部程序打开txt文件
+
+中文搜索操作：
+- =M-x consult-locate= 回车，输入要搜索的文件. 如 =#学习=
 
 *** =init-completion.el= 调用 provide
 
@@ -1248,7 +1507,16 @@ early-init.el 处激活缓存[[#h:package-cache][(=early-init.el= 初始化包�
       "EAF")
       (t
        (awesome-tab-get-group-name (current-buffer))))))
+#+end_src
 
+*** =init-tools.el= 使用拼音进行搜索
+:PROPERTIES:
+:CUSTOM_ID: h:tools-search-pinyin
+:END:
+
+在学习章节提到过[[#h:learn-tools-search-pinyin][(使用拼音进行搜索)]]
+
+#+begin_src emacs-lisp :tangle "lisp/init-tools.el"
   ;;; 使用拼音进行搜索
   ;;ivy
   ;; Encoding
@@ -1260,7 +1528,8 @@ early-init.el 处激活缓存[[#h:package-cache][(=early-init.el= 初始化包�
   ;;(prefer-coding-system 'utf-8-auto)
 
 
-  (package-install 'pyim)
+  (use-package pyim
+    :ensure t)
 
   (defun eh-orderless-regexp (orig_func component)
     (let ((result (funcall orig_func component)))
@@ -1281,12 +1550,23 @@ early-init.el 处激活缓存[[#h:package-cache][(=early-init.el= 初始化包�
   (add-hook 'minibuffer-exit-hook 'disable-py-search) ;退出minibuffer时自动退出拼音搜索
 
   (global-set-key (kbd "s-p") 'toggle-chinese-search) ;需要时打开拼音搜索。因为拼音搜索性能不稳定
+#+END_SRC
 
+*** =init-tools.el= keycast
+:PROPERTIES:
+:CUSTOM_ID: h:tools-keycast
+:END:
+
+modeline上显示我的所有的按键和执行的命令
+
+#+begin_src emacs-lisp :tangle "lisp/init-tools.el"
   ;;; modeline上显示我的所有的按键和执行的命令
   (use-package keycast
     :ensure t
     :init (keycast-mode-line-mode 1)) ; 在标题显示
 #+end_src
+
+在使用doom-modeline上面配置会报错。这里用下面的配置
 
 *** =init-tools.el= 调用 provide
 
@@ -1297,7 +1577,13 @@ early-init.el 处激活缓存[[#h:package-cache][(=early-init.el= 初始化包�
 
 ** =init-ui.el=
 
-*** =init-ui.el= config
+*** =init-ui.el= 内置配置
+:PROPERTIES:
+:CUSTOM_ID: h:ui-built-in
+:END:
+
+在学习章节提到过[[h:learn-ui-built-in][(外观配置)]]
+
 #+begin_src emacs-lisp :tangle "lisp/init-ui.el" :mkdirp yes
   (global-display-line-numbers-mode 1) ;显示行号 29版本。29之前用(global-linum-mode 1)
   (setq inhibit-startup-screen t) ; 尝试关掉启动界面
@@ -1319,8 +1605,43 @@ early-init.el 处激活缓存[[#h:package-cache][(=early-init.el= 初始化包�
   (global-hl-line-mode t)                      ;; 高亮当前行
 
   ;;主题
-  (load-theme 'tango-dark)
+  ;;(load-theme 'tango-dark) ;这里使用doom-theme
 #+end_src
+
+*** =init-ui.el= doom-emacs
+:PROPERTIES:
+:CUSTOM_ID: h:ui-doom-emacs
+:END:
+
+#+begin_src emacs-lisp :tangle "lisp/init-ui.el"
+  ;; 这里的执行顺序非常重要，doom-modeline-mode 的激活时机一定要在设置global-mode-string 之后‘
+  (use-package doom-themes
+    :ensure t)
+  (load-theme 'doom-one 1)
+
+  (use-package doom-modeline
+    :ensure t
+    :custom-face
+    (mode-line ((t (:height 0.9))))
+    (mode-line-inactive ((t (:height 0.9))))
+    :init
+    (doom-modeline-mode t))
+#+end_src
+
+#+begin_src emacs-lisp :tangle no
+  (use-package doom-themes
+    :ensure t)
+  (load-theme 'doom-one 1)
+
+  (use-package doom-modeline
+    :ensure t
+    :custom-face
+  (mode-line ((t (:height 0.9))))
+  (mode-line-inactive ((t (:height 0.9))))
+    :init
+    (doom-modeline-mode t))
+#+end_src
+
 *** =init-ui.el= 调用 provide
 
 #+begin_src emacs-lisp :tangle "lisp/init-ui.el"
@@ -1330,7 +1651,7 @@ early-init.el 处激活缓存[[#h:package-cache][(=early-init.el= 初始化包�
 
 ** =init-org.el=
 
-*** =init-org.el= config
+*** =init-org.el= 内置配置
 
 #+begin_src emacs-lisp :tangle "lisp/init-org.el" :mkdirp yes
   ;;; config
@@ -1351,6 +1672,173 @@ early-init.el 处激活缓存[[#h:package-cache][(=early-init.el= 初始化包�
                              (if (char-equal c ?\<) t (,electric-pair-inhibit-predicate c))))))
 #+end_src
 
+*** =init-org.el= 安装最新org包
+
+#+begin_src emacs-lisp :tangle "lisp/init-org.el"
+  ;;; 安装 org，这个配置一定要配置在 use-package 的初始化之前，否则无法正常安装
+  (assq-delete-all 'org package--builtins)
+  (assq-delete-all 'org package--builtin-versions)
+  (use-package org
+    :pin gnu-elpa
+    :ensure t)
+
+  (use-package org-contrib  ;非org的官方贡献的插件
+    :ensure t
+    :pin nongnu)
+
+ 
+
+#+end_src
+
+*** =init-org.el= org todo
+
+
+#+begin_src emacs-lisp :tangle "lisp/init-org.el"
+  ;;; 自定义org todo  C-c C-t 
+  (setq org-todo-keywords
+        (quote ((sequence "TODO(t)" "STARTED(s)" "|" "DONE(d!/!)")
+                (sequence "WAITING(w@/!)" "SOMEDAY(S)" "|" "CANCELLED(c@/!)" "MEETING(m)" "PHONE(p)"))))
+#+end_src
+
+以上代码让你在为一个标题提供待办事项状态时添加了一个键序列，你可以键入 =C-c C-t= 来查看效果。
+
+其中 =@= 代表记录日志，而 =!= 代表记录时间戳，你也可以让他们具有两种功能: =TODO(t@/!)=
+
+*任务进度* ：
+
+#+begin_src org
+,* WAITING Daily routine
+- [ ] leetcode
+- [ ] execrcise
+#+end_src
+
+
+#+begin_src org
+,* TODO Daily routine [100%]
+SCHEDULED: <2022-06-10 Fri 10:00 +1d>
+:PROPERTIES:
+:LAST_REPEAT: [2022-06-09 Thu 02:31]
+:END:
+- State "DONE"       from "TODO"       [2022-06-09 Thu 02:31]
+- State "TODO"       from "WAITING"    [2022-06-09 Thu 02:26]
+- [X] leetcode
+- [X] execrcise
+#+end_src
+
+- =C-c C-s= 开始计划： =<2022-06-09 Thu 10:00>= 10点
+  
+- 每天 10 点做：需要 =+d= 加一天 =SCHEDULED: <2022-06-09 Thu 10:00 +1d>= ，后面在 agenda 中会用到
+  
+- 完成情况进度：每一项任务使用复选框，todo 部分加 =[%]= ，复选框使用 =C-c C-c= 打 叉 表示完成。
+
+标记完成：=C-c C-t d= ，可以看到 =SCHEDULED= 时间自动加 1 =SCHEDULED: <2022-06-10 Fri 10:00 +1d>=
+
+#+begin_src org
+  ,* TODO Daily routine [100%]
+  SCHEDULED: <2022-06-10 Fri 10:00 +1d>
+  :PROPERTIES:
+  :LAST_REPEAT: [2022-06-09 Thu 02:31]
+  :END:
+  - State "DONE"       from "TODO"       [2022-06-09 Thu 02:31]
+  - State "TODO"       from "WAITING"    [2022-06-09 Thu 02:26]
+  - [X] leetcode
+  - [X] execrcise
+#+end_src
+
+不过进入新的计划，每一项还需要新状态。这很麻烦，所以这边用另一个插件包 org-contrib。
+目的是要引入 check list
+
+#+begin_src emacs-lisp :tangle "lisp/init-org.el"
+  (require 'org-checklist)
+  ;; need repeat task and properties
+  (setq org-log-done t)
+  (setq org-log-into-drawer t)
+#+end_src
+
+通过 =M-x org-set-property=  添加 =RESET_CHECK_BOXES= 。 =RESET_CHECK_BOXES=  设置为 =t= 开启， 会在 =PROPERTIES= 中增加属性。
+
+当 =C-c C-t d= 把标题设置为 DONE，自动进入下一个时间点。 这对自定义一些重复性工作比较方便。
+
+
+#+begin_src org
+  ,* TODO Daily routine [0%]
+  SCHEDULED: <2022-06-15 Wed 10:00 +1d>
+  :PROPERTIES:
+  :LAST_REPEAT: [2022-06-09 Thu 07:24]
+  :RESET_CHECK_BOXES: t
+  :END:
+  - State "DONE"       from "TODO"       [2022-06-09 Thu 07:24]
+  - State "DONE"       from "TODO"       [2022-06-09 Thu 02:31]
+  - State "TODO"       from "WAITING"    [2022-06-09 Thu 02:26]
+  - [ ] leetcode
+  - [ ] execrcise
+#+end_src
+
+每次完成任务会自动插入完成状态，使用下面设置可以隐藏到 =PROPERTIES= 里：
+#+begin_src emacs-lisp
+;; need repeat task and properties
+(setq org-log-done t)
+(setq org-log-into-drawer t)
+#+end_src
+
+使用 =C-c C-t d= 完成任务， 完成状态会增加到 =LOGBOOK= 属性中。把之前的状态手动行动过来。
+#+begin_src org
+,* TODO Daily routine [0%]
+SCHEDULED: <2022-06-17 Fri 10:00 +1d>
+:PROPERTIES:
+:LAST_REPEAT: [2022-06-09 Thu 07:44]
+:RESET_CHECK_BOXES: t
+:END:
+:LOGBOOK:
+- State "DONE"       from "TODO"       [2022-06-09 Thu 07:44]
+- State "DONE"       from "TODO"       [2022-06-09 Thu 07:34]
+- State "DONE"       from "TODO"       [2022-06-09 Thu 07:24]
+- State "DONE"       from              [2022-06-09 Thu 03:03]
+- State "DONE"       from              [2022-06-09 Thu 02:50]
+- State "DONE"       from "TODO"       [2022-06-09 Thu 02:31]
+- State "TODO"       from "WAITING"    [2022-06-09 Thu 02:26]  
+:END:
+- [ ] leetcode
+- [ ] execrcise
+#+end_src
+
+
+*** =init-org.el= org agenda
+
+
+#+begin_src emacs-lisp :tangle "lisp/init-org.el"
+
+
+#+end_src
+
+*** =init-org.el= org capture
+
+#+begin_src emacs-lisp :tangle "lisp/init-org.el"
+
+
+#+end_src
+
+*** =init-org.el= org effect
+
+#+begin_src emacs-lisp :tangle "lisp/init-org.el"
+
+
+#+end_src
+
+*** =init-org.el= org tags
+
+#+begin_src emacs-lisp :tangle "lisp/init-org.el"
+
+
+#+end_src
+
+*** =init-org.el= org priority
+
+#+begin_src emacs-lisp :tangle "lisp/init-org.el"
+
+
+#+end_src
+
 *** =init-org.el= 调用 provide
 
 #+begin_src emacs-lisp :tangle "lisp/init-org.el"
@@ -1366,6 +1854,23 @@ early-init.el 处激活缓存[[#h:package-cache][(=early-init.el= 初始化包�
   ;;; config
 
 #+end_src
+
+*** =init-keybindings.el= 文件搜索
+:PROPERTIES:
+:CUSTOM_ID: h:keybindings-search-file
+:END:
+
+配置划分成不同文件，好以后方式方便查找
+
+#+begin_src emacs-lisp :tangle "lisp/init.keybindings.el"
+    (global-set-key (kbd "C-c p f") 'project-find-file) ;;   查找文件，默认绑定在 C-x p f
+    (eval-after-load 'consult (global-set-key (kbd "C-c p s") 'consult-ripgrep))  ;;  查找文件内容
+#+end_src
+
+C-c 是给用户定义的快捷键，p 代表 project ， f 代表 find-file
+
+consult-ripgrep 需要安装 consult 和 ripgrep ， 方便查找关键字
+
 *** =init-keybindings.el= 调用 provide
 
 #+begin_src emacs-lisp :tangle "lisp/init-keybindings.el"
@@ -1433,8 +1938,15 @@ early-init.el 处激活缓存[[#h:package-cache][(=early-init.el= 初始化包�
         ('consult-location (let ((embark-after-export-hook #'occur-edit-mode))
                              (embark-export)))
         (x (user-error "embark category %S doesn't support writable export" x)))))
+#+end_src
 
+*** =init-funcs.el= 超级前端-打开PC文件管理器
+:PROPERTIES:
+:CUSTOM_ID: h:funcs-front-explorer
+:END:
+在学习章节提到过[[#h:learn-funcs-front-explorer][(使用 Emacs 来打开文件管理器)]]
 
+#+begin_src emacs-lisp :tangle "lisp/init-funcs.el"
   ;;; 使用 Emacs 来打开文件管理器
   (defun consult-directory-externally (file)
     "Open FILE externally using the default application of the system."

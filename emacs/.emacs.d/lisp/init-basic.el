@@ -27,6 +27,7 @@
 (electric-pair-mode t)                       ; 括号补全
 (add-hook 'prog-mode-hook #'show-paren-mode) ; 编程模式下，光标在括号上时高亮另一个括号
 (delete-selection-mode t)                    ; 选中文本后输入文本会替换文本（更符合我们习惯了的其它编辑器的逻辑。默认选中放后面
+
 (global-auto-revert-mode t)                  ; 自动加载外部修改过的文件
 (setq auto-save-default nil)                 ; 关闭自动保存文件，#为后缀的文件
 (setq ring-bell-function 'ignore)            ; 关闭提示声音
@@ -66,7 +67,7 @@
 ;; 记住光标所在文件的位置
 (use-package saveplace
   :ensure nil
-  :hook (after-init . save-place-mode))
+  :hook (after-init . save-place-mode)) ;在emacs配置完全加载好以后，执行save-place-mode
 
 ;;; modeline上显示文件大小、 列号
 (use-package simple

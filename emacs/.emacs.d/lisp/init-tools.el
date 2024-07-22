@@ -41,7 +41,8 @@ Other buffer group by `awesome-tab-get-group-name' with project name."
 ;;(prefer-coding-system 'utf-8-auto)
 
 
-(package-install 'pyim)
+(use-package pyim
+  :ensure t)
 
 (defun eh-orderless-regexp (orig_func component)
   (let ((result (funcall orig_func component)))
