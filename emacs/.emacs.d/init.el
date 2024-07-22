@@ -66,7 +66,6 @@
 (load (locate-user-emacs-file "jasper-emacs-pre-custom.el") :no-error :no-message)
 
 (require 'init-basic)
-(require 'init-funcs)
 (require 'init-packages)
 (use-package benchmark-init
   :ensure t
@@ -82,6 +81,7 @@
 (require 'init-keybindings)
 (require 'init-programming)
 (require 'init-window)
+(require 'init-funcs)
 
 (load (locate-user-emacs-file "jasper-emacs-post-custom.el") :no-error :no-message)
 
