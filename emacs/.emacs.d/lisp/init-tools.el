@@ -34,11 +34,11 @@ Other buffer group by `awesome-tab-get-group-name' with project name."
 ;;ivy
 ;; Encoding
 ;; UTF-8 as the default coding system
-(when (fboundp 'set-charset-priority)
-  (set-charset-priority 'unicode))
+;;(when (fboundp 'set-charset-priority)
+;;  (set-charset-priority 'unicode))
 
-(set-language-environment 'chinese-gbk)
-(prefer-coding-system 'utf-8-auto)
+;;(set-language-environment 'chinese-gbk)
+;;(prefer-coding-system 'utf-8-auto)
 
 
 (package-install 'pyim)
