@@ -32,7 +32,8 @@ Supports exporting consult-grep to wgrep, file to wdeired, and consult-location 
   (interactive "fOpen externally: ")
   (if (and (eq system-type 'windows-nt)
            (fboundp 'w32-shell-execute))
-      (shell-command-to-string (encode-coding-string (replace-regexp-in-string "/" "\\\\\\\\"
+      ;;(shell-command-to-string (encode-coding-string (replace-regexp-in-string "/" "\\\\\\\\"
+      (shell-command-to-string (encode-coding-string (replace-regexp-in-string "/" "\\\\"
             (format "explorer.exe %s" (file-name-directory (expand-file-name file)))) 'gbk))
     (call-process (pcase system-type
                     ('darwin "open")
