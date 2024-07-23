@@ -1706,6 +1706,7 @@ modeline上显示我的所有的按键和执行的命令
 
 *任务进度* ：
 
+创建文件 =~/gtd.org=
 #+begin_src org
 ,* WAITING Daily routine
 - [ ] leetcode
@@ -1781,7 +1782,7 @@ SCHEDULED: <2022-06-10 Fri 10:00 +1d>
 (setq org-log-into-drawer t)
 #+end_src
 
-使用 =C-c C-t d= 完成任务， 完成状态会增加到 =LOGBOOK= 属性中。把之前的状态手动行动过来。
+使用 =C-c C-t d= 完成任务， 完成状态会增加到 =LOGBOOK= 属性中。把之前的状态手动移过来。
 #+begin_src org
 ,* TODO Daily routine [0%]
 SCHEDULED: <2022-06-17 Fri 10:00 +1d>
@@ -1805,18 +1806,53 @@ SCHEDULED: <2022-06-17 Fri 10:00 +1d>
 
 *** =init-org.el= org agenda
 
+相当于有一个日历实时告诉你每天要做什么。通过 =M-x org-agenda= 来打开. 这里需要一个存放日程的目录，同时绑定快捷键 =C-c a= 方便查看。
+
 
 #+begin_src emacs-lisp :tangle "lisp/init-org.el"
-
-
+  ;; C-c C-s schedule
+  ;; C-c C-d deadline
+  (global-set-key (kbd "C-c a") 'org-agenda)
+  (setq org-agenda-files '("~/gtd.org")) ;; 定义 agenda 文件，可以是多个
+  (setq org-agenda-span 'day) ;; 按天观察
 #+end_src
+
+基本操作：
+- =C-c a a=  可以看到每周日程。
+- =f/b= 下一个/上一个阶段安排, =d/w= 天/周视图，=n/p= 上/下移动光标 
+- 在 =~/gtd.org= 设置 deadline =C-c C-d= ，在日程中也能看到。
+  
 
 *** =init-org.el= org capture
 
 #+begin_src emacs-lisp :tangle "lisp/init-org.el"
+  (setq org-capture-templates
+        '(("t" "Todo" entry (file+headline "~/gtd.org" "Workspace")
+           "* TODO [#B] %?\n  %i\n %U"
+           :empty-lines 1)))
 
-
+  (global-set-key (kbd "C-c r") 'org-capture)
 #+end_src
+
+这个模板包含五个部分，分别是
+
+| 模板组成     | 对应默认模板中的内容                      | 描述             |
+| key         | "t"                                     | 用来选择模板的字符 |
+| description | "Todo"                                  | 展示用的模板描述   |
+| type        | entry                                   | 新增内容的类型    |
+| target      | (file+headline "~/gtd.org" "Workspace") | 新增内容的存储位置 |
+| template    | "* TODO [#B] %?\n  %i\n %U"             | 新增内容的模板    |
+
+新增内容的模板:
+- "%?" 是一个更特殊的标记，它不会产生任何内容，当所有其他的特殊标记都展开完毕或者输入完毕后，光标将会停留在这个标记所在的位置。
+- %i 可以插入一段初始化内容
+- %U  当前包含日期和时间的未激活的 timestamp，如: [2018-03-04 日 19:26] 
+
+定义捕获模板，绑定到快捷键 =C-c r= 。 更写详细的参考官方文档。
+
+操作：
+- =C-c a t= 向指定文件中写内容。 =C-c C-c= 完成
+
 
 *** =init-org.el= org effect
 

@@ -36,9 +36,18 @@
 (setq org-log-done t)
 (setq org-log-into-drawer t)
 
+;; C-c C-s schedule
+;; C-c C-d deadline
+(global-set-key (kbd "C-c a") 'org-agenda)
+(setq org-agenda-files '("~/gtd.org")) ;; 定义 agenda 文件，可以是多个
+(setq org-agenda-span 'day) ;; 按天观察
 
+(setq org-capture-templates
+      '(("t" "Todo" entry (file+headline "~/gtd.org" "Workspace")
+         "* TODO [#B] %?\n  %i\n %U"
+         :empty-lines 1)))
 
-
+(global-set-key (kbd "C-c r") 'org-capture)
 
 
 
