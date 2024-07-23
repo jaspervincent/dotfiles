@@ -80,6 +80,7 @@
 (require 'init-org)
 (require 'init-keybindings)
 (require 'init-programming)
+(require 'init-evil)
 (require 'init-window)
 (require 'init-funcs)
 

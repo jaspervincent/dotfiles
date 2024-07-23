@@ -49,11 +49,11 @@
 
 (global-set-key (kbd "C-c r") 'org-capture)
 
-
-
-
-
-
+(setq org-agenda-custom-commands
+      '(("c" "重要且紧急的事"
+         ((tags-todo "+PRIORITY=\"A\"")))
+        ;; ...other commands here
+        ))
 
 (message "Load init-org done...")
 (provide 'init-org)

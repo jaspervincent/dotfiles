@@ -1,3 +1,4 @@
+
 #+title: GNU Emacs 配置
 #+author: Jasper Hsu
 #+email: xcwhome@163.com
@@ -812,6 +813,10 @@ Org-mode 下的文学编程将颠覆你对于 Emacs 的看法。因为我们也�
 
 
 还想使用旧版快捷键
+<<h:learn-org-built-in>>
+
+我的emacs模块配置[[#h:org-built-in][(=init-org.el= 内置配置)]]
+
 
 #+begin_src emacs-lisp
   (with-eval-after-load 'org
@@ -848,9 +853,19 @@ Org-mode 下的文学编程将颠覆你对于 Emacs 的看法。因为我们也�
   - simple[[#h:basic-simple][(=init-basic.el= simple)]]
   - keycast[[#h:tools-keycast][(=init-tools.el= keycast)]]
   - doom-modeline [[#h:ui-doom-emacs][(=init-ui.el= doom-emacs)]]
-*** 3
+*** org
 
 - org
+  - org todo[[#h:org-todo][(=init-org.el= org todo)]]
+  - org agenda[[#h:org-agenda][(=init-org.el= org agenda)]]
+  - org capture[[#h:org-capture][(=init-org.el= org capture)]]
+  - org effect[[#h:org-effect][(=init-org.el= org effect)]]
+  - org tags[[#h:org-tags][(=init-org.el= org tags)]]
+  - org priority[[#h:org-priority][(=init-org.el= org priority)]]
+*** 4
+
+- ox-hugo来写博客
+- eglot emacs29版本内置
 
 
 ** 清理学习内容
@@ -1024,6 +1039,7 @@ early-init.el 处激活缓存[[#h:package-cache][(=early-init.el= 初始化包�
   (require 'init-org)
   (require 'init-keybindings)
   (require 'init-programming)
+  (require 'init-evil)
   (require 'init-window)
   (require 'init-funcs)
 
@@ -1628,18 +1644,23 @@ modeline上显示我的所有的按键和执行的命令
     (doom-modeline-mode t))
 #+end_src
 
+
 #+begin_src emacs-lisp :tangle no
   (use-package doom-themes
-    :ensure t)
-  (load-theme 'doom-one 1)
+    :ensure t
+    :init
+    (if (display-graphic-p)
+        (load-theme 'doom-solarized-light)
+      (load-theme 'doom-tomorrow-night)))
 
   (use-package doom-modeline
     :ensure t
-    :custom-face
-  (mode-line ((t (:height 0.9))))
-  (mode-line-inactive ((t (:height 0.9))))
     :init
-    (doom-modeline-mode t))
+    (setq doom-modeline-minor-modes t)
+    :custom-face
+    (mode-line ((t (:height 0.95))))
+    (mode-line-inactive ((t (:height 0.95))))
+    :hook (after-init . doom-modeline-mode))
 #+end_src
 
 *** =init-ui.el= 调用 provide
@@ -1650,8 +1671,16 @@ modeline上显示我的所有的按键和执行的命令
 #+end_src
 
 ** =init-org.el=
+:PROPERTIES:
+:CUSTOM_ID: h:org
+:END:
 
 *** =init-org.el= 内置配置
+:PROPERTIES:
+:CUSTOM_ID: h:org-built-in
+:END:
+
+在学习章节提到过[[h:learn-org-built-i][(还想使用旧版快捷)]]
 
 #+begin_src emacs-lisp :tangle "lisp/init-org.el" :mkdirp yes
   ;;; config
@@ -1691,6 +1720,9 @@ modeline上显示我的所有的按键和执行的命令
 #+end_src
 
 *** =init-org.el= org todo
+:PROPERTIES:
+:CUSTOM_ID: h:org-todo
+:END:
 
 
 #+begin_src emacs-lisp :tangle "lisp/init-org.el"
@@ -1776,7 +1808,7 @@ SCHEDULED: <2022-06-10 Fri 10:00 +1d>
 #+end_src
 
 每次完成任务会自动插入完成状态，使用下面设置可以隐藏到 =PROPERTIES= 里：
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
 ;; need repeat task and properties
 (setq org-log-done t)
 (setq org-log-into-drawer t)
@@ -1803,8 +1835,11 @@ SCHEDULED: <2022-06-17 Fri 10:00 +1d>
 - [ ] execrcise
 #+end_src
 
-
 *** =init-org.el= org agenda
+:PROPERTIES:
+:CUSTOM_ID: h:org-agenda
+:END:
+
 
 相当于有一个日历实时告诉你每天要做什么。通过 =M-x org-agenda= 来打开. 这里需要一个存放日程的目录，同时绑定快捷键 =C-c a= 方便查看。
 
@@ -1822,8 +1857,10 @@ SCHEDULED: <2022-06-17 Fri 10:00 +1d>
 - =f/b= 下一个/上一个阶段安排, =d/w= 天/周视图，=n/p= 上/下移动光标 
 - 在 =~/gtd.org= 设置 deadline =C-c C-d= ，在日程中也能看到。
   
-
 *** =init-org.el= org capture
+:PROPERTIES:
+:CUSTOM_ID: h:org-capture
+:END:
 
 #+begin_src emacs-lisp :tangle "lisp/init-org.el"
   (setq org-capture-templates
@@ -1851,28 +1888,44 @@ SCHEDULED: <2022-06-17 Fri 10:00 +1d>
 定义捕获模板，绑定到快捷键 =C-c r= 。 更写详细的参考官方文档。
 
 操作：
-- =C-c a t= 向指定文件中写内容。 =C-c C-c= 完成
-
+- =C-c a t= 向指定文件中写内容。 =C-c C-c= 完成. 会记录到gtd.org文件中
+- 在文件中设置开始时间 =C-c C-s= 21:00 点， 再执行 =C-c a a= 就可看到日程更新了。
 
 *** =init-org.el= org effect
+:PROPERTIES:
+:CUSTOM_ID: h:org-effect
+:END:
 
-#+begin_src emacs-lisp :tangle "lisp/init-org.el"
 
+设置任务完成需要的时间。
 
-#+end_src
+在 agenda view 中,  =e= 键可以设置effort, 按 =_= (org-agenda-filter-by-effort) 可以过滤指定effort 的heading
+
+范例:设置 30分钟任务
+- 进入agenda =C-c a a=
+- 设置完成任务需要30分钟，按 =e= 输入 =00:30= 
+- 过滤 1 小时内能完成任务，按 =_=  输入 =<= 选择 [4]1:00 对应的数字 4
 
 *** =init-org.el= org tags
+:PROPERTIES:
+:CUSTOM_ID: h:org-tags
+:END:
 
-#+begin_src emacs-lisp :tangle "lisp/init-org.el"
 
-
-#+end_src
+在 agenda view 中添加tag, 使用 =:= , 也可以 =M-x org-agenda-set-tags= 添加。
 
 *** =init-org.el= org priority
+:PROPERTIES:
+:CUSTOM_ID: h:org-priority
+:END:
+
 
 #+begin_src emacs-lisp :tangle "lisp/init-org.el"
-
-
+  (setq org-agenda-custom-commands
+        '(("c" "重要且紧急的事"
+           ((tags-todo "+PRIORITY=\"A\"")))
+          ;; ...other commands here
+          ))
 #+end_src
 
 *** =init-org.el= 调用 provide
@@ -1916,17 +1969,223 @@ consult-ripgrep 需要安装 consult 和 ripgrep ， 方便查找关键字
 
 ** =init-programming.el=
 
-*** =init-programming.el= config
+*** =init-programming.el= c++
+:PROPERTIES:
+:CUSTOM_ID: h:c++
+:END:
+
+**** 使用 eglot 来编写、运行和调试 C/C++ 代码
+:PROPERTIES:
+:CUSTOM_ID: h:c++-eglot
+:END:
+
+*安装 mysys2*
+
+1.下载 https://www.msys2.org/
+
+2.安装 C/C++ 必要的软件工具
+
+#+begin_src sh :tangle no
+  #安装c++必要软件 gcc gdb make clang clang-tool
+  pacman -Syu
+  pacman -S mingw-w64-x86_64-gcc mingw-w64-x86_64-gdb make mingw-w64-x86_64-clang mingw-w64-x86_64-clang-tools-extra
+#+end_src
+
+3.设置环境变量
+#+begin_example
+d:\msys64\mingw64\bin
+d:\msys64\usr\bin
+#+end_example
+
+*安装 eglot(Emacs 29 自带 eglot)*
+
 
 #+begin_src emacs-lisp :tangle "lisp/init-programming.el" :mkdirp yes
-  ;;; config
-
+  ;;; c++ eglot
+  (require 'eglot)
+  (add-to-list 'eglot-server-programs '((c++-mode c-mode) "clangd"))
+  (add-hook 'c-mode-hook #'eglot-ensure)
+  (add-hook 'c++-mode-hook #'eglot-ensure)
 #+end_src
+
+测试一段c++代码
+
+=~/test.cpp=
+在emacs菜单栏flymake可以列出所有问题
+
+*一键运行代码*
+
+1.安装 quickrun:
+
+可以运行任意一个单文件程序
+#+begin_src emacs-lisp :tangle "lisp/init-programming.el"
+    ;;运行任意单文件程序 快捷键F5
+    (use-package quickrun
+      :ensure t
+      :commands (quickrun)
+      :init
+      (quickrun-add-command "c++/c1z"
+        '((:command . "g++")
+          (:exec . ("%c -std=c++1z %o -o %e %s"
+                    "%e %a"))
+          (:remove . ("%e")))
+        :default "c++"))
+    (global-set-key (kbd "<f5>") 'quickrun)
+#+end_src
+
+*使用 gdb 调试*
+
+1. 运行 =M-x compile=, 输入 g++ -g -o test.o test.cpp #-g编译时生成调试信息
+2. 使用 =M-x gud-gdb= 输入 gdb ./test.o
+3. 常用调试命令
+
+| name            | function                                            |
+| list            | 显示源代码                                           |
+| break           | 新增断点， break main, break 12（行号）               |
+| info            | 查看断点或者局部变量信息 info breakpoints, info locals |
+| run             | 开始调试                                             |
+| next            | 类似 step over                                      |
+| step            | 跳转到函数内部                                       |
+| continue        | 继续运行到下一个断点                                  |
+| quit            | 退出调试                                             |
+| watch           | 内存断点                                             |
+| display         | 类似 IDE 里面的 watch 功能                           |
+| break 11 if xxx | 条件断点                                             |
+
+
+- list 显示源代码
+- break 11 在第11行打断点
+- break 12 在第12行打断点.
+  - 如果有函数名add，也可以给函数下断点 b add;
+  - 条件断点 b 20 if i == 2500 在第20行i等于时加断点
+- info breakpoints 查看断点信息
+- run 调试，程序停在第一个断点位置
+- print myVec的值
+- next下一个
+- print myVec的值,发生变化
+- continue 运行到下一个断点
+
+#+begin_example
+  (gdb) list
+  1	#include<iostream>
+  2	#include<iterator>
+  3	#include<vector>
+  4	
+  5	using namespace std;
+  6	
+  7	int main()
+  8	{
+  9	  vector<int> myVec;
+  10	  myVec.push_back(2);
+  (gdb) 
+  11	  myVec.push_back(3);
+  12	  cout << "Hello World"<<endl;
+  13	  
+  14	  cout <<"vect size: "<<myVec.size() <<endl;
+  15	  return 0;
+  16	}
+  (gdb) break 11
+  Breakpoint 1 at 0x140001483: file test.cpp, line 11.
+  (gdb) break 12
+  Breakpoint 2 at 0x14000149a: file test.cpp, line 12.
+  (gdb) info breakpoints
+  Num     Type           Disp Enb Address            What
+  1       breakpoint     keep y   0x0000000140001483 in main() at test.cpp:11
+  2       breakpoint     keep y   0x000000014000149a in main() at test.cpp:12
+  (gdb) run
+  Starting program: d:\tmp\emacs\test.o 
+  [New Thread 7812.0x4d34]
+  [New Thread 7812.0x4864]
+  [New Thread 7812.0x3bdc]
+
+  Thread 1 hit Breakpoint 1, main () at test.cpp:11
+  11	  myVec.push_back(3);
+  (gdb) print myVec
+  $1 = std::vector of length 1, capacity 1 = {2}
+  (gdb) next
+
+  Thread 1 hit Breakpoint 2, main () at test.cpp:12
+  12	  cout << "Hello World"<<endl;
+  (gdb) print myVec
+  $2 = std::vector of length 2, capacity 2 = {2, 3}
+  (gdb) continue
+  Continuing.
+  Hello World
+  vect size: 2
+  [Thread 7812.0x4d34 exited with code 0]
+  [Thread 7812.0x4864 exited with code 0]
+  [Thread 7812.0x3bdc exited with code 0]
+  [Inferior 1 (process 7812) exited normally]
+  (gdb) 
+#+end_example
+
 *** =init-programming.el= 调用 provide
 
 #+begin_src emacs-lisp :tangle "lisp/init-programming.el"
   (message "Load init-programming done...")
   (provide 'init-programming)
+#+end_src
+
+** =init-evil.el=
+
+*** =init-evil.el= 安装
+
+#+begin_src emacs-lisp :tangle "lisp/init-evil.el" :mkdirp yes
+  ;;; evil 
+  (use-package evil
+    :ensure t
+    :init
+    (setq evil-want-keybinding nil) ;不使用自带的键位绑定
+    (setq evil-want-C-u-scroll t) ;C-u 实现向上滚动。默认C-u 是emacs中的
+    (evil-mode)
+
+    ;; https://emacs.stackexchange.com/questions/46371/how-can-i-get-ret-to-follow-org-mode-links-when-using-evil-mode
+    (with-eval-after-load 'evil-maps
+      (define-key evil-motion-state-map (kbd "RET") nil)) ;如果有链接，按回车能访问这个链接
+    )
+#+end_src
+
+
+安装undo-tree
+#+begin_src emacs-lisp :tangle "lisp/init-evil.el"
+  ;;; evil 使用undo-tree来管理undo redo
+  (use-package undo-tree
+    :diminish
+    :init
+    (global-undo-tree-mode 1)
+    (setq undo-tree-auto-save-history nil)
+    (evil-set-undo-system 'undo-tree))
+#+end_src
+
+*Emacs中使用vim和外部使用vim的区别*
+
+vim 中有normal和insert模式，在emacs中是各种state, noarmal state, insert state
+
+- Normal State (N) :: 这是 Evil 默认的“静止状态”，其中定义了 vi 绑定的主体。
+
+- Insert State (I) :: 这是插入文本的状态，其中未修改的键将在缓冲区中插入相应的字符。
+
+- Emacs State (E) :: 一种尽可能接近默认 Emacs 行为的状态，通过 =C-z= 从emacs和 vi 相互切换。
+
+- Visual State (V) :: 用于选择文本区域的状态。
+
+- Motion State (M) 运动状态 （M） :: 一种特殊状态，适用于只读缓冲区，其中运动可用，但编辑操作不可用。只读的文档一般都是Motion state 如帮助文档。
+
+- Replace State (R) 替换状态 （R） :: 一种特殊状态，与插入状态非常相似，只不过它替换文本而不是插入。 按住大写的 =R= , 一直替换状态
+
+evil-guide: <https://github.com/noctuid/evil-guide.git>
+
+上述文档花2小时认真读就可以完全从vim用户切到emacs上使用了。
+
+自定义快捷键
+在进行插入模式后，不希望用emacs state
+
+
+*** =init-evil.el= 调用 provide
+
+#+begin_src emacs-lisp :tangle "lisp/init-evil.el"
+  (message "Load init-evil done...")
+  (provide 'init-evil)
 #+end_src
 
 ** =init-window.el=
