@@ -1096,6 +1096,9 @@ early-init.el 处激活缓存[[#h:package-cache][(=early-init.el= 初始化包�
   (global-set-key (kbd "C-h C-k") 'find-function-on-key)
 
   ;; 设置系统的编码，避免各处的乱码
+  ;; UTF-8 as the default coding system
+  (when (fboundp 'set-charset-priority)
+    (set-charset-priority 'unicode))
   (prefer-coding-system 'utf-8)
   (set-default-coding-systems 'utf-8)
   (set-terminal-coding-system 'utf-8)
@@ -1108,7 +1111,7 @@ early-init.el 处激活缓存[[#h:package-cache][(=early-init.el= 初始化包�
   (electric-pair-mode t)                       ; 括号补全
   (add-hook 'prog-mode-hook #'show-paren-mode) ; 编程模式下，光标在括号上时高亮另一个括号
   (delete-selection-mode t)                    ; 选中文本后输入文本会替换文本（更符合我们习惯了的其它编辑器的逻辑。默认选中放后面
-  
+
   (global-auto-revert-mode t)                  ; 自动加载外部修改过的文件
   (setq auto-save-default nil)                 ; 关闭自动保存文件，#为后缀的文件
   (setq ring-bell-function 'ignore)            ; 关闭提示声音
@@ -1642,8 +1645,12 @@ modeline上显示我的所有的按键和执行的命令
     (mode-line-inactive ((t (:height 0.9))))
     :init
     (doom-modeline-mode t))
+
+  (use-package nerd-icons
+    :ensure t)
 #+end_src
 
+现在更推荐用 [[https://github.com/rainstormstudio/nerd-icons.el][rainstormstudio/nerd-icons.el (github.com)]] 。直接下载一个nerd fonts就可以 (=M-x nerd-icons-install-fonts=)或者手动下载fonts目录中的 =NFM.ttf= 。GUI和terminal都可以显示icon，大小也更统一。
 
 #+begin_src emacs-lisp :tangle no
   (use-package doom-themes

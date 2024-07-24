@@ -15,6 +15,9 @@
 (global-set-key (kbd "C-h C-k") 'find-function-on-key)
 
 ;; 设置系统的编码，避免各处的乱码
+;; UTF-8 as the default coding system
+(when (fboundp 'set-charset-priority)
+  (set-charset-priority 'unicode))
 (prefer-coding-system 'utf-8)
 (set-default-coding-systems 'utf-8)
 (set-terminal-coding-system 'utf-8)

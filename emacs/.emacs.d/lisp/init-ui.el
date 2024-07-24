@@ -33,5 +33,8 @@
   :init
   (doom-modeline-mode t))
 
+(use-package nerd-icons
+  :ensure t)
+
 (message "Load init-ui done...")
 (provide 'init-ui)
