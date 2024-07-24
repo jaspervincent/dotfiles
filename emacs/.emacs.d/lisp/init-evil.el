@@ -46,6 +46,7 @@
 
 ;;; evil 使用undo-tree来管理undo redo
 (use-package undo-tree
+  :ensure t
   :diminish
   :init
   (global-undo-tree-mode 1)

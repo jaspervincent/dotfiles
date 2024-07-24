@@ -1201,6 +1201,7 @@ modeline上显示文件大小、列号
 
 #+begin_src emacs-lisp :tangle "lisp/init-basic.el"
   (use-package general
+    :ensure t
     :init
     (with-eval-after-load 'evil
       (general-add-hook 'after-init-hook
@@ -2294,6 +2295,7 @@ evil-guide: <https://github.com/noctuid/evil-guide.git>
 
   ;;; evil 使用undo-tree来管理undo redo
   (use-package undo-tree
+    :ensure t
     :diminish
     :init
     (global-undo-tree-mode 1)
