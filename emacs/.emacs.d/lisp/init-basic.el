@@ -84,6 +84,7 @@
 (use-package general
   :ensure t
   :init
+  ;; 针对evil插件。设置了一些类似leader键的函数. 如 leader 为空格对应函数global-definer , leader 为逗号对应函数global-leader
   (with-eval-after-load 'evil
     (general-add-hook 'after-init-hook
                       (lambda (&rest _)
@@ -101,6 +102,7 @@
     :prefix "SPC"
     :non-normal-prefix "C-SPC")
 
+  ;; 定义一个宏。这个宏的作用是继承global-dfiner函数的leader键SPC空格，接收一个inix-key变量的值为子leader
   (defmacro +general-global-menu! (name infix-key &rest body)
     "Create a definer named +general-global-NAME wrapping global-definer.
 Create prefix map: +general-global-NAME. Prefix bindings in BODY with INFIX-KEY."

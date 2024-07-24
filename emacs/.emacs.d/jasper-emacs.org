@@ -1,4 +1,3 @@
-
 #+title: GNU Emacs 配置
 #+author: Jasper Hsu
 #+email: xcwhome@163.com
@@ -1203,6 +1202,7 @@ modeline上显示文件大小、列号
   (use-package general
     :ensure t
     :init
+    ;; 针对evil插件。设置了一些类似leader键的函数. 如 leader 为空格对应函数global-definer , leader 为逗号对应函数global-leader
     (with-eval-after-load 'evil
       (general-add-hook 'after-init-hook
                         (lambda (&rest _)
@@ -1220,6 +1220,7 @@ modeline上显示文件大小、列号
       :prefix "SPC"
       :non-normal-prefix "C-SPC")
 
+    ;; 定义一个宏。这个宏的作用是继承global-dfiner函数的leader键SPC空格，接收一个inix-key变量的值为子leader
     (defmacro +general-global-menu! (name infix-key &rest body)
       "Create a definer named +general-global-NAME wrapping global-definer.
   Create prefix map: +general-global-NAME. Prefix bindings in BODY with INFIX-KEY."
@@ -2007,14 +2008,19 @@ SCHEDULED: <2022-06-17 Fri 10:00 +1d>
 
 配置划分成不同文件，好以后方式方便查找
 
-#+begin_src emacs-lisp :tangle "lisp/init.keybindings.el"
-    (global-set-key (kbd "C-c p f") 'project-find-file) ;;   查找文件，默认绑定在 C-x p f
-    (eval-after-load 'consult (global-set-key (kbd "C-c p s") 'consult-ripgrep))  ;;  查找文件内容
+#+begin_src emacs-lisp :tangle "lisp/init-keybindings.el"
+  ;;; 文件搜索
+  (global-set-key (kbd "C-c p f") 'project-find-file) ;;   查找文件，默认绑定在 C-x p f
+  (eval-after-load 'consult (global-set-key (kbd "C-c p s") 'consult-ripgrep))  ;;  查找文件内容
 #+end_src
 
 C-c 是给用户定义的快捷键，p 代表 project ， f 代表 find-file
 
 consult-ripgrep 需要安装 consult 和 ripgrep ， 方便查找关键字
+
+操作：快速找到文件
+- =C-c p f= 选择目标目录, 回车 如 =~/.emacs.d=
+- 输入要查找文件名对应的关键字符，即可打开文件。 如打开 =~/.emacs.d/lisp/init-basic.el= 文件， 输入basic即可
 
 *** =init-keybindings.el= 调用 provide
 
@@ -2265,8 +2271,7 @@ evil-guide: <https://github.com/noctuid/evil-guide.git>
     ;;; 自定义设置
     ;; 在进行插入模式后，希望使用emacs的快捷键，而又不希望进入 Emacs State
     (setcdr evil-insert-state-map nil)
-    (define-key evil-insert-state-map [escape] 'evil-normal-state) ;按 [Esc] 回到normal state
-    ;;(define-key evil-insert-state-map (kbd "kj") 'evil-normal-state) ;按  回到normal state
+    (define-key evil-insert-state-map [escape] 'evil-normal-state) ;按 [Esc] 回到normal state. 下面会介绍更方便的evil-escape插件
 
     ;; 加空行, 默认 o + Esc 需要2次操作. 下面的设置直接在normal 模式中操作
     (define-key evil-normal-state-map (kbd "[ SPC") (lambda () (interactive) (evil-insert-newline-above) (forward-line))) ; 向上加空行
@@ -2317,7 +2322,6 @@ evil-guide: <https://github.com/noctuid/evil-guide.git>
   ;; 在进行插入模式后，希望使用emacs的快捷键，而又不希望进入 Emacs State
   (setcdr evil-insert-state-map nil)
   (define-key evil-insert-state-map [escape] 'evil-normal-state) ;按 [Esc] 回到normal state
-  ;;(define-key evil-insert-state-map (kbd "kj") 'evil-normal-state) ;按  回到normal state
 
   ;; 加空行, 默认 o + Esc 需要2次操作. 下面的设置直接在normal 模式中操作
   (define-key evil-normal-state-map (kbd "[ SPC") (lambda () (interactive) (evil-insert-newline-above) (forward-line))) ; [ + 空格，向上加空行
@@ -2340,41 +2344,167 @@ evil-guide: <https://github.com/noctuid/evil-guide.git>
     ")" 'dired-omit-mode)
 #+end_src
 
+
 *spacemacs like 快捷键如何定义*
 
 general插件中global-definer在init-basic.el中定义[[#h:basic-general][(=init-basic.el= general)]]
 
-#+begin_src emacs-lisp :tangle no :results none
+#+begin_src emacs-lisp :tangle "lisp/init-evil.el"
   (use-package general
     :init
+    ;; global-definer 对应leader键为空格
     (global-definer
-      "!" 'shell-command
-      "SPC" 'execute-extended-command
+      "!" 'shell-command ;空格+! SPC ! 进入shell命令行
+      "SPC" 'execute-extended-command ; 按2下空格SPC-SPC就可以实现 M-x 的效果
       "'" 'vertico-repeat
       "+" 'text-scale-increase
       "-" 'text-scale-decrease
-      "u" 'universal-argument
-      "hdf" 'describe-function
-      "hdv" 'describe-variable
-      "hdk" 'describe-key
+      "u" 'universal-argument ;SPC u 相当于emacs的C-u 
+      "hdf" 'describe-function ;SPC hdf 相当于emacs的C-h f
+      "hdv" 'describe-variable ;SPC hdv 相当于emacs的C-h v
+      "hdk" 'describe-key ;SPC hdk 相当于emacs的C-h k
       )
-
+    ;; leader 键为SPC空格，子leader键为b. 如 SPC b b查看buffer缓冲区
     (+general-global-menu! "buffer" "b"
       "d" 'kill-current-buffer
-      "b" '(consult-buffer :which-key "consult buffer")
+      "b" '(consult-buffer :which-key "consult buffer") ; 查看buffer缓冲区
       "B" 'switch-to-buffer
       "p" 'previous-buffer
       "R" 'rename-buffer
-      "M" '((lambda () (interactive) (switch-to-buffer "*Messages*"))
-            :which-key "messages-buffer")
+      "M" '((lambda () (interactive) (switch-to-buffer "*Messages*")) 
+            :which-key "messages-buffer") ; SPC b M查看*Message*缓冲区
       "n" 'next-buffer
       "i" 'ibuffer
       "f" 'my-open-current-directory
       "k" 'kill-buffer
+
       "y" 'copy-buffer-name
       "K" 'kill-other-buffers)
     )
 #+end_src
+
+参考配置： https://github.com/zilongshanren/emacs.d/blob/eglot/lisp/init-keybindings.el 实现自己的文件、窗口、项目多种快捷键绑定
+
+*** 相关插件列表
+
+**** evil-escape插件回退到normal state
+
+任何状态下按 =kj= 就能回到normal state。很实用，相当于把esc键集中在右手, 一只手就可以操作vim常用功能。
+#+begin_src emacs-lisp :tangle "lisp/init-evil.el"
+  ;; kj 退回到普通模式
+  (use-package evil-escape
+    :ensure t
+    :init
+    ;; {{ https://github.com/syl20bnr/evil-escape
+    (setq-default evil-escape-delay 0.3)
+    (setq evil-escape-excluded-major-modes '(dired-mode))
+    (setq-default evil-escape-key-sequence "kj")
+    ;; disable evil-escape when input method is on
+    (evil-escape-mode 1)
+    ;; }}
+  )
+#+end_src
+
+**** evil-anzu
+
+小功能ui。 当用 =Shift *= 查找单词重复出现几次时，下方状态栏会多一个标识显示，显示当前重复出现单词的位置和总重复次数。
+#+begin_src emacs-lisp :tangle "lisp/init-evil.el"
+  ;;下方状态栏显示单词重复出现位置
+  (use-package evil-anzu
+    :ensure t
+    :after evil
+    :diminish
+    :demand t
+    :init
+    (global-anzu-mode t))
+#+end_src
+
+**** evil-collections
+
+使用社区的按键绑定。相对稳定不会改变
+
+同时可以设置不同模式中默认的evil状态
+
+#+begin_src emacs-lisp :tangle "lisp/init-evil.el"
+  ;;; 使用社区稳定的按键绑定。 并设置不同模式中默认的evil状态
+  (use-package evil-collection
+    :ensure t
+    :demand t
+    :config
+    (setq evil-collection-mode-list (remove 'lispy evil-collection-mode-list)) ; 移除社区中插件的改键对你键位影响
+    (evil-collection-init)
+
+    ;; 设置进入mode时对应的vim 模式
+    (cl-loop for (mode . state) in
+             '((org-agenda-mode . normal) ;进入agenda时默认Normal State状态
+               (Custom-mode . emacs)
+               (eshell-mode . emacs) ;进入eshell模式时默认Emacs State状态
+               (makey-key-mode . motion))
+             do (evil-set-initial-state mode state)))
+#+end_src
+
+**** evil-surround
+
+S用法，选中一个单词后加引号。
+- =viw S "= 相当于原生vim text object用法 =viw Shift i "= 操作 
+
+#+begin_src emacs-lisp :tangle "lisp/init-evil.el"
+  ;;; S用法，选中一个单词后加引号。viw S " 相当于原生vim text object用法 viw Shift i " 
+  (use-package evil-surround
+    :ensure t
+    :init
+    (global-evil-surround-mode 1))
+#+end_src
+
+**** evil-nerd-commenter
+
+对不同语言加的注释
+
+#+begin_src emacs-lisp :tangle "lisp/init-evil.el"
+  ;;; 添加不同语言的注释
+  (use-package evil-nerd-commenter
+    :init
+    ;; normal 或 visual 模式下按 ,/ 可加注释
+    ;; (define-key evil-normal-state-map (kbd ",ci") 'evilnc-comment-or-uncomment-lines)
+    (define-key evil-normal-state-map (kbd ",/") 'evilnc-comment-or-uncomment-lines)
+    (define-key evil-visual-state-map (kbd ",") 'evilnc-comment-or-uncomment-lines)
+    )
+#+end_src
+
+操作：加注释
+- 单行注释， =,/=
+- 多行注释，选中行 =,/=
+
+**** evil-snipe
+
+小功能ui。高亮查找的字符。 如查找m字符。 =fm= 当前行的m字符高亮。按 =;= 重复查找动作
+#+begin_src emacs-lisp :tangle "lisp/init-evil.el"
+(use-package evil-snipe
+  :ensure t
+  :diminish
+  :init
+  (evil-snipe-mode +1)
+  (evil-snipe-override-mode +1))
+#+end_src
+
+**** evil-matchit
+
+按 =%= 可以在函数、括号之间跳转
+
+参考我的文章[[http://xuchangwei.com/lisp/coding-emacs/coding-emacs.html#h:vscode-symbol-jump][(如何提高编程速度)]]
+
+#+begin_src emacs-lisp :tangle "lisp/init-evil.el"
+  ;;; 按 % 可以在函数、括号之间跳转
+  (use-package evil-matchit
+    :ensure
+    :init
+    (global-evil-matchit-mode 1))
+#+end_src
+
+*** 高阶用法（自定义 text-obj 或者 自定义 commands)
+
+- https://github.com/noctuid/evil-guide#modes
+- https://evil.readthedocs.io/en/latest/overview.html
 
 *** =init-evil.el= 调用 provide
 
