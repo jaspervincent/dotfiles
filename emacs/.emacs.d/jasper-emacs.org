@@ -1737,7 +1737,7 @@ modeline上显示我的所有的按键和执行的命令
 :CUSTOM_ID: h:org-built-in
 :END:
 
-在学习章节提到过[[h:learn-org-built-i][(还想使用旧版快捷)]]
+在学习章节提到过[[h:learn-org-built-in][(还想使用旧版快捷)]]
 
 #+begin_src emacs-lisp :tangle "lisp/init-org.el" :mkdirp yes
   ;;; config
