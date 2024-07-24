@@ -1192,6 +1192,54 @@ modeline上显示文件大小、列号
       ))
 #+end_src
 
+*** =init-basic.el= general
+:PROPERTIES:
+:CUSTOM_ID: h:basic-general
+:END:
+
+在自定义evil键位绑定用到[[#h:evil-custom-keybinding][(=init.evil.el= 自定义快捷键)]]
+
+#+begin_src emacs-lisp :tangle "lisp/init-basic.el"
+  (use-package general
+    :init
+    (with-eval-after-load 'evil
+      (general-add-hook 'after-init-hook
+                        (lambda (&rest _)
+                          (when-let ((messages-buffer (get-buffer "*Messages*")))
+                            (with-current-buffer messages-buffer
+                              (evil-normalize-keymaps))))
+                        nil
+                        nil
+                        t))
+
+
+    (general-create-definer global-definer
+      :keymaps 'override
+      :states '(insert emacs normal hybrid motion visual operator)
+      :prefix "SPC"
+      :non-normal-prefix "C-SPC")
+
+    (defmacro +general-global-menu! (name infix-key &rest body)
+      "Create a definer named +general-global-NAME wrapping global-definer.
+  Create prefix map: +general-global-NAME. Prefix bindings in BODY with INFIX-KEY."
+      (declare (indent 2))
+      `(progn
+         (general-create-definer ,(intern (concat "+general-global-" name))
+           :wrapping global-definer
+           :prefix-map ',(intern (concat "+general-global-" name "-map"))
+           :infix ,infix-key
+           :wk-full-keys nil
+           "" '(:ignore t :which-key ,name))
+         (,(intern (concat "+general-global-" name))
+          ,@body)))
+
+    (general-create-definer global-leader
+      :keymaps 'override
+      :states '(emacs normal hybrid motion visual operator)
+      :prefix ","
+      "" '(:ignore t :which-key (lambda (arg) `(,(cadr (split-string (car arg) " ")) . ,(replace-regexp-in-string "-mode$" "" (symbol-name major-mode)))))))
+#+end_src
+
 *** =init-basic.el= 调用 provide
 
 #+begin_src emacs-lisp :tangle "lisp/init-basic.el"
@@ -2136,14 +2184,18 @@ d:\msys64\usr\bin
 ** =init-evil.el=
 
 *** =init-evil.el= 安装
+:PROPERTIES:
+:CUSTOM_ID: h:evil-init
+:END:
 
-#+begin_src emacs-lisp :tangle "lisp/init-evil.el" :mkdirp yes
+
+#+begin_src emacs-lisp :tangle no :results none
   ;;; evil 
   (use-package evil
     :ensure t
     :init
-    (setq evil-want-keybinding nil) ;不使用自带的键位绑定
-    (setq evil-want-C-u-scroll t) ;C-u 实现向上滚动。默认C-u 是emacs中的
+    (setq evil-want-keybinding nil) ;不使用自带的键位绑定。默认加载不同模式下键位绑定
+    (setq evil-want-C-u-scroll t) ;C-u 实现向上滚动。默认C-u 是emacs中的功能
     (evil-mode)
 
     ;; https://emacs.stackexchange.com/questions/46371/how-can-i-get-ret-to-follow-org-mode-links-when-using-evil-mode
@@ -2154,7 +2206,7 @@ d:\msys64\usr\bin
 
 
 安装undo-tree
-#+begin_src emacs-lisp :tangle "lisp/init-evil.el"
+#+begin_src emacs-lisp :tangle no :results none
   ;;; evil 使用undo-tree来管理undo redo
   (use-package undo-tree
     :diminish
@@ -2166,9 +2218,9 @@ d:\msys64\usr\bin
 
 *Emacs中使用vim和外部使用vim的区别*
 
-vim 中有normal和insert模式，在emacs中是各种state, noarmal state, insert state
+vim 中有normal和insert模式，在emacs中是各种state, 如 noarmal state, insert state
 
-- Normal State (N) :: 这是 Evil 默认的“静止状态”，其中定义了 vi 绑定的主体。
+- Normal State (N) :: 这是 Evil 默认的“静止状态”，其中定义了 vi 绑定的主体。 =M-x evil-normal-state=
 
 - Insert State (I) :: 这是插入文本的状态，其中未修改的键将在缓冲区中插入相应的字符。
 
@@ -2176,17 +2228,151 @@ vim 中有normal和insert模式，在emacs中是各种state, noarmal state, inse
 
 - Visual State (V) :: 用于选择文本区域的状态。
 
-- Motion State (M) 运动状态 （M） :: 一种特殊状态，适用于只读缓冲区，其中运动可用，但编辑操作不可用。只读的文档一般都是Motion state 如帮助文档。
+- Motion State (M) 运动状态 （M） :: 一种特殊状态，适用于只读缓冲区，其中运动可用，但编辑操作不可用。只读的文档一般都是Motion state 如帮助文档。 =M-x evil-motion-state=
 
 - Replace State (R) 替换状态 （R） :: 一种特殊状态，与插入状态非常相似，只不过它替换文本而不是插入。 按住大写的 =R= , 一直替换状态
 
+
+*Evil 基础用法*
+
+增删改查 (text-obj, commands, replace)
+- text-obj 更好地操作文本
+  - 选中单词 viw
+  - 删除单词 diw
+- 跳到r字符的位置： fr
+- commands
+  - =:= 进行命令行模式。 :%s/commands/111/ 可以替换, 按 u 回退 
+    
 evil-guide: <https://github.com/noctuid/evil-guide.git>
 
 上述文档花2小时认真读就可以完全从vim用户切到emacs上使用了。
 
-自定义快捷键
-在进行插入模式后，不希望用emacs state
+比较全的evil配置
+#+begin_src emacs-lisp :tangle "lisp/init-evil.el" :mkdirp yes
+  ;;; evil 
+  (use-package evil
+    :ensure t
+    :init
+    (setq evil-want-keybinding nil) ;不使用自带的键位绑定。默认加载不同模式下键位绑定
+    (setq evil-want-C-u-scroll t) ;C-u 实现向上滚动。默认C-u 是emacs中的功能
+    (evil-mode)
 
+    ;; https://emacs.stackexchange.com/questions/46371/how-can-i-get-ret-to-follow-org-mode-links-when-using-evil-mode
+    (with-eval-after-load 'evil-maps
+      (define-key evil-motion-state-map (kbd "RET") nil)) ;如果有链接，按回车能访问这个链接
+
+    ;;; 自定义设置
+    ;; 在进行插入模式后，希望使用emacs的快捷键，而又不希望进入 Emacs State
+    (setcdr evil-insert-state-map nil)
+    (define-key evil-insert-state-map [escape] 'evil-normal-state) ;按 [Esc] 回到normal state
+    ;;(define-key evil-insert-state-map (kbd "kj") 'evil-normal-state) ;按  回到normal state
+
+    ;; 加空行, 默认 o + Esc 需要2次操作. 下面的设置直接在normal 模式中操作
+    (define-key evil-normal-state-map (kbd "[ SPC") (lambda () (interactive) (evil-insert-newline-above) (forward-line))) ; 向上加空行
+    (define-key evil-normal-state-map (kbd "] SPC") (lambda () (interactive) (evil-insert-newline-below) (forward-line -1))) ; 向上加空行
+
+    ;; 在normal state中切换不同的buffer
+    (define-key evil-normal-state-map (kbd "[ b") 'previous-buffer) ;切到前一个buffer
+    (define-key evil-normal-state-map (kbd "] b") 'next-buffer)
+    (define-key evil-motion-state-map (kbd "[ b") 'previous-buffer)
+    (define-key evil-motion-state-map (kbd "] b") 'next-buffer)
+
+    ;; 在dired模式下，添加快捷键
+    (evil-define-key 'normal dired-mode-map ; 只修改dired模式下normal模式的快捷键绑定
+      (kbd "<RET>") 'dired-find-alternate-file
+      (kbd "C-k") 'dired-up-directory ;往上一级目录
+      "`" 'dired-open-term
+      "q" 'quit-window ; q 退出。默认没有。 可以查看emacs state下的q绑定的函数 =C-x d= 进入dired， =C-z= 进入emacs state， =C-h k= 按 q 可查到对应的函数为 quit-window
+      "o" 'dired-find-file-other-window ; 在另外一个窗口打开文件
+      "z" 'dired-get-size
+      ")" 'dired-omit-mode)
+    )
+
+
+
+
+
+  ;;; evil 使用undo-tree来管理undo redo
+  (use-package undo-tree
+    :diminish
+    :init
+    (global-undo-tree-mode 1)
+    (setq undo-tree-auto-save-history nil)
+    (evil-set-undo-system 'undo-tree))
+#+end_src
+
+*** =init.evil.el= 自定义快捷键
+:PROPERTIES:
+:CUSTOM_ID: h:evil-custom-keybinding
+:END:
+
+
+*定义不同 state 下面的快捷键*
+
+
+#+begin_src emacs-lisp :tangle no :results none
+  ;;; 自定义设置
+  ;; 在进行插入模式后，希望使用emacs的快捷键，而又不希望进入 Emacs State
+  (setcdr evil-insert-state-map nil)
+  (define-key evil-insert-state-map [escape] 'evil-normal-state) ;按 [Esc] 回到normal state
+  ;;(define-key evil-insert-state-map (kbd "kj") 'evil-normal-state) ;按  回到normal state
+
+  ;; 加空行, 默认 o + Esc 需要2次操作. 下面的设置直接在normal 模式中操作
+  (define-key evil-normal-state-map (kbd "[ SPC") (lambda () (interactive) (evil-insert-newline-above) (forward-line))) ; [ + 空格，向上加空行
+  (define-key evil-normal-state-map (kbd "] SPC") (lambda () (interactive) (evil-insert-newline-below) (forward-line -1))) ; [ + 空格，向上加空行
+
+  ;; 在normal state中切换不同的buffer
+  (define-key evil-normal-state-map (kbd "[ b") 'previous-buffer) ; [ + b 切到前一个buffer
+  (define-key evil-normal-state-map (kbd "] b") 'next-buffer)
+  (define-key evil-motion-state-map (kbd "[ b") 'previous-buffer)
+  (define-key evil-motion-state-map (kbd "] b") 'next-buffer)
+
+  ;; 在dired模式下，添加快捷键
+  (evil-define-key 'normal dired-mode-map ; 只修改dired模式下normal模式的快捷键绑定
+    (kbd "<RET>") 'dired-find-alternate-file
+    (kbd "C-k") 'dired-up-directory ;往上一级目录
+    "`" 'dired-open-term
+    "q" 'quit-window ; q 退出。默认没有。 可以查看emacs state下的q绑定的函数 =C-x d= 进入dired， =C-z= 进入emacs state， =C-h k= 按 q 可查到对应的函数为 quit-window
+    "o" 'dired-find-file-other-window ; 在另外一个窗口打开文件
+    "z" 'dired-get-size
+    ")" 'dired-omit-mode)
+#+end_src
+
+*spacemacs like 快捷键如何定义*
+
+general插件中global-definer在init-basic.el中定义[[#h:basic-general][(=init-basic.el= general)]]
+
+#+begin_src emacs-lisp :tangle no :results none
+  (use-package general
+    :init
+    (global-definer
+      "!" 'shell-command
+      "SPC" 'execute-extended-command
+      "'" 'vertico-repeat
+      "+" 'text-scale-increase
+      "-" 'text-scale-decrease
+      "u" 'universal-argument
+      "hdf" 'describe-function
+      "hdv" 'describe-variable
+      "hdk" 'describe-key
+      )
+
+    (+general-global-menu! "buffer" "b"
+      "d" 'kill-current-buffer
+      "b" '(consult-buffer :which-key "consult buffer")
+      "B" 'switch-to-buffer
+      "p" 'previous-buffer
+      "R" 'rename-buffer
+      "M" '((lambda () (interactive) (switch-to-buffer "*Messages*"))
+            :which-key "messages-buffer")
+      "n" 'next-buffer
+      "i" 'ibuffer
+      "f" 'my-open-current-directory
+      "k" 'kill-buffer
+      "y" 'copy-buffer-name
+      "K" 'kill-other-buffers)
+    )
+#+end_src
 
 *** =init-evil.el= 调用 provide
 
