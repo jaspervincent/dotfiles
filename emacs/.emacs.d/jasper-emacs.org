@@ -869,7 +869,18 @@ Org-mode 下的文学编程将颠覆你对于 Emacs 的看法。因为我们也�
 
 前期vim用户快速切emacs用户
 
-- evil[[#h:evil][(=init-evil.el=)]] 
+- evil[[#h:evil][(=init-evil.el=)]]
+  
+*** 精选 packages, 大大提升你的 Emacs 编辑效率
+:PROPERTIES:
+:CUSTOM_ID: h:learn-module-up-packages
+:END:
+
+- 多光标操作 iedit & evil-multiedit[[#h:tools-iedit][(=init-tools.el= 多光标操作 iedit & evil-multiedit)]]
+- expand-region[[#h:tools-expand-region][(=init-tools.el= expand-region)]] [[#h:funcs-expand-region][(=init-funcs.el= expand-region)]]
+- interactive replace[[#h:funcs-evil-quick-replace][(=init-funcs.el= interactive replace)]]
+- 安装 quelpa 插件[[#h:packages-quelpa][(=init-packages.el= 安装 quelpa 插件)]]
+- symbol-overlay & highlight-global[[#h:funcs-symbol-overly][(=init-funcs.el= symbol-overlay & highlight-global)]] [[#h:tools-symbol-overlay][(=init-tools.el= symbol-overlay & highlight-global)]]
 
 
 ** 清理学习内容
@@ -1281,6 +1292,29 @@ modeline上显示文件大小、列号
   (require 'use-package)
 #+end_src
 
+*** =init-packages.el= 安装 quelpa 插件
+:PROPERTIES:
+:CUSTOM_ID: h:packages-quelpa
+:END:
+
+在学习章节提到过[[#h:learn-module-up-packages][(精选 packages, 大大提升你的 Emacs 编辑效率)]]
+
+#+begin_src emacs-lisp :tangle "lisp/init-packages.el"
+  (use-package quelpa :ensure t)
+
+  (unless (package-installed-p 'quelpa-use-package)
+    (quelpa
+     '(quelpa-use-package
+       :fetcher git
+       :url "https://github.com/quelpa/quelpa-use-package.git")))
+
+  (use-package quelpa-use-package
+    :ensure t
+    :init
+    (setq quelpa-use-package-inhibit-loading-quelpa t)
+    :demand t)
+#+end_src
+
 *** =init-package.el= 调用 provide
 
 #+begin_src emacs-lisp :tangle "lisp/init-packages.el"
@@ -1579,7 +1613,6 @@ windows上有时，consult-ripgrep搜索不了
 #+end_src
 
 
-
 *** =init-completion.el= 调用 provide
 
 #+begin_src emacs-lisp :tangle "lisp/init-completion.el"
@@ -1683,6 +1716,130 @@ modeline上显示我的所有的按键和执行的命令
 #+end_src
 
 在使用doom-modeline上面配置会报错。这里用下面的配置
+
+*** =init-tools.el= 多光标操作 iedit & evil-multiedit
+:PROPERTIES:
+:CUSTOM_ID: h:tools-iedit
+:END:
+
+多光标操作 iedit & evil-multiedit
+
+在学习章节提到过[[#h:learn-module-up-packages][(精选 packages, 大大提升你的 Emacs 编辑效率)]]
+
+#+begin_src emacs-lisp :tangle "lisp/init-tools.el"
+(use-package iedit
+  :ensure t
+  :init
+  (setq iedit-toggle-key-default nil)
+  :config
+  (define-key iedit-mode-keymap (kbd "M-h") 'iedit-restrict-function)
+  (define-key iedit-mode-keymap (kbd "M-i") 'iedit-restrict-current-line))
+
+(use-package evil-multiedit
+  :ensure t
+  :commands (evil-multiedit-default-keybinds)
+  :init
+  (evil-multiedit-default-keybinds))
+#+end_src
+
+*** =init-tools.el= expand-region
+:PROPERTIES:
+:CUSTOM_ID: h:tools-expand-region
+:END:
+
+
+在学习章节提到过[[#h:learn-module-up-packages][(精选 packages, 大大提升你的 Emacs 编辑效率)]]
+
+#+begin_src emacs-lisp :tangle "lisp/init-tools.el"
+(use-package expand-region
+  :config
+  (defadvice er/prepare-for-more-expansions-internal
+      (around helm-ag/prepare-for-more-expansions-internal activate)
+    ad-do-it
+    (let ((new-msg (concat (car ad-return-value)
+                           ", H to highlight in buffers"
+                           ", / to search in project, "
+                           "e iedit mode in functions"
+                           "f to search in files, "
+                           "b to search in opened buffers"))
+          (new-bindings (cdr ad-return-value)))
+      (cl-pushnew
+       '("H" (lambda ()
+               (interactive)
+               (call-interactively
+                'zilongshanren/highlight-dwim)))
+       new-bindings)
+      (cl-pushnew
+       '("/" (lambda ()
+               (interactive)
+               (call-interactively
+                'my/search-project-for-symbol-at-point)))
+       new-bindings)
+      (cl-pushnew
+       '("e" (lambda ()
+               (interactive)
+               (call-interactively
+                'evil-multiedit-match-all)))
+       new-bindings)
+      (cl-pushnew
+       '("f" (lambda ()
+               (interactive)
+               (call-interactively
+                'find-file)))
+       new-bindings)
+      (cl-pushnew
+       '("b" (lambda ()
+               (interactive)
+               (call-interactively
+                'consult-line)))
+       new-bindings)
+      (setq ad-return-value (cons new-msg new-bindings)))))
+#+end_src
+
+添加一个快捷键，让标记和搜索功能更方便： 写在 =init-funcs.el=
+
+#+begin_src emacs-lisp :tangle no :results none
+  ;;;###autoload
+  (defun my/search-project-for-symbol-at-point ()
+    (interactive)
+    (if (use-region-p)
+        (progn
+          (consult-ripgrep (project-root (project-current))
+                           (buffer-substring (region-beginning) (region-end))))))
+
+  (global-definer
+    "hc" 'zilongshanren/clearn-highlight
+    "hH" 'zilongshanren/highlight-dwim
+    "v" 'er/expand-region
+    )
+#+end_src
+
+*** =init-tools.el= symbol-overlay & highlight-global
+:PROPERTIES:
+:CUSTOM_ID: h:tools-symbol-overlay
+:END:
+
+在学习章节提到过[[#h:learn-module-up-packages][(精选 packages, 大大提升你的 Emacs 编辑效率)]]
+
+#+begin_src emacs-lisp :tangle "lisp/init-tools.el"
+  (use-package highlight-global
+    :ensure nil
+    :commands (highlight-frame-toggle)
+    :quelpa (highlight-global :fetcher github :repo "glen-dai/highlight-global")
+    :config
+    (progn
+      (setq-default highlight-faces
+                    '(('hi-red-b . 0)
+                      ('hi-aquamarine . 0)
+                      ('hi-pink . 0)
+                      ('hi-blue-b . 0)))))
+
+
+  (use-package symbol-overlay
+    :config
+    (define-key symbol-overlay-map (kbd "h") 'nil))
+#+end_src
+
 
 *** =init-tools.el= 调用 provide
 
@@ -2240,7 +2397,6 @@ d:\msys64\usr\bin
 :CUSTOM_ID: h:evil
 :END:
 
-
 *** =init-evil.el= 安装
 :PROPERTIES:
 :CUSTOM_ID: h:evil-init
@@ -2414,6 +2570,10 @@ general插件中global-definer在init-basic.el中定义[[#h:basic-general][(=ini
       "hdf" 'describe-function ;SPC hdf 相当于emacs的C-h f
       "hdv" 'describe-variable ;SPC hdv 相当于emacs的C-h v
       "hdk" 'describe-key ;SPC hdk 相当于emacs的C-h k
+      ;; 查看init-funcs.el 自定义函数
+      "hh" 'my/highlight-dwim
+      "hc" 'my/clearn-highlight
+      "v" 'er/expand-region
       )
     ;; leader 键为SPC空格，子leader键为b. 如 SPC b b查看buffer缓冲区
     (+general-global-menu! "buffer" "b"
@@ -2645,6 +2805,79 @@ S用法，选中一个单词后加引号。
   (defun my-open-current-directory ()
     (interactive)
     (consult-directory-externally default-directory))
+#+end_src
+
+*** =init-funcs.el= expand-region
+:PROPERTIES:
+:CUSTOM_ID: h:funcs-expand-region
+:END:
+
+在学习章节提到过[[#h:learn-module-up-packages][(精选 packages, 大大提升你的 Emacs 编辑效率)]]
+
+#+begin_src emacs-lisp :tangle "lisp/init-funcs.el"
+;;;###autoload
+(defun my/search-project-for-symbol-at-point ()
+  (interactive)
+  (if (use-region-p)
+      (progn
+        (consult-ripgrep (project-root (project-current))
+                         (buffer-substring (region-beginning) (region-end))))))
+#+end_src
+
+在init-evil.el自定义键位绑定中定义
+#+begin_src emacs-lisp :tangle no :results none
+  (global-definer
+  "hc" 'my/clearn-highlight
+  "hH" 'my/highlight-dwim
+  "v" 'er/expand-region
+  )
+#+end_src
+
+*** =init-funcs.el= interactive replace
+:PROPERTIES:
+:CUSTOM_ID: h:funcs-evil-quick-replace
+:END:
+
+在学习章节提到过[[#h:learn-module-up-packages][(精选 packages, 大大提升你的 Emacs 编辑效率)]]
+
+#+begin_src emacs-lisp :tangle "lisp/init-funcs.el"
+  ;;;###autoload
+  (defun my/evil-quick-replace (beg end )
+    (interactive "r")
+    (when (evil-visual-state-p)
+      (evil-exit-visual-state)
+      (let ((selection (regexp-quote (buffer-substring-no-properties beg end))))
+        (setq command-string (format "%%s /%s//g" selection))
+        (minibuffer-with-setup-hook
+            (lambda () (backward-char 2))
+          (evil-ex command-string)))))
+
+  (define-key evil-visual-state-map (kbd "C-r") 'my/evil-quick-replace)
+#+end_src
+
+** =init-funcs.el= symbol-overlay & highlight-global
+:PROPERTIES:
+:CUSTOM_ID: h:funcs-symbol-overly
+:END:
+
+在学习章节提到过[[#h:learn-module-up-packages][(精选 packages, 大大提升你的 Emacs 编辑效率)]]
+
+#+begin_src emacs-lisp :tangle "lisp/init-funcs.el"
+  ;;;###autoload
+  (defun my/highlight-dwim ()
+    (interactive)
+    (if (use-region-p)
+        (progn
+          (highlight-frame-toggle)
+          (deactivate-mark))
+      (symbol-overlay-put)))
+
+
+  ;;;###autoload
+  (defun my/clearn-highlight ()
+    (interactive)
+    (clear-highlight-frame)
+    (symbol-overlay-remove-all))
 #+end_src
 
 *** =init-funcs.el= 调用 provide

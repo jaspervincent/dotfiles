@@ -7,5 +7,19 @@
       use-package-expand-minimally t)
 (require 'use-package)
 
+(use-package quelpa :ensure t)
+
+(unless (package-installed-p 'quelpa-use-package)
+  (quelpa
+   '(quelpa-use-package
+     :fetcher git
+     :url "https://github.com/quelpa/quelpa-use-package.git")))
+
+(use-package quelpa-use-package
+  :ensure t
+  :init
+  (setq quelpa-use-package-inhibit-loading-quelpa t)
+  :demand t)
+
 (message "Load init-packages done...")
 (provide 'init-packages)

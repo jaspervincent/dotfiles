@@ -49,5 +49,42 @@ Supports exporting consult-grep to wgrep, file to wdeired, and consult-location 
   (interactive)
   (consult-directory-externally default-directory))
 
+;;;###autoload
+(defun my/search-project-for-symbol-at-point ()
+  (interactive)
+  (if (use-region-p)
+      (progn
+        (consult-ripgrep (project-root (project-current))
+                         (buffer-substring (region-beginning) (region-end))))))
+
+;;;###autoload
+(defun my/evil-quick-replace (beg end )
+  (interactive "r")
+  (when (evil-visual-state-p)
+    (evil-exit-visual-state)
+    (let ((selection (regexp-quote (buffer-substring-no-properties beg end))))
+      (setq command-string (format "%%s /%s//g" selection))
+      (minibuffer-with-setup-hook
+          (lambda () (backward-char 2))
+        (evil-ex command-string)))))
+
+(define-key evil-visual-state-map (kbd "C-r") 'my/evil-quick-replace)
+
+;;;###autoload
+(defun my/highlight-dwim ()
+  (interactive)
+  (if (use-region-p)
+      (progn
+        (highlight-frame-toggle)
+        (deactivate-mark))
+    (symbol-overlay-put)))
+
+
+;;;###autoload
+(defun my/clearn-highlight ()
+  (interactive)
+  (clear-highlight-frame)
+  (symbol-overlay-remove-all))
+
 (message "Load init-funcs done...")
 (provide 'init-funcs)

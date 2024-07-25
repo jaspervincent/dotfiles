@@ -65,6 +65,10 @@
     "hdf" 'describe-function ;SPC hdf 相当于emacs的C-h f
     "hdv" 'describe-variable ;SPC hdv 相当于emacs的C-h v
     "hdk" 'describe-key ;SPC hdk 相当于emacs的C-h k
+    ;; 查看init-funcs.el 自定义函数
+    "hh" 'my/highlight-dwim
+    "hc" 'my/clearn-highlight
+    "v" 'er/expand-region
     )
   ;; leader 键为SPC空格，子leader键为b. 如 SPC b b查看buffer缓冲区
   (+general-global-menu! "buffer" "b"
