@@ -69,19 +69,26 @@
              (cons package "gnu-elpa-devel"))
            prot-emacs-my-packages)))
 
+;; make use-package default behavior better
+;; with `use-package-always-ensure' you won't need ":ensure t" all the time
+;; with `use-package-always-defer' you won't need ":defer t" all the time
+(setq use-package-always-ensure t
+      use-package-always-defer t
+      use-package-enable-imenu-support t
+      use-package-expand-minimally t)
+
 ;; 加载模块
 (load (locate-user-emacs-file "jasper-emacs-pre-custom.el") :no-error :no-message)
 
 (require 'init-basic)
 (require 'init-packages)
+(require 'init-completion)
 (use-package benchmark-init
   :ensure t
   :demand t
   :config
   ;; To disable collection of benchmark data after init is done.
   (add-hook 'after-init-hook 'benchmark-init/deactivate))
-(require 'init-evil)
-(require 'init-completion)
 (require 'init-tools)
 (require 'init-ui)
 (require 'init-org)

@@ -866,6 +866,10 @@ Org-mode 下的文学编程将颠覆你对于 Emacs 的看法。因为我们也�
 - ox-hugo来写博客
 - eglot emacs29版本内置[[#h:c++-eglot][(使用 eglot 来编写、运行和调试 C/C++ 代码)]]
 *** evil
+:PROPERTIES:
+:CUSTOM_ID: h:learn-evil
+:END:
+
 
 前期vim用户快速切emacs用户
 
@@ -878,7 +882,7 @@ Org-mode 下的文学编程将颠覆你对于 Emacs 的看法。因为我们也�
 
 - 多光标操作 iedit & evil-multiedit[[#h:tools-iedit][(=init-tools.el= 多光标操作 iedit & evil-multiedit)]]
 - expand-region[[#h:tools-expand-region][(=init-tools.el= expand-region)]] [[#h:funcs-expand-region][(=init-funcs.el= expand-region)]]
-- interactive replace[[#h:funcs-evil-quick-replace][(=init-funcs.el= interactive replace)]]
+- interactive replace交互式替换文本[[#h:funcs-evil-quick-replace][(=init-funcs.el= interactive replace)]]
 - 安装 quelpa 插件[[#h:packages-quelpa][(=init-packages.el= 安装 quelpa 插件)]]
 - symbol-overlay & highlight-global[[#h:funcs-symbol-overly][(=init-funcs.el= symbol-overlay & highlight-global)]] [[#h:tools-symbol-overlay][(=init-tools.el= symbol-overlay & highlight-global)]]
 
@@ -922,7 +926,7 @@ Org-mode 下的文学编程将颠覆你对于 Emacs 的看法。因为我们也�
 
   ;;; Code:
 
-  
+
 #+end_src
 
 ** =init.el= 加载前自定义配置
@@ -1037,6 +1041,19 @@ early-init.el 处激活缓存[[#h:package-cache][(=early-init.el= 初始化包�
              prot-emacs-my-packages)))
 #+end_src
 
+*** use-pacakge 插件
+
+29版本后内置包
+#+begin_src emacs-lisp :tangle "init.el"
+  ;; make use-package default behavior better
+  ;; with `use-package-always-ensure' you won't need ":ensure t" all the time
+  ;; with `use-package-always-defer' you won't need ":defer t" all the time
+  (setq use-package-always-ensure t
+        use-package-always-defer t
+        use-package-enable-imenu-support t
+        use-package-expand-minimally t)
+#+end_src
+
 ** =init.el= 加载各个模块
 :PROPERTIES:
 :CUSTOM_ID: h:i-modules
@@ -1048,29 +1065,28 @@ early-init.el 处激活缓存[[#h:package-cache][(=early-init.el= 初始化包�
 
 
 #+begin_src emacs-lisp :tangle "init.el"
-  ;; 加载模块
-  (load (locate-user-emacs-file "jasper-emacs-pre-custom.el") :no-error :no-message)
+    ;; 加载模块
+    (load (locate-user-emacs-file "jasper-emacs-pre-custom.el") :no-error :no-message)
 
-  (require 'init-basic)
-  (require 'init-packages)
-  (use-package benchmark-init
-    :ensure t
-    :demand t
-    :config
-    ;; To disable collection of benchmark data after init is done.
-    (add-hook 'after-init-hook 'benchmark-init/deactivate))
-  (require 'init-evil)
-  (require 'init-completion)
-  (require 'init-tools)
-  (require 'init-ui)
-  (require 'init-org)
-  (require 'init-keybindings)
-  (require 'init-programming)
-  (require 'init-evil)
-  (require 'init-window)
-  (require 'init-funcs)
+    (require 'init-basic)
+    (require 'init-packages)
+    (require 'init-completion)
+    (use-package benchmark-init
+      :ensure t
+      :demand t
+      :config
+      ;; To disable collection of benchmark data after init is done.
+      (add-hook 'after-init-hook 'benchmark-init/deactivate))
+    (require 'init-tools)
+    (require 'init-ui)
+    (require 'init-org)
+    (require 'init-keybindings)
+    (require 'init-programming)
+    (require 'init-evil)
+    (require 'init-window)
+    (require 'init-funcs)
 
-  (load (locate-user-emacs-file "jasper-emacs-post-custom.el") :no-error :no-message)
+    (load (locate-user-emacs-file "jasper-emacs-post-custom.el") :no-error :no-message)
 #+end_src
 
 ** =init.el= 计算启动时间
@@ -1279,17 +1295,10 @@ modeline上显示文件大小、列号
 
 ** =init-packages.el=
 
-*** =init-packages.el= 安装
+*** =init-packages.el= config
 
 #+begin_src emacs-lisp :tangle "lisp/init-packages.el" :mkdirp yes
-  ;; make use-package default behavior better
-  ;; with `use-package-always-ensure' you won't need ":ensure t" all the time
-  ;; with `use-package-always-defer' you won't need ":defer t" all the time
-  (setq use-package-always-ensure t
-        use-package-always-defer t
-        use-package-enable-imenu-support t
-        use-package-expand-minimally t)
-  (require 'use-package)
+  ;;; config
 #+end_src
 
 *** =init-packages.el= 安装 quelpa 插件
@@ -1299,20 +1308,32 @@ modeline上显示文件大小、列号
 
 在学习章节提到过[[#h:learn-module-up-packages][(精选 packages, 大大提升你的 Emacs 编辑效率)]]
 
+#+begin_comment :tangle no
+,#+begin_src emacs-lisp :tangle no :results none
+#+end_comment
+
 #+begin_src emacs-lisp :tangle "lisp/init-packages.el"
-  (use-package quelpa :ensure t)
+  ;;(use-package quelpa :ensure t)
+  (use-package quelpa
+    :ensure t
+    :commands quelpa
+    :config
+    :custom
+    (quelpa-git-clone-depth 1)
+    (quelpa-update-melpa-p nil)
+    (quelpa-self-upgrade-p nil)
+    (quelpa-checkout-melpa-p nil))
+  (use-package quelpa-use-package
+    :ensure t
+    :init
+    (setq quelpa-use-package-inhibit-loading-quelpa t)
+    :demand t)
 
   (unless (package-installed-p 'quelpa-use-package)
     (quelpa
      '(quelpa-use-package
        :fetcher git
        :url "https://github.com/quelpa/quelpa-use-package.git")))
-
-  (use-package quelpa-use-package
-    :ensure t
-    :init
-    (setq quelpa-use-package-inhibit-loading-quelpa t)
-    :demand t)
 #+end_src
 
 *** =init-package.el= 调用 provide
@@ -1320,15 +1341,6 @@ modeline上显示文件大小、列号
 #+begin_src emacs-lisp :tangle "lisp/init-packages.el"
   (message "Load init-packages done...")
   (provide 'init-packages)
-#+end_src
-
-** =init-evil.el=
-
-*** =init-evil.el= 调用 provide
-
-#+begin_src emacs-lisp :tangle "lisp/init-evil.el"
-  (message "Load init-evil done...")
-  (provide 'init-evil)
 #+end_src
 
 ** =init-completion.el=
@@ -1404,7 +1416,7 @@ orderless 支持 =M-x= 模糊搜索，可以无序的。 如 edebug-defun 函数
 
 在学习章节提到过[[h:learn-completion-minibuffer-2][(配置 Marginalia 增强 minubuffer 的 annotation)]]
 
-#+begin_src emacs-lisp :tangle "lisp/init-completion.el"
+#+begin_src emacs-lisp :tangle no :results none
   ;;; 配置 Marginalia 增强 minubuffer 的 annotation
   (use-package marginalia
     :ensure t
@@ -1419,6 +1431,15 @@ orderless 支持 =M-x= 模糊搜索，可以无序的。 如 edebug-defun 函数
 =C-h f= 键位绑定都已经在minibuffer中显示出来了
 
 =C-x C-f= 显示文件大小权限等， =C-x b= 显 buffer 大小状态， =C-h f= 显示函数快捷键等
+
+#+begin_src emacs-lisp :tangle "lisp/init-completion.el"
+  ;;; 配置 Marginalia 增强 minubuffer 的 annotation
+  (use-package marginalia
+    :ensure t
+    :hook (after-init . marginalia-mode)
+    :init
+    :config)
+#+end_src
 
 *** =init-completion.el= minibuffer action 和自适应的 context menu：Embark
 :PROPERTIES:
@@ -1612,7 +1633,6 @@ windows上有时，consult-ripgrep搜索不了
     "Nothing"))
 #+end_src
 
-
 *** =init-completion.el= 调用 provide
 
 #+begin_src emacs-lisp :tangle "lisp/init-completion.el"
@@ -1708,7 +1728,7 @@ windows上有时，consult-ripgrep搜索不了
 
 modeline上显示我的所有的按键和执行的命令
 
-#+begin_src emacs-lisp :tangle "lisp/init-tools.el"
+#+begin_src emacs-lisp :tangle no :results none
   ;;; modeline上显示我的所有的按键和执行的命令
   (use-package keycast
     :ensure t
@@ -1717,86 +1737,131 @@ modeline上显示我的所有的按键和执行的命令
 
 在使用doom-modeline上面配置会报错。这里用下面的配置
 
+#+begin_src emacs-lisp :tangle "lisp/init-tools.el"
+  (use-package keycast
+    :ensure t
+    :commands (+toggle-keycast)
+    :config
+    (defun +toggle-keycast()
+      (interactive)
+      (if (member '("" keycast-mode-line " ") global-mode-string)
+          (progn (setq global-mode-string (delete '("" keycast-mode-line " ") global-mode-string))
+                 (remove-hook 'pre-command-hook 'keycast--update)
+                 (message "Keycast OFF"))
+        (add-to-list 'global-mode-string '("" keycast-mode-line " "))
+        (add-hook 'pre-command-hook 'keycast--update t)
+        (message "Keycast ON"))))
+    ;; 这里的执行顺序非常重要，doom-modeline-mode 的激活时机一定要在设置global-mode-string 之后
+#+end_src
+
+#+begin_src emacs-lisp :tangle no
+  (use-package keycast
+    :ensure t
+    :config
+    (define-minor-mode keycast-mode
+      "Show current command and its key binding in the mode line (fix for use with doom-mode-line)."
+      :global t
+      (if keycast-mode
+          (add-hook 'pre-command-hook 'keycast--update t)
+        (remove-hook 'pre-command-hook 'keycast--update)))
+    (add-to-list 'global-mode-string '("" mode-line-keycast)))
+#+end_src
+
 *** =init-tools.el= 多光标操作 iedit & evil-multiedit
 :PROPERTIES:
 :CUSTOM_ID: h:tools-iedit
 :END:
 
-多光标操作 iedit & evil-multiedit
-
 在学习章节提到过[[#h:learn-module-up-packages][(精选 packages, 大大提升你的 Emacs 编辑效率)]]
 
-#+begin_src emacs-lisp :tangle "lisp/init-tools.el"
-(use-package iedit
-  :ensure t
-  :init
-  (setq iedit-toggle-key-default nil)
-  :config
-  (define-key iedit-mode-keymap (kbd "M-h") 'iedit-restrict-function)
-  (define-key iedit-mode-keymap (kbd "M-i") 'iedit-restrict-current-line))
+此插件需要配合着evil插件使用。
 
-(use-package evil-multiedit
-  :ensure t
-  :commands (evil-multiedit-default-keybinds)
-  :init
-  (evil-multiedit-default-keybinds))
+#+begin_src emacs-lisp :tangle "lisp/init-tools.el"
+  ;;; 多光标操作 iedit & evil-multiedit
+  (use-package iedit
+    :ensure t
+    :init
+    (setq iedit-toggle-key-default nil)
+    :config
+    (define-key iedit-mode-keymap (kbd "M-h") 'iedit-restrict-function)
+    (define-key iedit-mode-keymap (kbd "M-i") 'iedit-restrict-current-line))
+
+  (use-package evil-multiedit
+    :ensure t
+    :commands (evil-multiedit-default-keybinds)
+    :init
+    (evil-multiedit-default-keybinds))
 #+end_src
+
+edit操作：
+- evil normal 状态下，选中单词 =viw= 再按 =R=. 进入 =evil-multiedit= 模式。 这时选中区域高亮，同时下方状态栏显示单词出现次数和当前所在位置
+- 在 =evil-multiedit= 模式下，使用vim方式操作。如
+  - =gg= 到匹配单词的第一次出现位置; =大G= 到匹配单词的最后一个; 按 =0= 光标跳到当前匹单词的开头
+  - =i= 插入模式输入字符，所有匹配的单词跟着一直修改
+  - esc 回到normal模式，按 =C-g= 退出edit模式
 
 *** =init-tools.el= expand-region
 :PROPERTIES:
 :CUSTOM_ID: h:tools-expand-region
 :END:
 
-
 在学习章节提到过[[#h:learn-module-up-packages][(精选 packages, 大大提升你的 Emacs 编辑效率)]]
 
+快速选中区域
+
 #+begin_src emacs-lisp :tangle "lisp/init-tools.el"
-(use-package expand-region
-  :config
-  (defadvice er/prepare-for-more-expansions-internal
-      (around helm-ag/prepare-for-more-expansions-internal activate)
-    ad-do-it
-    (let ((new-msg (concat (car ad-return-value)
-                           ", H to highlight in buffers"
-                           ", / to search in project, "
-                           "e iedit mode in functions"
-                           "f to search in files, "
-                           "b to search in opened buffers"))
-          (new-bindings (cdr ad-return-value)))
-      (cl-pushnew
-       '("H" (lambda ()
-               (interactive)
-               (call-interactively
-                'zilongshanren/highlight-dwim)))
-       new-bindings)
-      (cl-pushnew
-       '("/" (lambda ()
-               (interactive)
-               (call-interactively
-                'my/search-project-for-symbol-at-point)))
-       new-bindings)
-      (cl-pushnew
-       '("e" (lambda ()
-               (interactive)
-               (call-interactively
-                'evil-multiedit-match-all)))
-       new-bindings)
-      (cl-pushnew
-       '("f" (lambda ()
-               (interactive)
-               (call-interactively
-                'find-file)))
-       new-bindings)
-      (cl-pushnew
-       '("b" (lambda ()
-               (interactive)
-               (call-interactively
-                'consult-line)))
-       new-bindings)
-      (setq ad-return-value (cons new-msg new-bindings)))))
+  (use-package expand-region
+    :config
+    ;; 定义子菜单
+    (defadvice er/prepare-for-more-expansions-internal
+        (around helm-ag/prepare-for-more-expansions-internal activate)
+      ad-do-it
+      (let ((new-msg (concat (car ad-return-value)
+                             ", H to highlight in buffers"
+                             ", / to search in project, "
+                             "e iedit mode in functions"
+                             "f to search in files, "
+                             "b to search in opened buffers"))
+            (new-bindings (cdr ad-return-value)))
+        (cl-pushnew  ; 高亮
+         '("H" (lambda ()
+                 (interactive)
+                 (call-interactively
+                  'my/highlight-dwim))) ;自定义函数
+         new-bindings)
+        (cl-pushnew ; 查找当前项目目录中匹配选中字符串的文件
+         '("/" (lambda ()
+                 (interactive)
+                 (call-interactively
+                  'my/search-project-for-symbol-at-point))) ;自定义函数
+         new-bindings)
+        (cl-pushnew
+         '("e" (lambda ()
+                 (interactive)
+                 (call-interactively
+                  'evil-multiedit-match-all)))
+         new-bindings)
+        (cl-pushnew
+         '("f" (lambda ()
+                 (interactive)
+                 (call-interactively
+                  'find-file)))
+         new-bindings)
+        (cl-pushnew
+         '("b" (lambda ()
+                 (interactive)
+                 (call-interactively
+                  'consult-line)))
+         new-bindings)
+        (setq ad-return-value (cons new-msg new-bindings)))))
 #+end_src
 
-添加一个快捷键，让标记和搜索功能更方便： 写在 =init-funcs.el=
+扩大缩小区域操作：
+- 选中字符或光标位置
+- =M-x er/expand-region= 扩大区域。 回车回车扩大； - 减号缩小区域；0 重置 /查找
+- 在expand-region下，又自定义快捷键绑定可以方便操作。
+
+添加一个快捷键[[#h:evil-custom-keybinding][(=init.evil.el= 自定义快捷键)]]，让标记和搜索功能更方便[[#h:funcs-expand-region][(=init-funcs.el= expand-region)]]： 
 
 #+begin_src emacs-lisp :tangle no :results none
   ;;;###autoload
@@ -1808,11 +1873,17 @@ modeline上显示我的所有的按键和执行的命令
                            (buffer-substring (region-beginning) (region-end))))))
 
   (global-definer
-    "hc" 'zilongshanren/clearn-highlight
-    "hH" 'zilongshanren/highlight-dwim
+    "hc" 'my/clearn-highlight
+    "hH" 'my/highlight-dwim
     "v" 'er/expand-region
     )
 #+end_src
+
+扩大区域快捷操作：
+- =SPC v= 扩大区域 . 之后可以使用 - 缩小区域
+- =SPC v e= 等同于evil multiedit中的 R 操作
+- =SPC v f= 调用 ~find-file~ 函数查找文件
+- =SPC v /= 查找当前项目目录中匹配选中字符串的文件
 
 *** =init-tools.el= symbol-overlay & highlight-global
 :PROPERTIES:
@@ -1821,25 +1892,36 @@ modeline上显示我的所有的按键和执行的命令
 
 在学习章节提到过[[#h:learn-module-up-packages][(精选 packages, 大大提升你的 Emacs 编辑效率)]]
 
+高亮插件
+
+highlight-global是github插件，使用quelpa插件辅助安装[[#h:packages-quelpa][(=init-packages.el= 安装 quelpa 插)]] , 自定义了高亮函数[[#h:funcs-symbol-overl][(=init-funcs.el= symbol-overlay & highlight-global)]]做为快捷键引用[[#h:tools-expand-region][(=init-tools.el= expand-region)]]
+
 #+begin_src emacs-lisp :tangle "lisp/init-tools.el"
   (use-package highlight-global
     :ensure nil
     :commands (highlight-frame-toggle)
     :quelpa (highlight-global :fetcher github :repo "glen-dai/highlight-global")
     :config
+    ;; 高亮默认随机红、粉、蓝、青、紫等颜色循环
     (progn
       (setq-default highlight-faces
                     '(('hi-red-b . 0)
                       ('hi-aquamarine . 0)
                       ('hi-pink . 0)
                       ('hi-blue-b . 0)))))
+#+end_src
 
-
+#+begin_src emacs-lisp :tangle "lisp/init-tools.el"
   (use-package symbol-overlay
     :config
     (define-key symbol-overlay-map (kbd "h") 'nil))
 #+end_src
 
+高亮插件操作：
+- =SPC v H= 选中部分以一种颜色高亮。重复操作可以看到不高亮颜色。
+  - 场景：查找代码或日志时，标记重点区域
+  - evil 快捷键 =SPC hh=
+- =M-x clear-highlight-frame= 清除颜色，或者 =SPC hc= 清除高亮颜色
 
 *** =init-tools.el= 调用 provide
 
@@ -1858,9 +1940,20 @@ modeline上显示我的所有的按键和执行的命令
 在学习章节提到过[[h:learn-ui-built-in][(外观配置)]]
 
 #+begin_src emacs-lisp :tangle "lisp/init-ui.el" :mkdirp yes
-  (global-display-line-numbers-mode 1) ;显示行号 29版本。29之前用(global-linum-mode 1)
   (setq inhibit-startup-screen t) ; 尝试关掉启动界面
+  (setq-default cursor-type 'bar)              ; 更改光标的样式，默认比较粗. 更多C-h v 查询帮助
+  ;;(setq cursor-type 'bar)                    ;; 更改光标的样式。setq当前buffer生效，不能全局生效
+
+  (global-hl-line-mode t)                      ;; 高亮当前行
+
+  (global-display-line-numbers-mode 1) ;显示行号 29版本。29之前用(global-linum-mode 1)
+  (setq frame-title-format
+        `((buffer-file-name "%f" "%b")
+          ,(format " - GNU Emacs %s" emacs-version)))
+
+
   ;;(toggle-frame-maximized)                     ; 全屏编辑器
+  (setq  initial-frame-alist (quote ((fullscreen . maximized))))
 
 
   ;;(set-face-attribute 'default nil :height 150) ; 修改字号，大小为16pt
@@ -1872,10 +1965,6 @@ modeline上显示我的所有的按键和执行的命令
   (scroll-bar-mode -1)                         ;; 关闭文件滑动控件
   ;; (menu-bar-mode -1)                        ;; 关闭菜单栏 (不关闭，使用插件时会用到)
 
-  (setq-default cursor-type 'bar)              ; 更改光标的样式，默认比较粗. 更多C-h v 查询帮助
-  ;;(setq cursor-type 'bar)                    ;; 更改光标的样式。setq当前buffer生效，不能全局生效
-
-  (global-hl-line-mode t)                      ;; 高亮当前行
 
   ;;主题
   ;;(load-theme 'tango-dark) ;这里使用doom-theme
@@ -1886,7 +1975,7 @@ modeline上显示我的所有的按键和执行的命令
 :CUSTOM_ID: h:ui-doom-emacs
 :END:
 
-#+begin_src emacs-lisp :tangle "lisp/init-ui.el"
+#+begin_src emacs-lisp :tangle no :results none
   ;; 这里的执行顺序非常重要，doom-modeline-mode 的激活时机一定要在设置global-mode-string 之后‘
   (use-package doom-themes
     :ensure t)
@@ -1906,13 +1995,16 @@ modeline上显示我的所有的按键和执行的命令
 
 现在更推荐用 [[https://github.com/rainstormstudio/nerd-icons.el][rainstormstudio/nerd-icons.el (github.com)]] 。直接下载一个nerd fonts就可以 (=M-x nerd-icons-install-fonts=)或者手动下载fonts目录中的 =NFM.ttf= 。GUI和terminal都可以显示icon，大小也更统一。
 
-#+begin_src emacs-lisp :tangle no
+#+begin_src emacs-lisp :tangle "lisp/init-ui.el"
+  ;; 这里的执行顺序非常重要，doom-modeline-mode 的激活时机一定要在设置global-mode-string 之后‘
   (use-package doom-themes
     :ensure t
     :init
     (if (display-graphic-p)
         (load-theme 'doom-solarized-light)
       (load-theme 'doom-tomorrow-night)))
+
+  (set-face-attribute 'default nil :height 150) ; 修改字号，大小为16pt
 
   (use-package doom-modeline
     :ensure t
@@ -2397,6 +2489,8 @@ d:\msys64\usr\bin
 :CUSTOM_ID: h:evil
 :END:
 
+在学习章节提到过[[#h:learn-evil][(evil)]]
+
 *** =init-evil.el= 安装
 :PROPERTIES:
 :CUSTOM_ID: h:evil-init
@@ -2571,9 +2665,9 @@ general插件中global-definer在init-basic.el中定义[[#h:basic-general][(=ini
       "hdv" 'describe-variable ;SPC hdv 相当于emacs的C-h v
       "hdk" 'describe-key ;SPC hdk 相当于emacs的C-h k
       ;; 查看init-funcs.el 自定义函数
-      "hh" 'my/highlight-dwim
-      "hc" 'my/clearn-highlight
-      "v" 'er/expand-region
+      "hh" 'my/highlight-dwim ;SPC hh 高亮选中区域并标上颜色
+      "hc" 'my/clearn-highlight ;SPC hc 清除高亮颜色
+      "v" 'er/expand-region ;SPC v 扩大区域
       )
     ;; leader 键为SPC空格，子leader键为b. 如 SPC b b查看buffer缓冲区
     (+general-global-menu! "buffer" "b"
@@ -2840,6 +2934,8 @@ S用法，选中一个单词后加引号。
 
 在学习章节提到过[[#h:learn-module-up-packages][(精选 packages, 大大提升你的 Emacs 编辑效率)]]
 
+交互式替换文本. 在evil模式中，选中的单词填写在 =:%s/<word>//= 中
+
 #+begin_src emacs-lisp :tangle "lisp/init-funcs.el"
   ;;;###autoload
   (defun my/evil-quick-replace (beg end )
@@ -2855,7 +2951,10 @@ S用法，选中一个单词后加引号。
   (define-key evil-visual-state-map (kbd "C-r") 'my/evil-quick-replace)
 #+end_src
 
-** =init-funcs.el= symbol-overlay & highlight-global
+交互式替换文本操作：
+- =SPC v= 或者选中要替换的字符串，按 =C-r= 替换
+
+*** =init-funcs.el= symbol-overlay & highlight-global
 :PROPERTIES:
 :CUSTOM_ID: h:funcs-symbol-overly
 :END:
@@ -2864,7 +2963,7 @@ S用法，选中一个单词后加引号。
 
 #+begin_src emacs-lisp :tangle "lisp/init-funcs.el"
   ;;;###autoload
-  (defun my/highlight-dwim ()
+  (defun my/highlight-dwim () ;do what i mean 如果选中区域调用highlight-frame-toggle高亮,没有则调用symbol-overlay高亮
     (interactive)
     (if (use-region-p)
         (progn

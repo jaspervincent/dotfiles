@@ -71,7 +71,7 @@ Supports exporting consult-grep to wgrep, file to wdeired, and consult-location 
 (define-key evil-visual-state-map (kbd "C-r") 'my/evil-quick-replace)
 
 ;;;###autoload
-(defun my/highlight-dwim ()
+(defun my/highlight-dwim () ;do what i mean 如果选中区域调用highlight-frame-toggle高亮,没有则调用symbol-overlay高亮
   (interactive)
   (if (use-region-p)
       (progn

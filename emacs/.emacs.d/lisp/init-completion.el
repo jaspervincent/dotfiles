@@ -31,8 +31,9 @@
 ;;; 配置 Marginalia 增强 minubuffer 的 annotation
 (use-package marginalia
   :ensure t
-  :init (marginalia-mode)
-)
+  :hook (after-init . marginalia-mode)
+  :init
+  :config)
 
 ;;; minibuffer action 和自适应的 context menu：Embark
 (use-package embark
