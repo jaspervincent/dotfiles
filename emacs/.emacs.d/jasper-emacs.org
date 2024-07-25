@@ -2272,6 +2272,11 @@ SCHEDULED: <2022-06-17 Fri 10:00 +1d>
 :CUSTOM_ID: h:org-priority
 :END:
 
+有三种优先级模式，A-C，若不指定优先级，'B'等级是默认的。
+- =C-c ,= 或者  =M-x org-priority=  : 设置当前标题的优先级，键入A-C设置级别，或者键入SPC清除标记
+- S-UP/DOWN  :: 提升/降低当前标题的优先级
+
+设置agenda中优先级A的为“重要且紧急的事”
 
 #+begin_src emacs-lisp :tangle "lisp/init-org.el"
   (setq org-agenda-custom-commands
@@ -2280,6 +2285,10 @@ SCHEDULED: <2022-06-17 Fri 10:00 +1d>
           ;; ...other commands here
           ))
 #+end_src
+
+查看重要且紧急的事：
+- 进行agenda  视图 =C-c a a=，设置优先级A， 按 =,=  逗号，输入a。
+- 查看重要且紧急的事，=C-c a c= 展示重要且紧急的事（必须有 TODO 状态）。
 
 *** =init-org.el= 调用 provide
 
