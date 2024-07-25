@@ -1894,7 +1894,7 @@ edit操作：
 
 高亮插件
 
-highlight-global是github插件，使用quelpa插件辅助安装[[#h:packages-quelpa][(=init-packages.el= 安装 quelpa 插)]] , 自定义了高亮函数[[#h:funcs-symbol-overl][(=init-funcs.el= symbol-overlay & highlight-global)]]做为快捷键引用[[#h:tools-expand-region][(=init-tools.el= expand-region)]]
+highlight-global是github插件，使用quelpa插件辅助安装[[#h:packages-quelpa][(=init-packages.el= 安装 quelpa 插)]] , 自定义了高亮函数[[#h:funcs-symbol-overly][(=init-funcs.el= symbol-overlay & highlight-global)]]做为快捷键引用[[#h:tools-expand-region][(=init-tools.el= expand-region)]]
 
 #+begin_src emacs-lisp :tangle "lisp/init-tools.el"
   (use-package highlight-global
