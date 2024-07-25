@@ -6,6 +6,13 @@
 
 ;;; Code:
 
+;; 判断操作系统， 定义一个新变量
+(setq *is-a-mac* (eq system-type 'darwin))
+(setq *win64* (eq system-type 'windows-nt))
+(setq *cygwin* (eq system-type 'cygwin) )
+(setq *linux* (or (eq system-type 'gnu/linux) (eq system-type 'linux)) )
+(setq *unix* (or *linux* (eq system-type 'usg-unix-v) (eq system-type 'berkeley-unix)) )
+
 ;; 禁用备份和锁定文件
 (setq make-backup-files nil)
 (setq backup-inhibited nil) ; Not sure if needed, given `make-backup-files'

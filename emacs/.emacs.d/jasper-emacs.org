@@ -864,7 +864,12 @@ Org-mode 下的文学编程将颠覆你对于 Emacs 的看法。因为我们也�
 *** 4
 
 - ox-hugo来写博客
-- eglot emacs29版本内置
+- eglot emacs29版本内置[[#h:c++-eglot][(使用 eglot 来编写、运行和调试 C/C++ 代码)]]
+*** evil
+
+前期vim用户快速切emacs用户
+
+- evil[[#h:evil][(=init-evil.el=)]] 
 
 
 ** 清理学习内容
@@ -907,6 +912,18 @@ Org-mode 下的文学编程将颠覆你对于 Emacs 的看法。因为我们也�
   ;;; Code:
 
   
+#+end_src
+
+** =init.el= 加载前自定义配置
+
+*** =init.el= 判断操作系统
+#+begin_src emacs-lisp :tangle "init.el"
+  ;; 判断操作系统， 定义一个新变量
+  (setq *is-a-mac* (eq system-type 'darwin))
+  (setq *win64* (eq system-type 'windows-nt))
+  (setq *cygwin* (eq system-type 'cygwin) )
+  (setq *linux* (or (eq system-type 'gnu/linux) (eq system-type 'linux)) )
+  (setq *unix* (or *linux* (eq system-type 'usg-unix-v) (eq system-type 'berkeley-unix)) )
 #+end_src
 
 ** =init.el= 基础配置禁用备份和锁定文件
@@ -1532,6 +1549,36 @@ everythin工具可以快速搜索本地文件。下载地址： <https://www.voi
 
 中文搜索操作：
 - =M-x consult-locate= 回车，输入要搜索的文件. 如 =#学习=
+
+*上下光标移动*
+
+适合vim习惯用户, 让minibbuffer上下移动变为 =C-k= =C-j= ,默认minibuffer上下移动是 =C-p= =C-n=
+#+begin_src emacs-lisp :tangle "lisp/init-completion.el"
+  ;; make c-j/c-k work in vertico selection 添加minibuffer中上下移动键位绑定
+  (define-key vertico-map (kbd "C-j") 'vertico-next)
+  (define-key vertico-map (kbd "C-k") 'vertico-previous)
+#+end_src
+
+*修复consult-ripgrep搜索不了问题*
+
+windows上有时，consult-ripgrep搜索不了
+
+#+begin_src emacs-lisp :tangle "lisp/init-completion.el"
+  ;; make consult-ripgrep work 有时consult-ripgrep搜索不了
+  (cond
+   ;; macOS
+   ((eq system-type 'darwin)
+    "afplay")
+   ;; Windows
+   ((eq system-type 'windows-nt)
+    (add-to-list 'process-coding-system-alist 
+                 '("[rR][gG]" . (utf-8-dos . windows-1251-dos)))
+    )
+   (t
+    "Nothing"))
+#+end_src
+
+
 
 *** =init-completion.el= 调用 provide
 
@@ -2189,6 +2236,10 @@ d:\msys64\usr\bin
 #+end_src
 
 ** =init-evil.el=
+:PROPERTIES:
+:CUSTOM_ID: h:evil
+:END:
+
 
 *** =init-evil.el= 安装
 :PROPERTIES:
@@ -2512,6 +2563,10 @@ S用法，选中一个单词后加引号。
   (message "Load init-evil done...")
   (provide 'init-evil)
 #+end_src
+
+*我的建议*
+
+使用emacs原生按键。 用多了evil，你还是个vim用户，无法轻松操作无配置或精简内置配置的emacs。
 
 ** =init-window.el=
 

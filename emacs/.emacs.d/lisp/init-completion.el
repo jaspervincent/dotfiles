@@ -96,5 +96,22 @@
         consult-async-input-debounce 0.1)
       ))
 
+;; make c-j/c-k work in vertico selection 添加minibuffer中上下移动键位绑定
+(define-key vertico-map (kbd "C-j") 'vertico-next)
+(define-key vertico-map (kbd "C-k") 'vertico-previous)
+
+;; make consult-ripgrep work 有时consult-ripgrep搜索不了
+(cond
+ ;; macOS
+ ((eq system-type 'darwin)
+  "afplay")
+ ;; Windows
+ ((eq system-type 'windows-nt)
+  (add-to-list 'process-coding-system-alist 
+               '("[rR][gG]" . (utf-8-dos . windows-1251-dos)))
+  )
+ (t
+  "Nothing"))
+
 (message "Load init-completion done...")
 (provide 'init-completion)
