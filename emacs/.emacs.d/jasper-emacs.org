@@ -887,6 +887,14 @@ Org-mode 下的文学编程将颠覆你对于 Emacs 的看法。因为我们也�
 - symbol-overlay & highlight-global[[#h:funcs-symbol-overly][(=init-funcs.el= symbol-overlay & highlight-global)]] [[#h:tools-symbol-overlay][(=init-tools.el= symbol-overlay & highlight-global)]]
 
 
+*** 使用 Treesit + eglot 来打造现代编程 IDE
+:PROPERTIES:
+:CUSTOM_ID: h:learn-c++-treesit
+:END:
+
+- 
+
+
 ** 清理学习内容
 #+begin_src emacs-lisp :tangle no
   (write-region "" nil "~/.emacs.d/init.el")
@@ -2004,7 +2012,8 @@ highlight-global是github插件，使用quelpa插件辅助安装[[#h:packages-qu
         (load-theme 'doom-solarized-light)
       (load-theme 'doom-tomorrow-night)))
 
-  (set-face-attribute 'default nil :height 150) ; 修改字号，大小为16pt
+  ;; (set-face-attribute 'default nil :height 150) ; 修改字号，大小为16pt
+  (set-face-attribute 'default nil :height 130) ; 修改字号，大小为16pt
 
   (use-package doom-modeline
     :ensure t
@@ -2067,9 +2076,6 @@ highlight-global是github插件，使用quelpa插件辅助安装[[#h:packages-qu
   (use-package org-contrib  ;非org的官方贡献的插件
     :ensure t
     :pin nongnu)
-
- 
-
 #+end_src
 
 *** =init-org.el= org todo
@@ -2485,6 +2491,86 @@ d:\msys64\usr\bin
   [Inferior 1 (process 7812) exited normally]
   (gdb) 
 #+end_example
+
+使用 Treesit + eglot 来打造现代编程 IDE
+
+Emacs29新特性介绍：<https://emacs.liujiacai.net/post/031-emacs-29-feature-preview/>
+
+**** 安装 treesit-auto 插件
+
+https://github.com/renzmann/treesit-auto
+
+语法高亮, =*ts-mode= , 性能要原生的好。
+
+#+begin_src emacs-lisp :tangle no :results none
+  ;; 语法高亮, *ts-mode , M-x treesit-auto-install-all
+  (use-package treesit-auto
+  :demand t
+  :config
+  (setq treesit-auto-install 'prompt)
+  (global-treesit-auto-mode))
+#+end_src
+
+安装完之后运行 =M-x treesit-auto-install-all= , 它自动下载各种语言的 =.dll= 文件, 文件安装在 =~/.emacs.d/tree-sitter=
+
+重启emacs，打开一个c++程序，查看当前的主模式 =C-h v= major=mode 可以看到是 =c++-ts-mode= ，而不是原先的 =c++-mode=
+
+
+**** 配置 fontlock level
+
+#+begin_src emacs-lisp :tangle no :results none
+(setq treesit-font-lock-level 4)
+#+end_src
+
+**** 跳转函数列表 consult-imenu
+
+#+begin_src emacs-lisp :tangle "lisp/init-programming.el"
+(+general-global-menu! "search" "s"
+  "j" 'consult-imenu
+  "p" 'consult-ripgrep
+  "k" 'consult-keep-lines
+  "f" 'consult-focus-lines)
+#+end_src
+
+查找定义和引用
+
+使用 ctrl-o 返回
+#+begin_example :tangle no
+xref-find-references
+xref-find-definitions
+#+end_example
+
+**** 添加 snippets 支持
+
+#+begin_src emacs-lisp :tangle "lisp/init-programming.el"
+  (use-package yasnippet
+    :ensure t
+    :hook ((prog-mode . yas-minor-mode)
+           (org-mode . yas-minor-mode))
+    :init
+    :config
+    (progn
+      (setq hippie-expand-try-functions-list
+            '(yas/hippie-try-expand
+              try-complete-file-name-partially
+              try-expand-all-abbrevs
+              try-expand-dabbrev
+              try-expand-dabbrev-all-buffers
+              try-expand-dabbrev-from-kill
+              try-complete-lisp-symbol-partially
+              try-complete-lisp-symbol))))
+
+  (use-package yasnippet-snippets
+    :ensure t
+    :after yasnippet)
+#+end_src
+
+**** 在头文件和源文件之间进行跳转
+
+ff-find-related-file
+
+
+
 
 *** =init-programming.el= 调用 provide
 
