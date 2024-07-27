@@ -11,6 +11,7 @@ jasper-emacs-pre-custom.*
 jasper-emacs-post-custom.*
 **/.emacs.d/*
 !**/.emacs.d/lisp
+!**/.emacs.d/j-lisp
 #*.el
 !**/.emacs.d/lisp/*.el
 !**/.emacs.d/j-lisp/*.el
