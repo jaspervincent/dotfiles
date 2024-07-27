@@ -99,6 +99,7 @@
 
 ;;; 添加不同语言的注释
 (use-package evil-nerd-commenter
+  :ensure t
   :init
   ;; normal 或 visual 模式下按 ,/ 可加注释
   ;; (define-key evil-normal-state-map (kbd ",ci") 'evilnc-comment-or-uncomment-lines)

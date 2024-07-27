@@ -20,10 +20,11 @@
 ;;; treesit-auto
 ;; 语法高亮, *ts-mode , M-x treesit-auto-install-all
 (use-package treesit-auto
-:demand t
-:config
-(setq treesit-auto-install 'prompt)
-(global-treesit-auto-mode))
+  :ensure t
+  :demand t
+  :config
+  (setq treesit-auto-install 'prompt)
+  (global-treesit-auto-mode))
 
 (use-package yasnippet
   :ensure t

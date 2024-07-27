@@ -52,6 +52,7 @@ Main data structure of the dispatcher with the form:
 
 ;; Enforce rules for popups
 (use-package popper
+  :ensure t
   :defines popper-echo-dispatch-actions
   :commands popper-group-by-directory
   :bind (:map popper-mode-map

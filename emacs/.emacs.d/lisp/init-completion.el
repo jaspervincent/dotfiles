@@ -135,6 +135,7 @@
 
 ;;; Minibuffer 垂直补全布局(vertico)
 (use-package vertico
+  :ensure t
   :hook (after-init . vertico-mode)
   :config
   (setq vertico-resize nil

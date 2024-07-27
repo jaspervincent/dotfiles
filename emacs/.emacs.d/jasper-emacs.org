@@ -2014,6 +2014,7 @@ orderless 支持 =M-x= 模糊搜索，可以无序的。 如 edebug-defun 函数
 #+begin_src emacs-lisp :tangle "lisp/init-completion.el"
   ;;; Minibuffer 垂直补全布局(vertico)
   (use-package vertico
+    :ensure t
     :hook (after-init . vertico-mode)
     :config
     (setq vertico-resize nil
@@ -2071,6 +2072,7 @@ orderless 支持 =M-x= 模糊搜索，可以无序的。 如 edebug-defun 函数
 #+begin_src emacs-lisp :tangle no :results none
   ;;; evil 使用undo-tree来管理undo redo
   (use-package undo-tree
+    :ensure t
     :diminish
     :init
     (global-undo-tree-mode 1)
@@ -2353,6 +2355,7 @@ S用法，选中一个单词后加引号。
 #+begin_src emacs-lisp :tangle "lisp/init-evil.el"
   ;;; 添加不同语言的注释
   (use-package evil-nerd-commenter
+    :ensure t
     :init
     ;; normal 或 visual 模式下按 ,/ 可加注释
     ;; (define-key evil-normal-state-map (kbd ",ci") 'evilnc-comment-or-uncomment-lines)
@@ -2458,6 +2461,7 @@ edit操作：
 
 #+begin_src emacs-lisp :tangle "lisp/init-tools.el"
   (use-package expand-region
+    :ensure t
     :config
     ;; 定义子菜单
     (defadvice er/prepare-for-more-expansions-internal
@@ -2716,6 +2720,7 @@ C-w h/j/j/k
 #+begin_src emacs-lisp :tangle "lisp/init-window.el"
   ;; Enforce rules for popups
   (use-package popper
+    :ensure t
     :defines popper-echo-dispatch-actions
     :commands popper-group-by-directory
     :bind (:map popper-mode-map
@@ -3432,10 +3437,11 @@ https://github.com/renzmann/treesit-auto
   ;;; treesit-auto
   ;; 语法高亮, *ts-mode , M-x treesit-auto-install-all
   (use-package treesit-auto
-  :demand t
-  :config
-  (setq treesit-auto-install 'prompt)
-  (global-treesit-auto-mode))
+    :ensure t
+    :demand t
+    :config
+    (setq treesit-auto-install 'prompt)
+    (global-treesit-auto-mode))
 #+end_src
 
 安装完之后运行 =M-x treesit-auto-install-all= , 它自动下载编译好的各种语言 =.dll= 文件, 文件安装在 =~/.emacs.d/tree-sitter=
@@ -3446,6 +3452,7 @@ https://github.com/renzmann/treesit-auto
 
 #+begin_src emacs-lisp :tangle no
   (use-package treesit-auto
+    :ensure t
     :demand t
     :config
     (progn

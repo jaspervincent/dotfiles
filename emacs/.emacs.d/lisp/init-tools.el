@@ -16,6 +16,7 @@
   (evil-multiedit-default-keybinds))
 
 (use-package expand-region
+  :ensure t
   :config
   ;; 定义子菜单
   (defadvice er/prepare-for-more-expansions-internal
