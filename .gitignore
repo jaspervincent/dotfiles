@@ -13,6 +13,7 @@ jasper-emacs-post-custom.*
 !**/.emacs.d/lisp
 #*.el
 !**/.emacs.d/lisp/*.el
+!**/.emacs.d/j-lisp/*.el
 !emacs/**/jasper-emacs.org
 !emacs/.emacs.d/init.el
 !emacs/.emacs.d/early-init.el
