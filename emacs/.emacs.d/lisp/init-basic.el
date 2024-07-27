@@ -1,8 +1,7 @@
 ;;; 一些默认的配置
-
+;;;
 (setq w32-apps-modifier 'super)       ;PC 通过SharpKeys改成了 Application
 
-;;; 统一配置
 (global-set-key (kbd "s-a") 'mark-whole-buffer) ;;对应Windows上面的Ctrl-a 全选
 (global-set-key (kbd "s-c") 'kill-ring-save) ;;对应Windows上面的Ctrl-c 复制
 (global-set-key (kbd "s-s") 'save-buffer) ;; 对应Windows上面的Ctrl-s 保存
@@ -81,6 +80,7 @@
     (setq column-number-mode t)
     ))
 
+;;; 自定义类似evil中的leader键
 (use-package general
   :ensure t
   :init
@@ -125,3 +125,7 @@ Create prefix map: +general-global-NAME. Prefix bindings in BODY with INFIX-KEY.
 
 (message "Load init-basic done...")
 (provide 'init-basic)
+
+;;; 输入法 (pyim)
+(use-package pyim
+  :ensure t)

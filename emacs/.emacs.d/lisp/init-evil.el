@@ -37,8 +37,12 @@
   )
 
 
-
-
+(use-package j-evil
+  :ensure nil
+  :bind
+  ( :map evil-visual-state-map 
+  ("C-r" . my/evil-quick-replace) ;交互式替换文本 选中文本C-r, :%s/<words>//
+  ))
 
 ;;; evil 使用undo-tree来管理undo redo
 (use-package undo-tree
@@ -48,42 +52,6 @@
   (global-undo-tree-mode 1)
   (setq undo-tree-auto-save-history nil)
   (evil-set-undo-system 'undo-tree))
-
-(use-package general
-  :init
-  ;; global-definer 对应leader键为空格
-  (global-definer
-    "!" 'shell-command ;空格+! SPC ! 进入shell命令行
-    "SPC" 'execute-extended-command ; 按2下空格SPC-SPC就可以实现 M-x 的效果
-    "'" 'vertico-repeat
-    "+" 'text-scale-increase
-    "-" 'text-scale-decrease
-    "u" 'universal-argument ;SPC u 相当于emacs的C-u 
-    "hdf" 'describe-function ;SPC hdf 相当于emacs的C-h f
-    "hdv" 'describe-variable ;SPC hdv 相当于emacs的C-h v
-    "hdk" 'describe-key ;SPC hdk 相当于emacs的C-h k
-    ;; 查看init-funcs.el 自定义函数
-    "hh" 'my/highlight-dwim ;SPC hh 高亮选中区域并标上颜色
-    "hc" 'my/clearn-highlight ;SPC hc 清除高亮颜色
-    "v" 'er/expand-region ;SPC v 扩大区域
-    )
-  ;; leader 键为SPC空格，子leader键为b. 如 SPC b b查看buffer缓冲区
-  (+general-global-menu! "buffer" "b"
-    "d" 'kill-current-buffer
-    "b" '(consult-buffer :which-key "consult buffer") ; 查看buffer缓冲区
-    "B" 'switch-to-buffer
-    "p" 'previous-buffer
-    "R" 'rename-buffer
-    "M" '((lambda () (interactive) (switch-to-buffer "*Messages*")) 
-          :which-key "messages-buffer") ; SPC b M查看*Message*缓冲区
-    "n" 'next-buffer
-    "i" 'ibuffer
-    "f" 'my-open-current-directory
-    "k" 'kill-buffer
-
-    "y" 'copy-buffer-name
-    "K" 'kill-other-buffers)
-  )
 
 ;; kj 退回到普通模式
 (use-package evil-escape

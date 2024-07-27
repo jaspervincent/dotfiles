@@ -32,10 +32,11 @@
   :ensure t
   :init
   (if (display-graphic-p)
-      (load-theme 'doom-solarized-light)
-    (load-theme 'doom-tomorrow-night)))
+      (load-theme 'doom-solarized-light t) ; t表示自动确认运行代码
+    (load-theme 'doom-tomorrow-night t)))
 
-(set-face-attribute 'default nil :height 150) ; 修改字号，大小为16pt
+;; (set-face-attribute 'default nil :height 150) ; 修改字号，大小为16pt
+(set-face-attribute 'default nil :height 130) ; 修改字号，大小为16pt
 
 (use-package doom-modeline
   :ensure t

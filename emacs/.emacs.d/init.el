@@ -29,7 +29,7 @@
 (mapc
  (lambda (string)
    (add-to-list 'load-path (locate-user-emacs-file string)))
- '("lisp" "person"))
+ '("lisp" "j-lisp"))
 
 ;;;; 软件包
 
@@ -72,30 +72,40 @@
 ;; make use-package default behavior better
 ;; with `use-package-always-ensure' you won't need ":ensure t" all the time
 ;; with `use-package-always-defer' you won't need ":defer t" all the time
-(setq use-package-always-ensure t
-      use-package-always-defer t
-      use-package-enable-imenu-support t
-      use-package-expand-minimally t)
+;;(setq use-package-always-ensure t
+;;      use-package-always-defer t
+;;      use-package-enable-imenu-support t
+;;      use-package-expand-minimally t)
 
 ;; 加载模块
 (load (locate-user-emacs-file "jasper-emacs-pre-custom.el") :no-error :no-message)
 
-(require 'init-basic)
+;; Packages
 (require 'init-packages)
-(require 'init-completion)
 (use-package benchmark-init
   :ensure t
   :demand t
   :config
   ;; To disable collection of benchmark data after init is done.
   (add-hook 'after-init-hook 'benchmark-init/deactivate))
-(require 'init-tools)
+
+;; Core
+(require 'init-basic)
 (require 'init-ui)
-(require 'init-org)
-(require 'init-keybindings)
-(require 'init-programming)
+(require 'init-modeline)
+(require 'init-completion)
 (require 'init-evil)
+(require 'init-tools)
+;; uis
 (require 'init-window)
+;; Tools
+(require 'init-org)
+;; Frameworks
+(require 'init-persp)
+;; Languages
+(require 'init-programming)
+;; personal
+(require 'init-keybindings)
 (require 'init-funcs)
 
 (load (locate-user-emacs-file "jasper-emacs-post-custom.el") :no-error :no-message)

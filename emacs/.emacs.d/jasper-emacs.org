@@ -313,7 +313,7 @@ Emacs Lisp 是世界上第二古老高级编程语言 Lisp 专为 Emacs 打造�
 *Company插件*
 <<h:learn-completion-company>>
 
-我的emacs模块配置[[#h:completion-company][(=init-completion.el= Company)]]
+我的emacs模块配置[[#h:completion-company][(=init-completion.el= 补全 =company=)]]
 
 他是一个用于代码补全的插件
 
@@ -330,7 +330,8 @@ Emacs Lisp 是世界上第二古老高级编程语言 Lisp 专为 Emacs 打造�
 *增强 minibuffer 补全：vertico 和 Orderless*
 <<h:learn-completion-minibuffer-1>>
 
-我的emacs模块配置[[#h:completion-minibuffer-1][(=init-completion.el= 增强 minibuffer 补全：vertico 和 Orderless)]]
+- 我的emacs模块配置[[#h:completion-orderless][(=init-completion.el= minibuffer增强 =orderless=)]]
+- 我的emacs模块配置[[#h:completion-vertico][(=init-completion.el= minibuffer增强 =vertico=)]]
 
 #+begin_src emacs-lisp
   (package-install 'vertico)
@@ -348,7 +349,7 @@ orderless 支持 =M-x= 模糊搜索，可以无序的。 如 edebug-defun 函数
 *配置 Marginalia 增强 minubuffer 的 annotation*
 <<h:learn-completion-minibuffer-2>>
 
-我的emacs模块配置[[#h:completion-minibuffer-2][(=init-completion.el= 配置 Marginalia 增强 minubuffer 的 annotation)]]
+我的emacs模块配置[[#h:completion-marginalia][(=init-completion.el=  minubuffer增强注释 =marginalia=)]]
 
 #+begin_src emacs
 (package-install 'marginalia)
@@ -366,8 +367,7 @@ orderless 支持 =M-x= 模糊搜索，可以无序的。 如 edebug-defun 函数
 *minibuffer action 和自适应的 context menu：Embark*
 <<h:learn-completion-minibuffer-3>>
 
-我的emacs模块配置[[#h:completion-minibuffer-3][(=init-completion.el= minibuffer action 和自适应的 context menu：Embark)]]
-
+我的emacs模块配置[[#h:completion-embark][(=init-completion.el= minibuffer增强 =embark=)]]
 
 #+begin_src emacs-lisp
 (package-install 'embark)
@@ -392,7 +392,7 @@ orderless 支持 =M-x= 模糊搜索，可以无序的。 如 edebug-defun 函数
 *增强文件内搜索和跳转函数定义：Consult*
 <<h:learn-completion-minibuffer-4>>
 
-我的emacs模块配置[[#h:completion-minibuffer-4][(=init-completion.el= 增强文件内搜索Consul)]]
+我的emacs模块配置[[#h:completion-consult][(=init-completion.el= 增强文件内搜索 =consult=)]]
 
 #+begin_src emacs-lisp
   (package-install 'consult)
@@ -428,37 +428,45 @@ git clone --depth=1 https://github.com/manateelazycat/awesome-tab.git
 
 配置文件
 #+begin_src emacs-lisp :tangle no :results none
-(add-to-list 'load-path (expand-file-name "~/.emacs.d/site-lisp/awesome-tab/"))
-(require 'awesome-tab)
-(awesome-tab-mode t)
+  (add-to-list 'load-path (expand-file-name "~/.emacs.d/site-lisp/awesome-tab/"))
+  (require 'awesome-tab)
+  (awesome-tab-mode t)
 
-(defun awesome-tab-buffer-groups ()
-"`awesome-tab-buffer-groups' control buffers' group rules.
-Group awesome-tab with mode if buffer is derived from `eshell-mode' `emacs-lisp-mode' `dired-mode' `org-mode' `magit-mode'.
-All buffer name start with * will group to \"Emacs\".
-Other buffer group by `awesome-tab-get-group-name' with project name."
-(list
-(cond
-    ((or (string-equal "*" (substring (buffer-name) 0 1))
-	(memq major-mode '(magit-process-mode
-			    magit-status-mode
-			    magit-diff-mode
-			    magit-log-mode
-			    magit-file-mode
-			    magit-blob-mode
-			    magit-blame-mode)))
-    "Emacs")
-    ((derived-mode-p 'eshell-mode)
-    "EShell")
-    ((derived-mode-p 'dired-mode)
-    "Dired")
-    ((memq major-mode '(org-mode org-agenda-mode diary-mode))
-    "OrgMode")
-    ((derived-mode-p 'eaf-mode)
-    "EAF")
-    (t
-    (awesome-tab-get-group-name (current-buffer))))))
+  ;;(use-package awesome-tab
+  ;;  :ensure nil
+  ;;  :quelpa (awesome-tab :fetcher github :repo "manateelazycat/awesome-tab")
+  ;;  :init (awesome-tab-mode t)
+  ;;  )
+
+  (defun awesome-tab-buffer-groups ()
+  "`awesome-tab-buffer-groups' control buffers' group rules.
+  Group awesome-tab with mode if buffer is derived from `eshell-mode' `emacs-lisp-mode' `dired-mode' `org-mode' `magit-mode'.
+  All buffer name start with * will group to \"Emacs\".
+  Other buffer group by `awesome-tab-get-group-name' with project name."
+  (list
+  (cond
+      ((or (string-equal "*" (substring (buffer-name) 0 1))
+  	(memq major-mode '(magit-process-mode
+  			    magit-status-mode
+  			    magit-diff-mode
+  			    magit-log-mode
+  			    magit-file-mode
+  			    magit-blob-mode
+  			    magit-blame-mode)))
+      "Emacs")
+      ((derived-mode-p 'eshell-mode)
+      "EShell")
+      ((derived-mode-p 'dired-mode)
+      "Dired")
+      ((memq major-mode '(org-mode org-agenda-mode diary-mode))
+      "OrgMode")
+      ((derived-mode-p 'eaf-mode)
+      "EAF")
+      (t
+      (awesome-tab-get-group-name (current-buffer))))))
 #+end_src
+
+尽量用内置的包。 =tab-bar=
 
 ** 其他小配置
 
@@ -500,7 +508,7 @@ Other buffer group by `awesome-tab-get-group-name' with project name."
 :PROPERTIES:
 :CUSTOM_ID: h:learn-funcs-front-explorer
 :END:
-我的emacs模块配置[[#h:funcs-front-explorer][(=init-funcs.el= 超级前端-打开PC文件管理)]]
+我的emacs模块配置[[#h:j-embark][(=j-embark.el= 库)]]
 
 windows 用户
 
@@ -618,7 +626,7 @@ Error running timer: (file-missing "Searching for program" "No such file or dire
 
 *配置搜索中文文件*
 
-everythin工具可以快速搜索本地文件。下载地址： <https://www.voidtools.com/zh-cn/downloads/>
+=everything= 工具可以快速搜索本地文件。下载地址： <https://www.voidtools.com/zh-cn/downloads/>
 
 安装好后，同时下载 ES.exe 客户端工具加入环境变量。
 
@@ -644,7 +652,7 @@ everythin工具可以快速搜索本地文件。下载地址： <https://www.voi
 #+end_src
 
 操作：
-- 前提：PC 始终打开everything, 转为ES会调用everthing
+- 前提：PC 始终打开everything, 转为 =ES= 会调用everthing
 - =M-x consult-locate= 回车，输入要搜索的文件如 =#init.el= 。 可以看到minibuffer中显示的和everthing界面搜索的是一样的。
 - 再输入个#号就可以使用 orderless 的功能进行过滤。如只想看29.4中init.el文件 =#init.el#29.4= 选中回车即可打开对应文件
 
@@ -660,7 +668,7 @@ everythin工具可以快速搜索本地文件。下载地址： <https://www.voi
 :CUSTOM_ID: h:learn-tools-search-pinyin
 :END:
 
-我的emacs模块配置[[#h:tools-search-pinyin][(=init-tools.el= 使用拼音进行搜索)]]
+我的emacs模块配置[[#h:completion-consult][(=init-completion.el= 增强文件内搜索 =consult=)]]
 
 #+begin_src emacs-lisp
   ;; 使用拼音进行搜索
@@ -846,12 +854,12 @@ Org-mode 下的文学编程将颠覆你对于 Emacs 的看法。因为我们也�
 
 - restart-emacs
 
-- savehist 记住使用过的命令[[#h:basic-session][(=init-basic.el= 保存会话)]]
+- savehist 记住使用过的命令[[#h:basic-session][(=init-basic.el= 历史命令 =savehist=)]]
 
 - 显示文件行、列、大小 ，美化状态栏
-  - simple[[#h:basic-simple][(=init-basic.el= simple)]]
-  - keycast[[#h:tools-keycast][(=init-tools.el= keycast)]]
-  - doom-modeline [[#h:ui-doom-emacs][(=init-ui.el= doom-emacs)]]
+  - simple[[#h:basic-simple][(=init-basic.el= 内置包 =simple=)]]
+  - keycast[[#h:modeline-keycast][(=init-modeline.el= 按键显示 =keycast=)]]
+  - doom-modeline [[#h:ui-doom-emacs][(=init-ui.el= 主题 =doom-emacs=)]]
 *** org
 
 - org
@@ -864,7 +872,7 @@ Org-mode 下的文学编程将颠覆你对于 Emacs 的看法。因为我们也�
 *** 4
 
 - ox-hugo来写博客
-- eglot emacs29版本内置[[#h:c++-eglot][(使用 eglot 来编写、运行和调试 C/C++ 代码)]]
+- eglot emacs29版本内置[[#h:c++-eglot][(=init-programming.el= 代码编写 =eglot=)]]
 *** evil
 :PROPERTIES:
 :CUSTOM_ID: h:learn-evil
@@ -881,19 +889,38 @@ Org-mode 下的文学编程将颠覆你对于 Emacs 的看法。因为我们也�
 :END:
 
 - 多光标操作 iedit & evil-multiedit[[#h:tools-iedit][(=init-tools.el= 多光标操作 iedit & evil-multiedit)]]
-- expand-region[[#h:tools-expand-region][(=init-tools.el= expand-region)]] [[#h:funcs-expand-region][(=init-funcs.el= expand-region)]]
-- interactive replace交互式替换文本[[#h:funcs-evil-quick-replace][(=init-funcs.el= interactive replace)]]
+- expand-region[[#h:tools-expand-region][(=init-tools.el= 快速选中区域 =expand-region=)]] [[#h:j-expand-region][(=j-expand-region.el= 库)]]
+- interactive replace交互式替换文本[[#h:evil-init][(=init-evil.el= 安装)]] [[#h:j-evil][(=j-evil.el= 库)]]
 - 安装 quelpa 插件[[#h:packages-quelpa][(=init-packages.el= 安装 quelpa 插件)]]
-- symbol-overlay & highlight-global[[#h:funcs-symbol-overly][(=init-funcs.el= symbol-overlay & highlight-global)]] [[#h:tools-symbol-overlay][(=init-tools.el= symbol-overlay & highlight-global)]]
-
+- symbol-overlay & highlight-global[[#h:j-highlight-global][(=j-highlight-global.el= 库)]] [[#h:tools-highlight-global][(=init-tools.el= 文本高亮 =symbol-overlay= & =highlight-global=)]]
 
 *** 使用 Treesit + eglot 来打造现代编程 IDE
 :PROPERTIES:
 :CUSTOM_ID: h:learn-c++-treesit
 :END:
 
-- 
+- 安装 treesit-auto 插件[[#h:c++-treesit-auto][(=init-programming.el= 语法高亮 =treesit-auto=)]]
+- 跳转函数列表 consult-imenup[[#h:c++-consult-imenu][(=init-programming.el= 跳转函数列表 consult-imenu)]]
+- 查找定义和引用
+- 添加 snippets 支持
+- 在头文件和源文件之间进行跳转
 
+*** 窗口
+:PROPERTIES:
+:CUSTOM_ID: h:learn-window
+:END:
+
+- windows[[#h:window][(=init-window.el=)]]
+  
+*** 工作区间管理
+:PROPERTIES:
+:CUSTOM_ID: h:learn-personspace
+:END:
+
+
+- personspace[[#h:personspace][(=init-persp.el= 工作区间管理)]]
+
+*** org 进阶
 
 ** 清理学习内容
 #+begin_src emacs-lisp :tangle no
@@ -995,7 +1022,7 @@ Org-mode 下的文学编程将颠覆你对于 Emacs 的看法。因为我们也�
   (mapc
    (lambda (string)
      (add-to-list 'load-path (locate-user-emacs-file string)))
-   '("lisp" "person"))
+   '("lisp" "j-lisp"))
 #+end_src
 
 ** =init.el= 软件包 (=package.el=)
@@ -1056,10 +1083,10 @@ early-init.el 处激活缓存[[#h:package-cache][(=early-init.el= 初始化包�
   ;; make use-package default behavior better
   ;; with `use-package-always-ensure' you won't need ":ensure t" all the time
   ;; with `use-package-always-defer' you won't need ":defer t" all the time
-  (setq use-package-always-ensure t
-        use-package-always-defer t
-        use-package-enable-imenu-support t
-        use-package-expand-minimally t)
+  ;;(setq use-package-always-ensure t
+  ;;      use-package-always-defer t
+  ;;      use-package-enable-imenu-support t
+  ;;      use-package-expand-minimally t)
 #+end_src
 
 ** =init.el= 加载各个模块
@@ -1073,28 +1100,38 @@ early-init.el 处激活缓存[[#h:package-cache][(=early-init.el= 初始化包�
 
 
 #+begin_src emacs-lisp :tangle "init.el"
-    ;; 加载模块
-    (load (locate-user-emacs-file "jasper-emacs-pre-custom.el") :no-error :no-message)
+  ;; 加载模块
+  (load (locate-user-emacs-file "jasper-emacs-pre-custom.el") :no-error :no-message)
 
-    (require 'init-basic)
-    (require 'init-packages)
-    (require 'init-completion)
-    (use-package benchmark-init
-      :ensure t
-      :demand t
-      :config
-      ;; To disable collection of benchmark data after init is done.
-      (add-hook 'after-init-hook 'benchmark-init/deactivate))
-    (require 'init-tools)
-    (require 'init-ui)
-    (require 'init-org)
-    (require 'init-keybindings)
-    (require 'init-programming)
-    (require 'init-evil)
-    (require 'init-window)
-    (require 'init-funcs)
+  ;; Packages
+  (require 'init-packages)
+  (use-package benchmark-init
+    :ensure t
+    :demand t
+    :config
+    ;; To disable collection of benchmark data after init is done.
+    (add-hook 'after-init-hook 'benchmark-init/deactivate))
 
-    (load (locate-user-emacs-file "jasper-emacs-post-custom.el") :no-error :no-message)
+  ;; Core
+  (require 'init-basic)
+  (require 'init-ui)
+  (require 'init-modeline)
+  (require 'init-completion)
+  (require 'init-evil)
+  (require 'init-tools)
+  ;; uis
+  (require 'init-window)
+  ;; Tools
+  (require 'init-org)
+  ;; Frameworks
+  (require 'init-persp)
+  ;; Languages
+  (require 'init-programming)
+  ;; personal
+  (require 'init-keybindings)
+  (require 'init-funcs)
+
+  (load (locate-user-emacs-file "jasper-emacs-post-custom.el") :no-error :no-message)
 #+end_src
 
 ** =init.el= 计算启动时间
@@ -1121,6 +1158,54 @@ early-init.el 处激活缓存[[#h:package-cache][(=early-init.el= 初始化包�
 
 =init.el= 部分中，通过 ~load-path~ 让 Emacs 可以运行他们的代码[[#h:i-dir][(=init.el= 加载目录)]]。本章的副标题定义了模块，每个模块都加载在我的 =init.el= 末尾调用[[#h:i-modules][(=init.el= 加载各模块)]]
 
+** =init-packages.el=
+*** =init-packages.el= config
+
+#+begin_src emacs-lisp :tangle "lisp/init-packages.el" :mkdirp yes
+  ;;; config
+#+end_src
+
+*** =init-packages.el= 安装 quelpa 插件
+:PROPERTIES:
+:CUSTOM_ID: h:packages-quelpa
+:END:
+
+在学习章节提到过[[#h:learn-module-up-packages][(精选 packages, 大大提升你的 Emacs 编辑效率)]]
+
+#+begin_comment :tangle no
+,#+begin_src emacs-lisp :tangle no :results none
+#+end_comment
+
+#+begin_src emacs-lisp :tangle "lisp/init-packages.el"
+  ;;(use-package quelpa :ensure t)
+  (use-package quelpa
+    :ensure t
+    :commands quelpa
+    :config
+    :custom
+    (quelpa-git-clone-depth 1)
+    (quelpa-update-melpa-p nil)
+    (quelpa-self-upgrade-p nil)
+    (quelpa-checkout-melpa-p nil))
+  (use-package quelpa-use-package
+    :ensure t
+    :init
+    (setq quelpa-use-package-inhibit-loading-quelpa t)
+    :demand t)
+
+  (unless (package-installed-p 'quelpa-use-package)
+    (quelpa
+     '(quelpa-use-package
+       :fetcher git
+       :url "https://github.com/quelpa/quelpa-use-package.git")))
+#+end_src
+
+
+#+begin_src emacs-lisp :tangle "lisp/init-packages.el"
+  (message "Load init-packages done...")
+  (provide 'init-packages)
+#+end_src
+
 ** =init-basic.el=
 *** =init-basic.el= 一些默认的配置
 :PROPERTIES:
@@ -1131,10 +1216,9 @@ early-init.el 处激活缓存[[#h:package-cache][(=early-init.el= 初始化包�
 
 #+begin_src emacs-lisp :tangle "lisp/init-basic.el" :mkdirp yes
   ;;; 一些默认的配置
-
+  ;;;
   (setq w32-apps-modifier 'super)       ;PC 通过SharpKeys改成了 Application
 
-  ;;; 统一配置
   (global-set-key (kbd "s-a") 'mark-whole-buffer) ;;对应Windows上面的Ctrl-a 全选
   (global-set-key (kbd "s-c") 'kill-ring-save) ;;对应Windows上面的Ctrl-c 复制
   (global-set-key (kbd "s-s") 'save-buffer) ;; 对应Windows上面的Ctrl-s 保存
@@ -1169,7 +1253,7 @@ early-init.el 处激活缓存[[#h:package-cache][(=early-init.el= 初始化包�
   (fset 'yes-or-no-p 'y-or-n-p)                ;; 某个命令时需要输入 (yes or no)
 #+end_src
 
-*** =init-basic.el= 最近编辑过的文件
+*** =init-basic.el= 最近编辑过的文件 =recentf=
 
 #+begin_src emacs-lisp :tangle "lisp/init-basic.el"
   ;;; 最近编辑过的文件
@@ -1189,7 +1273,7 @@ early-init.el 处激活缓存[[#h:package-cache][(=early-init.el= 初始化包�
     (add-to-list 'recentf-filename-handlers #'abbreviate-file-name))
 #+end_src
 
-*** =init-basic.el= 保存会话
+*** =init-basic.el= 历史命令 =savehist=
 :PROPERTIES:
 :CUSTOM_ID: h:basic-session
 :END:
@@ -1225,7 +1309,7 @@ save-place-mode 开启后，会记住光标所在文件的位置，下次打开�
 - 记住光标的位置，重启emacs
 - =C-x C-f= 重新打开该文件，可以看到光标是上次退出的位置。
 
-*** =init-basic.el= simple
+*** =init-basic.el= 内置包 =simple=
 :PROPERTIES:
 :CUSTOM_ID: h:basic-simple
 :END:
@@ -1243,7 +1327,7 @@ modeline上显示文件大小、列号
       ))
 #+end_src
 
-*** =init-basic.el= general
+*** =init-basic.el= 键位绑定 =general=
 :PROPERTIES:
 :CUSTOM_ID: h:basic-general
 :END:
@@ -1251,6 +1335,7 @@ modeline上显示文件大小、列号
 在自定义evil键位绑定用到[[#h:evil-custom-keybinding][(=init.evil.el= 自定义快捷键)]]
 
 #+begin_src emacs-lisp :tangle "lisp/init-basic.el"
+  ;;; 自定义类似evil中的leader键
   (use-package general
     :ensure t
     :init
@@ -1294,649 +1379,108 @@ modeline上显示文件大小、列号
       "" '(:ignore t :which-key (lambda (arg) `(,(cadr (split-string (car arg) " ")) . ,(replace-regexp-in-string "-mode$" "" (symbol-name major-mode)))))))
 #+end_src
 
-*** =init-basic.el= 调用 provide
+键位绑定示例：
+#+begin_src emacs-lisp :tangle no
+  (use-package general
+    :init
+    (general-emacs-define-key 'global [remap imenu] 'consult-imenu)
+    (general-emacs-define-key 'global [remap apropos] 'consult-apropos)
+    (global-definer
+      "!" 'shell-command)
+
+    (+general-global-menu! "search" "s"
+      "p" 'consult-ripgrep)
+
+    (+general-global-menu! "buffer" "b"
+      "d" 'kill-current-buffer)
+#+end_src
+
+
+python-mode
+#+begin_src emacs-lisp :tangle no
+  (use-package python
+    :ensure t
+    :hook (inferior-python-mode . (lambda ()
+                                    (process-query-on-exit-flag
+                                     (get-process "Python"))))
+    :init
+    ;; Disable readline based native completion
+    (setq python-shell-completion-native-enable nil)
+    :config
+    (global-leader
+      :major-modes
+      '(python-mode t)
+      ;;and the keymaps:
+      :keymaps
+      '(python-mode-map)
+      "e" 'live-py-set-version)
+    (setq python-shell-interpreter "python3")
+
+    ;; Live Coding in Python
+    (use-package live-py-mode))
+#+end_src
+
+rust-mode
+#+begin_src emacs-lisp :tangle no
+  (global-leader
+    :major-modes
+    '(rust-mode t)
+    ;;and the keymaps:
+    :keymaps
+    '(rust-mode-map)
+    "=" 'rust-format-buffer
+    "c" 'rust-compile
+    "r" 'rust-run
+    "t" 'rust-test)
+#+end_src
+
+org-mode
+#+begin_src emacs-lisp :tangle no
+      ;; mode specific major key
+      (global-leader
+        :major-modes
+        '(org-mode t)
+        ;;and the keymaps:
+        :keymaps
+        '(org-mode-map)
+        "p" 'org-pomodoro
+        "t" 'org-todo
+        "e" 'org-set-effort)
+
+      (global-leader
+        :major-modes
+        '(org-agenda-mode t)
+        ;;and the keymaps:
+        :keymaps
+        '(org-agenda-mode-map)
+        "d" 'org-agenda-day-view
+        "w" 'org-agenda-week-view
+        "," 'org-agenda-priority
+        "e" 'org-agenda-set-effort
+        ":" 'org-agenda-set-tags
+        "T" 'org-agenda-show-tags
+        "p" 'org-pomodoro)
+#+end_src
 
 #+begin_src emacs-lisp :tangle "lisp/init-basic.el"
   (message "Load init-basic done...")
   (provide 'init-basic)
 #+end_src
 
-** =init-packages.el=
-
-*** =init-packages.el= config
-
-#+begin_src emacs-lisp :tangle "lisp/init-packages.el" :mkdirp yes
-  ;;; config
-#+end_src
-
-*** =init-packages.el= 安装 quelpa 插件
+*** =init-basic.el= 输入法
 :PROPERTIES:
-:CUSTOM_ID: h:packages-quelpa
+:CUSTOM_ID: h:basic-input
 :END:
 
-在学习章节提到过[[#h:learn-module-up-packages][(精选 packages, 大大提升你的 Emacs 编辑效率)]]
-
-#+begin_comment :tangle no
-,#+begin_src emacs-lisp :tangle no :results none
-#+end_comment
-
-#+begin_src emacs-lisp :tangle "lisp/init-packages.el"
-  ;;(use-package quelpa :ensure t)
-  (use-package quelpa
-    :ensure t
-    :commands quelpa
-    :config
-    :custom
-    (quelpa-git-clone-depth 1)
-    (quelpa-update-melpa-p nil)
-    (quelpa-self-upgrade-p nil)
-    (quelpa-checkout-melpa-p nil))
-  (use-package quelpa-use-package
-    :ensure t
-    :init
-    (setq quelpa-use-package-inhibit-loading-quelpa t)
-    :demand t)
-
-  (unless (package-installed-p 'quelpa-use-package)
-    (quelpa
-     '(quelpa-use-package
-       :fetcher git
-       :url "https://github.com/quelpa/quelpa-use-package.git")))
-#+end_src
-
-*** =init-package.el= 调用 provide
-
-#+begin_src emacs-lisp :tangle "lisp/init-packages.el"
-  (message "Load init-packages done...")
-  (provide 'init-packages)
-#+end_src
-
-** =init-completion.el=
-
-*** =init-completion.el= 内置补全
-:PROPERTIES:
-:CUSTOM_ID: h:completion-built-in
-:END:
-
-在学习章节提到过[[h:learn-completion-built-in][(补全)]]
-
-#+begin_src emacs-lisp :tangle "lisp/init-completion.el" :mkdirp yes
-  ;; 内置补全功能n
-  ;;(setq tab-always-indent 'complete)           ;; 使用 TAB 来列出当前补全选项
-#+end_src
-
-*** =init-completion.el= Company
-:PROPERTIES:
-:CUSTOM_ID: h:completion-company
-:END:
-
-在学习章节提到过[[h:learn-completion-company][(Company插件)]]
-
-
-他是一个用于代码补全的插件
-
-#+begin_src emacs-lisp :tangle "lisp/init-completion.el"
-  (use-package company
-    :ensure t
-    :init
-    (global-company-mode t)                    ;; 全局开启 company 补全
-    :config
-    (setq company-idle-delay 0)                ;; 补全时间快些
-    (setq company-minimum-prefix-length 1)     ;; 最少输入1个字符开启
-    (setq company-show-numbers t)              ;; 给选项编号 (按快捷键 M-1、M-2 等等来进行选择)
-    (setq company-dabbrev-other-buffers 'all)  ;; 从所有缓冲区收集补全信息
-    (setq company-tooltip-align-annotations t) ;; 右侧附加注释
-    (setq company-selection-wrap-around t)
-    (setq company-transformers '(company-sort-by-occurrence)) ; 根据选择的频率进行排序，如果不喜欢可以去掉
-    :bind (:map company-active-map
-                ("C-n" . 'company-select-next)
-                ("C-p" . 'company-select-previous)))  ;; 使用 `C-n` 与 `C-p` 来选择补全项，默认选择上一条和下一条候选项命令 M-n M-p
-#+end_src
-
-*** =init-completion.el= 增强 minibuffer 补全：vertico 和 Orderless
-:PROPERTIES:
-:CUSTOM_ID: h:completion-minibuffer-1
-:END:
-
-在学习章节提到过[[h:learn-completion-minibuffer-1][(增强 minibuffer 补全：vertico 和 Orderless)]]
-
-#+begin_src emacs-lisp :tangle "lisp/init-completion.el"
-  ;;; 增强 minibuffer 补全：vertico 和 Orderless
-
-  (use-package vertico
-    :ensure t
-    :init (vertico-mode))
-
-  (use-package orderless
-    :ensure t
-    :after vertico
-    :init (setq completion-styles '(orderless)))
-#+end_src
-
-有了 vertico-mode，把之前的 icomplete-mode 关掉。 补全变为垂直，垂直对于我们是更友好的，所有 minibuffer 的行为的可以补全。如使用 =M-x= 补全变为垂直,  =C-x C-f= 增强显示目录下文件、 =C-x b= 变为垂直。
-
-orderless 支持 =M-x= 模糊搜索，可以无序的。 如 edebug-defun 函数搜索， =M-x fun debug=
-
-*** =init-completion.el= 配置 Marginalia 增强 minubuffer 的 annotation
-:PROPERTIES:
-:CUSTOM_ID: h:completion-minibuffer-2
-:END:
-
-在学习章节提到过[[h:learn-completion-minibuffer-2][(配置 Marginalia 增强 minubuffer 的 annotation)]]
-
-#+begin_src emacs-lisp :tangle no :results none
-  ;;; 配置 Marginalia 增强 minubuffer 的 annotation
-  (use-package marginalia
-    :ensure t
-    :init (marginalia-mode)
-  )
-#+end_src
-
-=M-x= 可以看到它会把命令的注释直接显示在minibuffer中
-
-=C-h v= 查看一个变量的内容，可以发现不用再按回车看到里面的值。直接显示在minibuffer中
-
-=C-h f= 键位绑定都已经在minibuffer中显示出来了
-
-=C-x C-f= 显示文件大小权限等， =C-x b= 显 buffer 大小状态， =C-h f= 显示函数快捷键等
-
-#+begin_src emacs-lisp :tangle "lisp/init-completion.el"
-  ;;; 配置 Marginalia 增强 minubuffer 的 annotation
-  (use-package marginalia
-    :ensure t
-    :hook (after-init . marginalia-mode)
-    :init
-    :config)
-#+end_src
-
-*** =init-completion.el= minibuffer action 和自适应的 context menu：Embark
-:PROPERTIES:
-:CUSTOM_ID: h:completion-minibuffer-3
-:END:
-
-在学习章节提到过[[h:learn-completion-minibuffer-3][(minibuffer action 和自适应的 context menu：Embar)]]
-
-#+begin_src emacs-lisp :tangle "lisp/init-completion.el"
-  ;;; minibuffer action 和自适应的 context menu：Embark
-  (use-package embark
-    :ensure t
-    :init
-    ;; Optionally replace the key help with a completing-read interface
-    (setq prefix-help-command #'embark-prefix-help-command)
-    :config
-    ;; Hide the mode line of the Embark live/completions buffers
-    (add-to-list 'display-buffer-alist
-                 '("\\`\\*Embark Collect \\(Live\\|Completions\\)\\*"
-                   nil
-                   (window-parameters (mode-line-format . none))))
-    :bind
-    (("C-;" . embark-act)         ;; pick some comfortable binding
-     )) ;; alternative for `describe-bindings'
-#+end_src
-
-使用
-
-光标在函数位置，按 =C-;= 
-- RET 查看光标处函数定义文件位置，并打开
-- c 修改变量的值
-  - 如 C-h v 变量名，按 C-; c 修改变量的值
-
-优点：不需要记快捷键了
-- 以前查看函数的绑定键
-  - ~C-h b~ 查看函数快捷键绑定：
-  - 以前按 =C-x C-h= 时，会告诉你 =C-x= 绑定了哪些快捷键
-- 设置了 =(setq prefix-help-command #'embark-prefix-help-command)= 后
-  - 按 =C-x C-h= 模糊输入函数名可看到绑定的快捷键，按回车可直接执行命令，就不需要再记快捷键了
-
-*** =init-completion.el= 增强文件内搜索Consult
-:PROPERTIES:
-:CUSTOM_ID: h:completion-minibuffer-4
-:END:
-
-在学习章节提到过[[h:learn-completion-minibuffer-4][(增强文件内搜索和跳转函数定义：Consult)]]
-
-#+begin_src emacs-lisp :tangle "lisp/init-completion.el"
-  ;;; 增强文件内搜索和跳转函数定义：Consult
-  (use-package consult
-    :ensure t
-    ;;replace swiper 可以替代老的 ivy mode 的 swiper 功能
-    :bind (
-           ("C-s" . consult-line) ;; replace swipe
-           ("M-s i" . consult-imenu)  ;跳转函数定义
-           ;;("C-x b" .  consult-buffer) ;; 多显示最近打开文件。替换默认 C-x b buffer
-           ;;("C-c p s" . consult-ripgrep) ;;  查找文件内容，需要安装 ripgrep 命令
-           )
-    )
-#+end_src
-
-使用 =C-s= 搜索的内容就会在minibuffer中垂直显示，使用C-p 或 C-n来上下选择
-
-使用 =M-s i= 跳转函数定义或者org-mode标题
-
-这些组合可以秒杀ivy helm这种一统的插件。
-
-**** =init-completion.el= 增强 embark 和 consult，批量搜索替换大杀器
-:PROPERTIES:
-:CUSTOM_ID: h:completion-minibuffer-4-1
-:END:
-
-在学习章节提到过[[#h:learn-completion-minibuffer-4-1][(增强 embark 和 consult，批量搜索替换大杀器)]]
-
-性能： grep < ack < ag < ripgrep(rg)
-
-使用ripgrep来进行搜索, =M-x consult-ripqgrep= 搜索hello 会出现报错找不到rg命令。
-
-#+begin_example
-Error running timer: (file-missing "Searching for program" "No such file or directory" "rg")
-#+end_example
-
-下载ripgrep: <https://github.com/BurntSushi/ripgrep> msys2 <https://packages.msys2.org/base/mingw-w64-ripgrep>
-
-安装方式：
-- PC msys2 ~pacman -S mingw-w64-x86_64-ripgrep~
-- PC github release 下载windows包，解压并加入到PARH变量中
-- Arch Linux  ~sudo pacman -S ripgrep~
-- macOS ~brew install ripgrep~
-
-再使用ripgrep来进行搜索, =M-x consult-ripgrep= 搜索hello ，所有当前目录下包含hello字符串的信息都在minibuffer中展示出来了。 使用 =C-n= 或 =C-p= 来预览文件或进入文件里。
-
-*下面介绍批量修改插件*
-
-
-
-#+begin_src emacs-lisp :tangle "lisp/init-completion.el"
-  ;;; 批量修改文件内容
-  (use-package embark-consult
-    :ensure t)
-
-  (use-package wgrep
-    :ensure t)
-
-  (setq wgrep-auto-save-buffer t)
-
-  (eval-after-load 'consult
-    '(eval-after-load 'embark
-       '(progn
-          (require 'embark-consult)
-          (add-hook 'embark-collect-mode-hook #'consult-preview-at-point-mode)))) ;hook 第一个参数执行前，先执行第2个参数的功能
-
-  (define-key minibuffer-local-map (kbd "C-c C-e") 'embark-export-write)
-  #+end_src
-
-批量替换操作
-- ~M-x consult-ripgrep~  默认会在以 git 为根目录搜索。如 =#hello= ，搜索包含hello字符的文件。 ~C-n/C-p~ 下上搜索同时可以预览。
-- ~C-c C-e~ 打开写
-- ~M-x query-replace-regexp~ 输入hello 回车， 替换为hello 回车。 按 y 同意当前行替换，n 不同意修改
-- ~C-c C-c~ 执行替换，按 q 退出
-
-
-当前buffer替换操作
-- =C-s= 搜索， 输入hello
-- =C-c C-e= 编辑
-- ~M-x query-replace-regexp~ 输入要替换的内容
-- ~C-c C-c~ 执行替换，按 q 退出
-
-*配置搜索中文文件*
-
-everythin工具可以快速搜索本地文件。下载地址： <https://www.voidtools.com/zh-cn/downloads/>
-
-安装好后，同时下载 ES.exe 客户端工具加入环境变量。
-
-#+begin_src emacs-lisp :tangle "lisp/init-completion.el"
-  ;;; 配置搜索中文文件
-  ;; PC提前安装 everyting 及其客户端ES. 利用M-x consult-locate搜索
-  (progn
-    (setq consult-locate-args (encode-coding-string "es.exe -i -p -r" 'gbk))
-    (add-to-list 'process-coding-system-alist '("es" gbk . gbk))
-    )
-  (eval-after-load 'consult
-    (progn
-        (setq
-          consult-narrow-key "<"
-          consult-line-numbers-widen t
-          consult-async-min-input 2         ;; 搜索 2 个字符显示输出。默认 3
-          consult-async-refresh-delay  0.15
-          consult-async-input-throttle 0.2
-          consult-async-input-debounce 0.1)
-        ))
-#+end_src
-
-操作：
-- 前提：PC 始终打开everything, 转为ES会调用everthing
-- =M-x consult-locate= 回车，输入要搜索的文件如 =#init.el= 。 可以看到minibuffer中显示的和everthing界面搜索的是一样的。
-- 再输入个#号就可以使用 orderless 的功能进行过滤。如只想看29.4中init.el文件 =#init.el#29.4= 选中回车即可打开对应文件
-
-使用外部程序打开：
-- =M-x consult-locate= 回车，输入要搜索的文件. 如搜索projeckt中的txt文件 =#\.txt#project=
-- 使用embark =C;=  按x使用外部程序打开txt文件
-
-中文搜索操作：
-- =M-x consult-locate= 回车，输入要搜索的文件. 如 =#学习=
-
-*上下光标移动*
-
-适合vim习惯用户, 让minibbuffer上下移动变为 =C-k= =C-j= ,默认minibuffer上下移动是 =C-p= =C-n=
-#+begin_src emacs-lisp :tangle "lisp/init-completion.el"
-  ;; make c-j/c-k work in vertico selection 添加minibuffer中上下移动键位绑定
-  (define-key vertico-map (kbd "C-j") 'vertico-next)
-  (define-key vertico-map (kbd "C-k") 'vertico-previous)
-#+end_src
-
-*修复consult-ripgrep搜索不了问题*
-
-windows上有时，consult-ripgrep搜索不了
-
-#+begin_src emacs-lisp :tangle "lisp/init-completion.el"
-  ;; make consult-ripgrep work 有时consult-ripgrep搜索不了
-  (cond
-   ;; macOS
-   ((eq system-type 'darwin)
-    "afplay")
-   ;; Windows
-   ((eq system-type 'windows-nt)
-    (add-to-list 'process-coding-system-alist 
-                 '("[rR][gG]" . (utf-8-dos . windows-1251-dos)))
-    )
-   (t
-    "Nothing"))
-#+end_src
-
-*** =init-completion.el= 调用 provide
-
-#+begin_src emacs-lisp :tangle "lisp/init-completion.el"
-  (message "Load init-completion done...")
-  (provide 'init-completion)
-#+end_src
-
-** =init-tools.el=
-
-*** =init-tools.el= config
-
-#+begin_src emacs-lisp :tangle "lisp/init-tools.el" :mkdirp yes
-  ;;; 窗口标签
-  ;;(add-to-list 'load-path (expand-file-name "~/.emacs.d/site-lisp/awesome-tab/"))
-  ;;(require 'awesome-tab)
-  ;;(awesome-tab-mode t)
-
-  (defun awesome-tab-buffer-groups ()
-  "`awesome-tab-buffer-groups' control buffers' group rules.
-  Group awesome-tab with mode if buffer is derived from `eshell-mode' `emacs-lisp-mode' `dired-mode' `org-mode' `magit-mode'.
-  All buffer name start with * will group to \"Emacs\".
-  Other buffer group by `awesome-tab-get-group-name' with project name."
-  (list
-  (cond
-      ((or (string-equal "*" (substring (buffer-name) 0 1))
-          (memq major-mode '(magit-process-mode
-                              magit-status-mode
-                              magit-diff-mode
-                              magit-log-mode
-                              magit-file-mode
-                              magit-blob-mode
-                              magit-blame-mode)))
-      "Emacs")
-      ((derived-mode-p 'eshell-mode)
-      "EShell")
-      ((derived-mode-p 'dired-mode)
-      "Dired")
-      ((memq major-mode '(org-mode org-agenda-mode diary-mode))
-      "OrgMode")
-      ((derived-mode-p 'eaf-mode)
-      "EAF")
-      (t
-       (awesome-tab-get-group-name (current-buffer))))))
-#+end_src
-
-*** =init-tools.el= 使用拼音进行搜索
-:PROPERTIES:
-:CUSTOM_ID: h:tools-search-pinyin
-:END:
+**** =init-basic.el= 输入法 =pyim=
 
 在学习章节提到过[[#h:learn-tools-search-pinyin][(使用拼音进行搜索)]]
 
-#+begin_src emacs-lisp :tangle "lisp/init-tools.el"
-  ;;; 使用拼音进行搜索
-  ;;ivy
-  ;; Encoding
-  ;; UTF-8 as the default coding system
-  ;;(when (fboundp 'set-charset-priority)
-  ;;  (set-charset-priority 'unicode))
-
-  ;;(set-language-environment 'chinese-gbk)
-  ;;(prefer-coding-system 'utf-8-auto)
-
-
+#+begin_src emacs-lisp :tangle "lisp/init-basic.el"
+  ;;; 输入法 (pyim)
   (use-package pyim
     :ensure t)
-
-  (defun eh-orderless-regexp (orig_func component)
-    (let ((result (funcall orig_func component)))
-      (pyim-cregexp-build result)))
-
-
-  (defun toggle-chinese-search ()
-    (interactive)
-    (if (not (advice-member-p #'eh-orderless-regexp 'orderless-regexp))
-        (advice-add 'orderless-regexp :around #'eh-orderless-regexp)
-      (advice-remove 'orderless-regexp #'eh-orderless-regexp)))
-
-  (defun disable-py-search (&optional args)
-    (if (advice-member-p #'eh-orderless-regexp 'orderless-regexp)
-        (advice-remove 'orderless-regexp #'eh-orderless-regexp)))
-
-  ;; (advice-add 'exit-minibuffer :after #'disable-py-search)
-  (add-hook 'minibuffer-exit-hook 'disable-py-search) ;退出minibuffer时自动退出拼音搜索
-
-  (global-set-key (kbd "s-p") 'toggle-chinese-search) ;需要时打开拼音搜索。因为拼音搜索性能不稳定
 #+END_SRC
-
-*** =init-tools.el= keycast
-:PROPERTIES:
-:CUSTOM_ID: h:tools-keycast
-:END:
-
-modeline上显示我的所有的按键和执行的命令
-
-#+begin_src emacs-lisp :tangle no :results none
-  ;;; modeline上显示我的所有的按键和执行的命令
-  (use-package keycast
-    :ensure t
-    :init (keycast-mode-line-mode 1)) ; 在标题显示
-#+end_src
-
-在使用doom-modeline上面配置会报错。这里用下面的配置
-
-#+begin_src emacs-lisp :tangle "lisp/init-tools.el"
-  (use-package keycast
-    :ensure t
-    :commands (+toggle-keycast)
-    :config
-    (defun +toggle-keycast()
-      (interactive)
-      (if (member '("" keycast-mode-line " ") global-mode-string)
-          (progn (setq global-mode-string (delete '("" keycast-mode-line " ") global-mode-string))
-                 (remove-hook 'pre-command-hook 'keycast--update)
-                 (message "Keycast OFF"))
-        (add-to-list 'global-mode-string '("" keycast-mode-line " "))
-        (add-hook 'pre-command-hook 'keycast--update t)
-        (message "Keycast ON"))))
-    ;; 这里的执行顺序非常重要，doom-modeline-mode 的激活时机一定要在设置global-mode-string 之后
-#+end_src
-
-#+begin_src emacs-lisp :tangle no
-  (use-package keycast
-    :ensure t
-    :config
-    (define-minor-mode keycast-mode
-      "Show current command and its key binding in the mode line (fix for use with doom-mode-line)."
-      :global t
-      (if keycast-mode
-          (add-hook 'pre-command-hook 'keycast--update t)
-        (remove-hook 'pre-command-hook 'keycast--update)))
-    (add-to-list 'global-mode-string '("" mode-line-keycast)))
-#+end_src
-
-*** =init-tools.el= 多光标操作 iedit & evil-multiedit
-:PROPERTIES:
-:CUSTOM_ID: h:tools-iedit
-:END:
-
-在学习章节提到过[[#h:learn-module-up-packages][(精选 packages, 大大提升你的 Emacs 编辑效率)]]
-
-此插件需要配合着evil插件使用。
-
-#+begin_src emacs-lisp :tangle "lisp/init-tools.el"
-  ;;; 多光标操作 iedit & evil-multiedit
-  (use-package iedit
-    :ensure t
-    :init
-    (setq iedit-toggle-key-default nil)
-    :config
-    (define-key iedit-mode-keymap (kbd "M-h") 'iedit-restrict-function)
-    (define-key iedit-mode-keymap (kbd "M-i") 'iedit-restrict-current-line))
-
-  (use-package evil-multiedit
-    :ensure t
-    :commands (evil-multiedit-default-keybinds)
-    :init
-    (evil-multiedit-default-keybinds))
-#+end_src
-
-edit操作：
-- evil normal 状态下，选中单词 =viw= 再按 =R=. 进入 =evil-multiedit= 模式。 这时选中区域高亮，同时下方状态栏显示单词出现次数和当前所在位置
-- 在 =evil-multiedit= 模式下，使用vim方式操作。如
-  - =gg= 到匹配单词的第一次出现位置; =大G= 到匹配单词的最后一个; 按 =0= 光标跳到当前匹单词的开头
-  - =i= 插入模式输入字符，所有匹配的单词跟着一直修改
-  - esc 回到normal模式，按 =C-g= 退出edit模式
-
-*** =init-tools.el= expand-region
-:PROPERTIES:
-:CUSTOM_ID: h:tools-expand-region
-:END:
-
-在学习章节提到过[[#h:learn-module-up-packages][(精选 packages, 大大提升你的 Emacs 编辑效率)]]
-
-快速选中区域
-
-#+begin_src emacs-lisp :tangle "lisp/init-tools.el"
-  (use-package expand-region
-    :config
-    ;; 定义子菜单
-    (defadvice er/prepare-for-more-expansions-internal
-        (around helm-ag/prepare-for-more-expansions-internal activate)
-      ad-do-it
-      (let ((new-msg (concat (car ad-return-value)
-                             ", H to highlight in buffers"
-                             ", / to search in project, "
-                             "e iedit mode in functions"
-                             "f to search in files, "
-                             "b to search in opened buffers"))
-            (new-bindings (cdr ad-return-value)))
-        (cl-pushnew  ; 高亮
-         '("H" (lambda ()
-                 (interactive)
-                 (call-interactively
-                  'my/highlight-dwim))) ;自定义函数
-         new-bindings)
-        (cl-pushnew ; 查找当前项目目录中匹配选中字符串的文件
-         '("/" (lambda ()
-                 (interactive)
-                 (call-interactively
-                  'my/search-project-for-symbol-at-point))) ;自定义函数
-         new-bindings)
-        (cl-pushnew
-         '("e" (lambda ()
-                 (interactive)
-                 (call-interactively
-                  'evil-multiedit-match-all)))
-         new-bindings)
-        (cl-pushnew
-         '("f" (lambda ()
-                 (interactive)
-                 (call-interactively
-                  'find-file)))
-         new-bindings)
-        (cl-pushnew
-         '("b" (lambda ()
-                 (interactive)
-                 (call-interactively
-                  'consult-line)))
-         new-bindings)
-        (setq ad-return-value (cons new-msg new-bindings)))))
-#+end_src
-
-扩大缩小区域操作：
-- 选中字符或光标位置
-- =M-x er/expand-region= 扩大区域。 回车回车扩大； - 减号缩小区域；0 重置 /查找
-- 在expand-region下，又自定义快捷键绑定可以方便操作。
-
-添加一个快捷键[[#h:evil-custom-keybinding][(=init.evil.el= 自定义快捷键)]]，让标记和搜索功能更方便[[#h:funcs-expand-region][(=init-funcs.el= expand-region)]]： 
-
-#+begin_src emacs-lisp :tangle no :results none
-  ;;;###autoload
-  (defun my/search-project-for-symbol-at-point ()
-    (interactive)
-    (if (use-region-p)
-        (progn
-          (consult-ripgrep (project-root (project-current))
-                           (buffer-substring (region-beginning) (region-end))))))
-
-  (global-definer
-    "hc" 'my/clearn-highlight
-    "hH" 'my/highlight-dwim
-    "v" 'er/expand-region
-    )
-#+end_src
-
-扩大区域快捷操作：
-- =SPC v= 扩大区域 . 之后可以使用 - 缩小区域
-- =SPC v e= 等同于evil multiedit中的 R 操作
-- =SPC v f= 调用 ~find-file~ 函数查找文件
-- =SPC v /= 查找当前项目目录中匹配选中字符串的文件
-
-*** =init-tools.el= symbol-overlay & highlight-global
-:PROPERTIES:
-:CUSTOM_ID: h:tools-symbol-overlay
-:END:
-
-在学习章节提到过[[#h:learn-module-up-packages][(精选 packages, 大大提升你的 Emacs 编辑效率)]]
-
-高亮插件
-
-highlight-global是github插件，使用quelpa插件辅助安装[[#h:packages-quelpa][(=init-packages.el= 安装 quelpa 插)]] , 自定义了高亮函数[[#h:funcs-symbol-overly][(=init-funcs.el= symbol-overlay & highlight-global)]]做为快捷键引用[[#h:tools-expand-region][(=init-tools.el= expand-region)]]
-
-#+begin_src emacs-lisp :tangle "lisp/init-tools.el"
-  (use-package highlight-global
-    :ensure nil
-    :commands (highlight-frame-toggle)
-    :quelpa (highlight-global :fetcher github :repo "glen-dai/highlight-global")
-    :config
-    ;; 高亮默认随机红、粉、蓝、青、紫等颜色循环
-    (progn
-      (setq-default highlight-faces
-                    '(('hi-red-b . 0)
-                      ('hi-aquamarine . 0)
-                      ('hi-pink . 0)
-                      ('hi-blue-b . 0)))))
-#+end_src
-
-#+begin_src emacs-lisp :tangle "lisp/init-tools.el"
-  (use-package symbol-overlay
-    :config
-    (define-key symbol-overlay-map (kbd "h") 'nil))
-#+end_src
-
-高亮插件操作：
-- =SPC v H= 选中部分以一种颜色高亮。重复操作可以看到不高亮颜色。
-  - 场景：查找代码或日志时，标记重点区域
-  - evil 快捷键 =SPC hh=
-- =M-x clear-highlight-frame= 清除颜色，或者 =SPC hc= 清除高亮颜色
-
-*** =init-tools.el= 调用 provide
-
-#+begin_src emacs-lisp :tangle "lisp/init-tools.el"
-  (message "Load init-tools done...")
-  (provide 'init-tools)
-#+end_src
 
 ** =init-ui.el=
 
@@ -1976,9 +1520,11 @@ highlight-global是github插件，使用quelpa插件辅助安装[[#h:packages-qu
 
   ;;主题
   ;;(load-theme 'tango-dark) ;这里使用doom-theme
+
+
 #+end_src
 
-*** =init-ui.el= doom-emacs
+*** =init-ui.el= 主题 =doom-emacs=
 :PROPERTIES:
 :CUSTOM_ID: h:ui-doom-emacs
 :END:
@@ -2009,8 +1555,8 @@ highlight-global是github插件，使用quelpa插件辅助安装[[#h:packages-qu
     :ensure t
     :init
     (if (display-graphic-p)
-        (load-theme 'doom-solarized-light)
-      (load-theme 'doom-tomorrow-night)))
+        (load-theme 'doom-solarized-light t) ; t表示自动确认运行代码
+      (load-theme 'doom-tomorrow-night t)))
 
   ;; (set-face-attribute 'default nil :height 150) ; 修改字号，大小为16pt
   (set-face-attribute 'default nil :height 130) ; 修改字号，大小为16pt
@@ -2025,11 +1571,1284 @@ highlight-global是github插件，使用quelpa插件辅助安装[[#h:packages-qu
     :hook (after-init . doom-modeline-mode))
 #+end_src
 
-*** =init-ui.el= 调用 provide
 
 #+begin_src emacs-lisp :tangle "lisp/init-ui.el"
   (message "Load init-ui done...")
   (provide 'init-ui)
+#+end_src
+
+** =init-modeline.el=
+
+*** =init-modeline.el= 配置
+:PROPERTIES:
+:CUSTOM_ID: h:modeline-config
+:END:
+
+
+#+begin_src emacs-lisp :tangle "lisp/init-modeline.el" :mkdirp yes
+  ;;; config
+#+end_src
+
+*** =init-modeline.el= 按键显示 =keycast=
+:PROPERTIES:
+:CUSTOM_ID: h:modeline-keycast
+:END:
+
+modeline上显示我的所有的按键和执行的命令
+
+#+begin_src emacs-lisp :tangle no :results none
+  ;;; modeline上显示我的所有的按键和执行的命令
+  (use-package keycast
+    :ensure t
+    :init (keycast-mode-line-mode 1)) ; 在标题显示
+#+end_src
+
+在使用doom-modeline上面配置会报错。这里用下面的配置
+
+
+#+begin_src emacs-lisp :tangle no
+  (use-package keycast
+    :ensure t
+    :config
+    (define-minor-mode keycast-mode
+      "Show current command and its key binding in the mode line (fix for use with doom-mode-line)."
+      :global t
+      (if keycast-mode
+          (add-hook 'pre-command-hook 'keycast--update t)
+        (remove-hook 'pre-command-hook 'keycast--update)))
+    (add-to-list 'global-mode-string '("" mode-line-keycast)))
+#+end_src
+
+我的配置如下
+#+begin_src emacs-lisp :tangle "lisp/init-modeline.el"
+  (use-package keycast
+    :ensure t
+    :commands (+toggle-keycast)
+    :config
+    (defun +toggle-keycast()
+      (interactive)
+      (if (member '("" keycast-mode-line " ") global-mode-string)
+          (progn (setq global-mode-string (delete '("" keycast-mode-line " ") global-mode-string))
+                 (remove-hook 'pre-command-hook 'keycast--update)
+                 (message "Keycast OFF"))
+        (add-to-list 'global-mode-string '("" keycast-mode-line " "))
+        (add-hook 'pre-command-hook 'keycast--update t)
+        (message "Keycast ON"))))
+    ;; 这里的执行顺序非常重要，doom-modeline-mode 的激活时机一定要在设置global-mode-string 之后
+#+end_src
+
+#+begin_src emacs-lisp :tangle "lisp/init-modeline.el"
+  (message "Load init-modeline done...")
+  (provide 'init-modeline)
+#+end_src
+
+** =init-completion.el=
+
+*** =init-completion.el= 内置补全
+:PROPERTIES:
+:CUSTOM_ID: h:completion-built-in
+:END:
+
+在学习章节提到过[[h:learn-completion-built-in][(补全)]]
+
+#+begin_src emacs-lisp :tangle "lisp/init-completion.el" :mkdirp yes
+  ;; 内置补全功能n
+  ;;(setq tab-always-indent 'complete)           ;; 使用 TAB 来列出当前补全选项
+#+end_src
+
+*** =init-completion.el= 补全 =company=
+:PROPERTIES:
+:CUSTOM_ID: h:completion-company
+:END:
+
+在学习章节提到过[[h:learn-completion-company][(Company插件)]]
+
+
+他是一个用于代码补全的插件
+
+#+begin_src emacs-lisp :tangle "lisp/init-completion.el"
+  (use-package company
+    :ensure t
+    :init
+    (global-company-mode t)                    ;; 全局开启 company 补全
+    :config
+    (setq company-idle-delay 0)                ;; 补全时间快些
+    (setq company-minimum-prefix-length 1)     ;; 最少输入1个字符开启
+    (setq company-show-numbers t)              ;; 给选项编号 (按快捷键 M-1、M-2 等等来进行选择)
+    (setq company-dabbrev-other-buffers 'all)  ;; 从所有缓冲区收集补全信息
+    (setq company-tooltip-align-annotations t) ;; 右侧附加注释
+    (setq company-selection-wrap-around t)
+    (setq company-transformers '(company-sort-by-occurrence)) ; 根据选择的频率进行排序，如果不喜欢可以去掉
+    :bind (:map company-active-map
+                ("C-n" . 'company-select-next)
+                ("C-p" . 'company-select-previous)))  ;; 使用 `C-n` 与 `C-p` 来选择补全项，默认选择上一条和下一条候选项命令 M-n M-p
+#+end_src
+
+*** =init-completion.el= minibuffer增强 =orderless=
+:PROPERTIES:
+:CUSTOM_ID: h:completion-orderless
+:END:
+
+在学习章节提到过[[h:learn-completion-minibuffer-1][(增强 minibuffer 补全：vertico 和 Orderless)]]
+
+orderless 支持 =M-x= 模糊搜索，可以无序的。 如 edebug-defun 函数搜索， =M-x fun debug=
+
+#+begin_src emacs-lisp :tangle "lisp/init-completion.el"
+  ;;; minibuffer增强，模糊搜索 (orderless)
+  (use-package orderless
+    :ensure t
+    :after minibuffer
+    :custom
+    (completion-styles '(orderless basic))
+    (completion-category-overrides '((file (styles basic partial-completion))))
+    (orderless-component-separator #'orderless-escapable-split-on-space))
+#+end_src
+
+*** =init-completion.el= 增强文件内搜索 =consult=
+:PROPERTIES:
+:CUSTOM_ID: h:completion-consult
+:END:
+
+在学习章节提到过[[h:learn-completion-minibuffer-4][(增强文件内搜索和跳转函数定义：Consult)]]
+
+
+性能： grep < ack < ag < ripgrep(rg)
+
+使用ripgrep来进行搜索, =M-x consult-ripqgrep= 搜索hello 会出现报错找不到rg命令。
+
+#+begin_example
+Error running timer: (file-missing "Searching for program" "No such file or directory" "rg")
+#+end_example
+
+下载ripgrep: <https://github.com/BurntSushi/ripgrep> msys2 <https://packages.msys2.org/base/mingw-w64-ripgrep>
+
+安装方式：
+- PC msys2 ~pacman -S mingw-w64-x86_64-ripgrep~
+- PC github release 下载windows包，解压并加入到PARH变量中
+- Arch Linux  ~sudo pacman -S ripgrep~
+- macOS ~brew install ripgrep~
+
+再使用ripgrep来进行搜索, =M-x consult-ripgrep= 搜索hello ，所有当前目录下包含hello字符串的信息都在minibuffer中展示出来了。 使用 =C-n= 或 =C-p= 来预览文件或进入文件里。
+
+
+#+begin_src emacs-lisp :tangle no :results none
+  ;;; 增强文件内搜索和跳转函数定义(consult.el)
+  (use-package consult
+    :ensure t
+    ;;replace swiper 可以替代老的 ivy mode 的 swiper 功能
+    :bind (
+           ("C-s" . consult-line) ;; replace swipe
+           ("M-s i" . consult-imenu)  ;跳转函数定义
+           ;;("C-x b" .  consult-buffer) ;; 多显示最近打开文件。替换默认 C-x b buffer
+           ;;("C-c p s" . consult-ripgrep) ;;  查找文件内容，需要安装 ripgrep 命令
+           )
+    )
+#+end_src
+
+使用 =C-s= 搜索的内容就会在minibuffer中垂直显示，使用C-p 或 C-n来上下选择
+
+使用 =M-s i= 跳转函数定义或者org-mode标题
+
+
+*配置搜索中文文件*
+
+everythin工具可以快速搜索本地文件。下载地址： <https://www.voidtools.com/zh-cn/downloads/>
+
+安装好后，同时下载 ES.exe 客户端工具加入环境变量。
+
+#+begin_src emacs-lisp :tangle no :results none
+  ;;; 配置搜索中文文件
+  ;; PC提前安装 everyting 及其客户端ES. 利用M-x consult-locate搜索
+  (progn
+    (setq consult-locate-args (encode-coding-string "es.exe -i -p -r" 'gbk))
+    (add-to-list 'process-coding-system-alist '("es" gbk . gbk))
+    )
+  (eval-after-load 'consult
+    (progn
+        (setq
+          consult-narrow-key "<"
+          consult-line-numbers-widen t
+          consult-async-min-input 2         ;; 搜索 2 个字符显示输出。默认 3
+          consult-async-refresh-delay  0.15
+          consult-async-input-throttle 0.2
+          consult-async-input-debounce 0.1)
+        ))
+#+end_src
+
+操作：
+- 前提：PC 始终打开everything, 转为ES会调用everthing
+- =M-x consult-locate= 回车，输入要搜索的文件如 =#init.el= 。 可以看到minibuffer中显示的和everthing界面搜索的是一样的。
+- 再输入个#号就可以使用 orderless 的功能进行过滤。如只想看29.4中init.el文件 =#init.el#29.4= 选中回车即可打开对应文件
+
+使用外部程序打开：
+- =M-x consult-locate= 回车，输入要搜索的文件. 如搜索projeckt中的txt文件 =#\.txt#project=
+- 使用embark =C;=  按x使用外部程序打开txt文件
+
+中文搜索操作：
+- =M-x consult-locate= 回车，输入要搜索的文件. 如 =#学习=
+
+*使用拼音进行搜索*
+
+在学习章节提到过[[#h:learn-tools-search-pinyin][(使用拼音进行搜索)]]
+
+中文拼音操作：
+- 前提：PC 始终打开everything, 转为ES会调用everthing
+- =M-x consult-locate= 回车，输入要搜索的文件. 如打包含“学习”的txt文件 =#\.txt#= 按 =s-p= 输入 =#\.txt#xx=  可以看到过滤学习的txt文件
+
+
+*修复consult-ripgrep搜索不了问题*
+
+windows上有时，consult-ripgrep搜索不了
+
+#+begin_src emacs-lisp :tangle no :results none
+  ;; make consult-ripgrep work 有时consult-ripgrep搜索不了
+  (cond
+   ;; macOS
+   ((eq system-type 'darwin)
+    "afplay")
+   ;; Windows
+   ((eq system-type 'windows-nt)
+    (add-to-list 'process-coding-system-alist 
+                 '("[rR][gG]" . (utf-8-dos . windows-1251-dos)))
+    )
+   (t
+    "Nothing"))
+#+end_src
+
+
+
+完整配置, 增加了中文搜索[[#h:j-consult][(=j-consult.el= 库)]]
+
+#+begin_src emacs-lisp :tangle "lisp/init-completion.el"
+  ;;; 增强文件内搜索和跳转函数定义(consult.el and j-consult.el)
+  (use-package consult
+    :ensure t
+    :hook (completion-list-mode . consult-preview-at-point-mode)
+    ;;replace swiper 可以替代老的 ivy mode 的 swiper 功能
+    :bind
+    ( :map global-map
+      ("M-g M-g" . consult-goto-line)
+      ("C-s" . consult-line) ;; replace swipe
+      ("M-s i" . consult-imenu)  ;跳转函数定义
+      ;;("C-x b" .  consult-buffer) ;; 多显示最近打开文件。替换默认 C-x b buffer
+      ;;("C-c p s" . consult-ripgrep) ;;  查找文件内容，需要安装 ripgrep 命令
+      )
+    :config
+    (setq
+     consult-narrow-key "<"
+     consult-line-numbers-widen t
+     consult-async-min-input 2         ;; 搜索 2 个字符显示输出。默认 3
+     consult-async-refresh-delay  0.15
+     consult-async-input-throttle 0.2
+     consult-async-input-debounce 0.1
+     consult-line-start-from-top t)
+    )
+
+  (use-package j-consult
+    :ensure nil
+    ;;:after (consult orderless)
+    ;;:demand t
+    :config
+    
+    (setq
+     consult-narrow-key "<"
+     consult-line-numbers-widen t
+     consult-async-min-input 5         ;; 搜索 2 个字符显示输出。默认 3
+     consult-async-refresh-delay  0.15
+     consult-async-input-throttle 0.2
+     consult-async-input-debounce 0.1
+     consult-line-start-from-top t)
+
+    ;; 使用拼音进行搜索文件 (pyim)
+    (require 'pyim)
+    
+    (defun eh-orderless-regexp (orig_func component)
+      (let ((result (funcall orig_func component)))
+        (pyim-cregexp-build result)))
+    
+    (defun toggle-chinese-search ()
+      (interactive)
+      (if (not (advice-member-p #'eh-orderless-regexp 'orderless-regexp))
+  	(advice-add 'orderless-regexp :around #'eh-orderless-regexp)
+        (advice-remove 'orderless-regexp #'eh-orderless-regexp)))
+    
+    (defun disable-py-search (&optional args)
+      (if (advice-member-p #'eh-orderless-regexp 'orderless-regexp)
+  	(advice-remove 'orderless-regexp #'eh-orderless-regexp)))
+    
+    ;; (advice-add 'exit-minibuffer :after #'disable-py-search)
+    (add-hook 'minibuffer-exit-hook 'disable-py-search) ;退出minibuffer时自动退出拼音搜索
+    
+    (global-set-key (kbd "s-p") 'toggle-chinese-search) ;需要时打开拼音搜索。因为拼音搜索性能不稳定
+    )
+#+end_src
+
+*** =init-completion.el= minibuffer增强 =embark=
+:PROPERTIES:
+:CUSTOM_ID: h:completion-embark
+:END:
+
+在学习章节提到过[[h:learn-completion-minibuffer-3][(minibuffer action 和自适应的 context menu：Embark)]]
+
+#+begin_src emacs-lisp :tangle "lisp/init-completion.el"
+  ;;; minibuffer操作扩展 （embark.el and j-embark.el)
+  (use-package embark
+    :ensure t
+    :defer 1
+    :init
+    (setq which-key-use-C-h-commands nil
+          ;; press C-h after a prefix key, it shows all the possible key bindings and let you choose what you want
+          prefix-help-command #'embark-prefix-help-command)
+    :bind
+    ( :map minibuffer-local-map
+      ("C-;" . embark-act)         ;; pick some comfortable binding
+     )) ;; alternative for `describe-bindings'
+#+end_src
+
+使用
+
+光标在函数位置，按 =C-;= 
+- RET 查看光标处函数定义文件位置，并打开
+- c 修改变量的值
+  - 如 C-h v 变量名，按 C-; c 修改变量的值
+
+优点：不需要记快捷键了
+- 以前查看函数的绑定键
+  - ~C-h b~ 查看函数快捷键绑定：
+  - 以前按 =C-x C-h= 时，会告诉你 =C-x= 绑定了哪些快捷键
+- 设置了 =(setq prefix-help-command #'embark-prefix-help-command)= 后
+  - 按 =C-x C-h= 模糊输入函数名可看到绑定的快捷键，按回车可直接执行命令，就不需要再记快捷键了
+
+这些组合可以秒杀ivy helm这种一统的插件。
+
+**** =init-completion.el= 增强 =embark= 和 =consult= ，批量搜索替换大杀器
+:PROPERTIES:
+:CUSTOM_ID: h:completion-minibuffer-4-1
+:END:
+
+在学习章节提到过[[#h:learn-completion-minibuffer-4-1][(增强 embark 和 consult，批量搜索替换大杀器)]]
+
+*下面介绍批量修改插件*
+
+[[#h:j-embark][(=j-embark.el= 库)]]
+#+begin_src emacs-lisp :tangle "lisp/init-completion.el"
+  ;;; 批量修改文件内容
+  (use-package embark-consult
+    :ensure t
+    :after (embark consult)
+    :demand
+    :config
+    (add-hook 'embark-collect-mode-hook #'consult-preview-at-point-mode) ;hook 第一个参数执行前，先执行第2个参数的功能
+    )
+
+  (use-package wgrep
+    :ensure t
+    :commands wgrep-change-to-wgrep-mode
+    :config (setq wgrep-auto-save-buffer t))
+
+  (use-package j-embark
+    :ensure nil
+    :after embark
+    :bind
+    ( :map minibuffer-local-map
+      ("C-c C-e" . my/embark-export-write) ; 打开写，配合query-replace-regexp实现文本替换
+      :map embark-file-map ; 打开pc文件管理器
+      ("E" . my/consult-directory-externally)
+      ))
+  #+end_src
+
+批量替换操作
+- ~M-x consult-ripgrep~  默认会在以 git 为根目录搜索。如 =#hello= ，搜索包含hello字符的文件。 ~C-n/C-p~ 下上搜索同时可以预览。
+- ~C-c C-e~ 打开写
+- ~M-x query-replace-regexp~ 输入hello 回车， 替换为hello 回车。 按 y 同意当前行替换，n 不同意修改
+- ~C-c C-c~ 执行替换，按 q 退出
+
+
+当前buffer替换操作
+- =C-s= 搜索， 输入hello
+- =C-c C-e= 编辑
+- ~M-x query-replace-regexp~ 输入要替换的内容
+- ~C-c C-c~ 执行替换，按 q 退出
+
+快速打开文件所在目录：
+- =M-x my/consult-directory-externally= 输入文件路径，如 =~/.emacs.d/auto-save-list/.saves-2000-JASPER~=
+- =C-x C-f= 选择文件时，可以用embark来打开， =C;= 选择E，用文件管理器打开对应目录的
+
+*** =init-completion.el= minubuffer增强注释 =marginalia=
+:PROPERTIES:
+:CUSTOM_ID: h:completion-marginalia
+:END:
+
+在学习章节提到过[[h:learn-completion-minibuffer-2][(配置 Marginalia 增强 minubuffer 的 annotation)]]
+
+#+begin_src emacs-lisp :tangle "lisp/init-completion.el"
+  ;;; Minubuffer 详细的注释信息 (marginalia.el)
+  (use-package marginalia
+    :ensure t
+    :defer 1
+    :config
+    (setq marginalia-max-relative-age 0) ; absolute time
+    (marginalia-mode 1))
+#+end_src
+
+=M-x= 可以看到它会把命令的注释直接显示在minibuffer中
+
+=C-h v= 查看一个变量的内容，可以发现不用再按回车看到里面的值。直接显示在minibuffer中
+
+=C-h f= 键位绑定都已经在minibuffer中显示出来了
+
+=C-x C-f= 显示文件大小权限等， =C-x b= 显 buffer 大小状态， =C-h f= 显示函数快捷键等
+
+*** =init-completion.el= minibuffer增强 =vertico=
+:PROPERTIES:
+:CUSTOM_ID: h:completion-vertico
+:END:
+
+在学习章节提到过[[h:learn-completion-minibuffer-1][(增强 minibuffer 补全：vertico 和 Orderless)]]
+
+有了 vertico-mode，把之前的 icomplete-mode 关掉。 补全变为垂直，垂直对于我们是更友好的，所有 minibuffer 的行为的可以补全。如使用 =M-x= 补全变为垂直,  =C-x C-f= 增强显示目录下文件、 =C-x b= 变为垂直。
+
+orderless 支持 =M-x= 模糊搜索，可以无序的。 如 edebug-defun 函数搜索， =M-x fun debug=
+
+我更喜欢用下下面的配置：
+#+begin_src emacs-lisp :tangle "lisp/init-completion.el"
+  ;;; Minibuffer 垂直补全布局(vertico)
+  (use-package vertico
+    :hook (after-init . vertico-mode)
+    :config
+    (setq vertico-resize nil
+          vertico-count 17
+          vertico-cycle t)
+    ;; Cleans up path when moving directories with shadowed paths syntax, e.g.
+    ;; cleans ~/foo/bar/// to /, and ~/foo/bar/~/ to ~/.
+    ;; 适合vim用户习惯，上下移动 C-k, C-j 
+    (add-hook 'rfn-eshadow-update-overlay-hook #'vertico-directory-tidy)
+    (add-hook 'minibuffer-setup-hook #'vertico-repeat-save)
+    (define-key vertico-map (kbd "C-j") 'vertico-next)
+    (define-key vertico-map (kbd "C-'") 'vertico-quick-jump)
+    (define-key vertico-map (kbd "C-k") 'vertico-previous)
+    (define-key vertico-map [backspace] #'vertico-directory-delete-char)
+    (define-key vertico-map (kbd "s-SPC") #'+vertico/embark-preview)
+    )
+#+end_src
+
+
+#+begin_src emacs-lisp :tangle "lisp/init-completion.el"
+  (message "Load init-completion done...")
+  (provide 'init-completion)
+#+end_src
+
+** =init-evil.el=
+:PROPERTIES:
+:CUSTOM_ID: h:evil
+:END:
+
+在学习章节提到过[[#h:learn-evil][(evil)]]
+
+*** =init-evil.el= 安装
+:PROPERTIES:
+:CUSTOM_ID: h:evil-init
+:END:
+
+
+#+begin_src emacs-lisp :tangle no :results none
+  ;;; evil 
+  (use-package evil
+    :ensure t
+    :init
+    (setq evil-want-keybinding nil) ;不使用自带的键位绑定。默认加载不同模式下键位绑定
+    (setq evil-want-C-u-scroll t) ;C-u 实现向上滚动。默认C-u 是emacs中的功能
+    (evil-mode)
+
+    ;; https://emacs.stackexchange.com/questions/46371/how-can-i-get-ret-to-follow-org-mode-links-when-using-evil-mode
+    (with-eval-after-load 'evil-maps
+      (define-key evil-motion-state-map (kbd "RET") nil)) ;如果有链接，按回车能访问这个链接
+    )
+#+end_src
+
+
+安装undo-tree
+#+begin_src emacs-lisp :tangle no :results none
+  ;;; evil 使用undo-tree来管理undo redo
+  (use-package undo-tree
+    :diminish
+    :init
+    (global-undo-tree-mode 1)
+    (setq undo-tree-auto-save-history nil)
+    (evil-set-undo-system 'undo-tree))
+#+end_src
+
+*Emacs中使用vim和外部使用vim的区别*
+
+vim 中有normal和insert模式，在emacs中是各种state, 如 noarmal state, insert state
+
+- Normal State (N) :: 这是 Evil 默认的“静止状态”，其中定义了 vi 绑定的主体。 =M-x evil-normal-state=
+
+- Insert State (I) :: 这是插入文本的状态，其中未修改的键将在缓冲区中插入相应的字符。
+
+- Emacs State (E) :: 一种尽可能接近默认 Emacs 行为的状态，通过 =C-z= 从emacs和 vi 相互切换。
+
+- Visual State (V) :: 用于选择文本区域的状态。
+
+- Motion State (M) 运动状态 （M） :: 一种特殊状态，适用于只读缓冲区，其中运动可用，但编辑操作不可用。只读的文档一般都是Motion state 如帮助文档。 =M-x evil-motion-state=
+
+- Replace State (R) 替换状态 （R） :: 一种特殊状态，与插入状态非常相似，只不过它替换文本而不是插入。 按住大写的 =R= , 一直替换状态
+
+
+*Evil 基础用法*
+
+增删改查 (text-obj, commands, replace)
+- text-obj 更好地操作文本
+  - 选中单词 viw
+  - 删除单词 diw
+- 跳到r字符的位置： fr
+- commands
+  - =:= 进行命令行模式。 :%s/commands/111/ 可以替换, 按 u 回退 
+    
+evil-guide: <https://github.com/noctuid/evil-guide.git>
+
+上述文档花2小时认真读就可以完全从vim用户切到emacs上使用了。
+
+
+*interactive replace 交互式替换文本*
+
+在学习章节提到过[[#h:learn-module-up-packages][(精选 packages, 大大提升你的 Emacs 编辑效率)]]
+
+交互式替换文本. 在evil模式中，选中的单词填写在 =:%s/<word>//= 中
+
+#+begin_src emacs-lisp :tangle no :results none
+  ;;;###autoload
+  (defun my/evil-quick-replace (beg end )
+    (interactive "r")
+    (when (evil-visual-state-p)
+      (evil-exit-visual-state)
+      (let ((selection (regexp-quote (buffer-substring-no-properties beg end))))
+        (setq command-string (format "%%s /%s//g" selection))
+        (minibuffer-with-setup-hook
+            (lambda () (backward-char 2))
+          (evil-ex command-string)))))
+
+  (define-key evil-visual-state-map (kbd "C-r") 'my/evil-quick-replace)
+#+end_src
+
+交互式替换文本操作：
+- =SPC v= 或者选中要替换的字符串，按 =C-r= 替换
+
+比较全的evil配置
+#+begin_src emacs-lisp :tangle "lisp/init-evil.el" :mkdirp yes
+  ;;; evil 
+  (use-package evil
+    :ensure t
+    :init
+    (setq evil-want-keybinding nil) ;不使用自带的键位绑定。默认加载不同模式下键位绑定
+    (setq evil-want-C-u-scroll t) ;C-u 实现向上滚动。默认C-u 是emacs中的功能
+    (evil-mode)
+
+    ;; https://emacs.stackexchange.com/questions/46371/how-can-i-get-ret-to-follow-org-mode-links-when-using-evil-mode
+    (with-eval-after-load 'evil-maps
+      (define-key evil-motion-state-map (kbd "RET") nil)) ;如果有链接，按回车能访问这个链接
+
+    ;;; 自定义设置
+    ;; 在进行插入模式后，希望使用emacs的快捷键，而又不希望进入 Emacs State
+    (setcdr evil-insert-state-map nil)
+    (define-key evil-insert-state-map [escape] 'evil-normal-state) ;按 [Esc] 回到normal state. 下面会介绍更方便的evil-escape插件
+
+    ;; 加空行, 默认 o + Esc 需要2次操作. 下面的设置直接在normal 模式中操作
+    (define-key evil-normal-state-map (kbd "[ SPC") (lambda () (interactive) (evil-insert-newline-above) (forward-line))) ; 向上加空行
+    (define-key evil-normal-state-map (kbd "] SPC") (lambda () (interactive) (evil-insert-newline-below) (forward-line -1))) ; 向上加空行
+
+    ;; 在normal state中切换不同的buffer
+    (define-key evil-normal-state-map (kbd "[ b") 'previous-buffer) ;切到前一个buffer
+    (define-key evil-normal-state-map (kbd "] b") 'next-buffer)
+    (define-key evil-motion-state-map (kbd "[ b") 'previous-buffer)
+    (define-key evil-motion-state-map (kbd "] b") 'next-buffer)
+
+    ;; 在dired模式下，添加快捷键
+    (evil-define-key 'normal dired-mode-map ; 只修改dired模式下normal模式的快捷键绑定
+      (kbd "<RET>") 'dired-find-alternate-file
+      (kbd "C-k") 'dired-up-directory ;往上一级目录
+      "`" 'dired-open-term
+      "q" 'quit-window ; q 退出。默认没有。 可以查看emacs state下的q绑定的函数 =C-x d= 进入dired， =C-z= 进入emacs state， =C-h k= 按 q 可查到对应的函数为 quit-window
+      "o" 'dired-find-file-other-window ; 在另外一个窗口打开文件
+      "z" 'dired-get-size
+      ")" 'dired-omit-mode)
+    )
+
+
+  (use-package j-evil
+    :ensure nil
+    :bind
+    ( :map evil-visual-state-map 
+    ("C-r" . my/evil-quick-replace) ;交互式替换文本 选中文本C-r, :%s/<words>//
+    ))
+
+  ;;; evil 使用undo-tree来管理undo redo
+  (use-package undo-tree
+    :ensure t
+    :diminish
+    :init
+    (global-undo-tree-mode 1)
+    (setq undo-tree-auto-save-history nil)
+    (evil-set-undo-system 'undo-tree))
+#+end_src
+
+*** =init.evil.el= 自定义快捷键
+:PROPERTIES:
+:CUSTOM_ID: h:evil-custom-keybinding
+:END:
+
+
+*定义不同 state 下面的快捷键*
+
+
+#+begin_src emacs-lisp :tangle no :results none
+  ;;; 自定义设置
+  ;; 在进行插入模式后，希望使用emacs的快捷键，而又不希望进入 Emacs State
+  (setcdr evil-insert-state-map nil)
+  (define-key evil-insert-state-map [escape] 'evil-normal-state) ;按 [Esc] 回到normal state
+
+  ;; 加空行, 默认 o + Esc 需要2次操作. 下面的设置直接在normal 模式中操作
+  (define-key evil-normal-state-map (kbd "[ SPC") (lambda () (interactive) (evil-insert-newline-above) (forward-line))) ; [ + 空格，向上加空行
+  (define-key evil-normal-state-map (kbd "] SPC") (lambda () (interactive) (evil-insert-newline-below) (forward-line -1))) ; [ + 空格，向上加空行
+
+  ;; 在normal state中切换不同的buffer
+  (define-key evil-normal-state-map (kbd "[ b") 'previous-buffer) ; [ + b 切到前一个buffer
+  (define-key evil-normal-state-map (kbd "] b") 'next-buffer)
+  (define-key evil-motion-state-map (kbd "[ b") 'previous-buffer)
+  (define-key evil-motion-state-map (kbd "] b") 'next-buffer)
+
+  ;; 在dired模式下，添加快捷键
+  (evil-define-key 'normal dired-mode-map ; 只修改dired模式下normal模式的快捷键绑定
+    (kbd "<RET>") 'dired-find-alternate-file
+    (kbd "C-k") 'dired-up-directory ;往上一级目录
+    "`" 'dired-open-term
+    "q" 'quit-window ; q 退出。默认没有。 可以查看emacs state下的q绑定的函数 =C-x d= 进入dired， =C-z= 进入emacs state， =C-h k= 按 q 可查到对应的函数为 quit-window
+    "o" 'dired-find-file-other-window ; 在另外一个窗口打开文件
+    "z" 'dired-get-size
+    ")" 'dired-omit-mode)
+#+end_src
+
+
+*spacemacs like 快捷键如何定义*
+
+general插件中global-definer在init-basic.el中定义[[#h:basic-general][(=init-basic.el= 键位绑定 =general=)]]
+
+#+begin_src emacs-lisp :tangle no :results none
+  (use-package general
+    :init
+    ;; global-definer 对应leader键为空格
+    (global-definer
+      "!" 'shell-command ;空格+! SPC ! 进入shell命令行
+      "SPC" 'execute-extended-command ; 按2下空格SPC-SPC就可以实现 M-x 的效果
+      "'" 'vertico-repeat
+      "+" 'text-scale-increase
+      "-" 'text-scale-decrease
+      "u" 'universal-argument ;SPC u 相当于emacs的C-u 
+      "hdf" 'describe-function ;SPC hdf 相当于emacs的C-h f
+      "hdv" 'describe-variable ;SPC hdv 相当于emacs的C-h v
+      "hdk" 'describe-key ;SPC hdk 相当于emacs的C-h k
+      ;; 查看init-funcs.el 自定义函数
+      "hh" 'my/highlight-dwim ;SPC hh 高亮选中区域并标上颜色
+      "hc" 'my/clearn-highlight ;SPC hc 清除高亮颜色
+      "v" 'er/expand-region ;SPC v 扩大区域
+      )
+    ;; leader 键为SPC空格，子leader键为b. 如 SPC b b查看buffer缓冲区
+    (+general-global-menu! "buffer" "b"
+      "d" 'kill-current-buffer
+      "b" '(consult-buffer :which-key "consult buffer") ; 查看buffer缓冲区
+      "B" 'switch-to-buffer
+      "p" 'previous-buffer
+      "R" 'rename-buffer
+      "M" '((lambda () (interactive) (switch-to-buffer "*Messages*")) 
+            :which-key "messages-buffer") ; SPC b M查看*Message*缓冲区
+      "n" 'next-buffer
+      "i" 'ibuffer
+      "f" 'my-open-current-directory
+      "k" 'kill-buffer
+
+      "y" 'copy-buffer-name
+      "K" 'kill-other-buffers)
+    )
+#+end_src
+
+我的emacs模块配置[[#h:keybindings-general][(=init-keybindings.el= 键位绑定 =general=)]]
+
+参考配置： https://github.com/zilongshanren/emacs.d/blob/eglot/lisp/init-keybindings.el 实现自己的文件、窗口、项目多种快捷键绑定
+
+*** 相关插件列表
+
+**** evil-escape插件回退到normal state
+
+任何状态下按 =kj= 就能回到normal state。很实用，相当于把esc键集中在右手, 一只手就可以操作vim常用功能。
+#+begin_src emacs-lisp :tangle "lisp/init-evil.el"
+  ;; kj 退回到普通模式
+  (use-package evil-escape
+    :ensure t
+    :init
+    ;; {{ https://github.com/syl20bnr/evil-escape
+    (setq-default evil-escape-delay 0.3)
+    (setq evil-escape-excluded-major-modes '(dired-mode))
+    (setq-default evil-escape-key-sequence "kj")
+    ;; disable evil-escape when input method is on
+    (evil-escape-mode 1)
+    ;; }}
+  )
+#+end_src
+
+**** evil-anzu
+
+小功能ui。 当用 =Shift *= 查找单词重复出现几次时，下方状态栏会多一个标识显示，显示当前重复出现单词的位置和总重复次数。
+#+begin_src emacs-lisp :tangle "lisp/init-evil.el"
+  ;;下方状态栏显示单词重复出现位置
+  (use-package evil-anzu
+    :ensure t
+    :after evil
+    :diminish
+    :demand t
+    :init
+    (global-anzu-mode t))
+#+end_src
+
+**** evil-collections
+
+使用社区的按键绑定。相对稳定不会改变
+
+同时可以设置不同模式中默认的evil状态
+
+#+begin_src emacs-lisp :tangle "lisp/init-evil.el"
+  ;;; 使用社区稳定的按键绑定。 并设置不同模式中默认的evil状态
+  (use-package evil-collection
+    :ensure t
+    :demand t
+    :config
+    (setq evil-collection-mode-list (remove 'lispy evil-collection-mode-list)) ; 移除社区中插件的改键对你键位影响
+    (evil-collection-init)
+
+    ;; 设置进入mode时对应的vim 模式
+    (cl-loop for (mode . state) in
+             '((org-agenda-mode . normal) ;进入agenda时默认Normal State状态
+               (Custom-mode . emacs)
+               (eshell-mode . emacs) ;进入eshell模式时默认Emacs State状态
+               (makey-key-mode . motion))
+             do (evil-set-initial-state mode state)))
+#+end_src
+
+**** evil-surround
+
+S用法，选中一个单词后加引号。
+- =viw S "= 相当于原生vim text object用法 =viw Shift i "= 操作 
+
+#+begin_src emacs-lisp :tangle "lisp/init-evil.el"
+  ;;; S用法，选中一个单词后加引号。viw S " 相当于原生vim text object用法 viw Shift i " 
+  (use-package evil-surround
+    :ensure t
+    :init
+    (global-evil-surround-mode 1))
+#+end_src
+
+**** evil-nerd-commenter
+
+对不同语言加的注释
+
+#+begin_src emacs-lisp :tangle "lisp/init-evil.el"
+  ;;; 添加不同语言的注释
+  (use-package evil-nerd-commenter
+    :init
+    ;; normal 或 visual 模式下按 ,/ 可加注释
+    ;; (define-key evil-normal-state-map (kbd ",ci") 'evilnc-comment-or-uncomment-lines)
+    (define-key evil-normal-state-map (kbd ",/") 'evilnc-comment-or-uncomment-lines)
+    (define-key evil-visual-state-map (kbd ",") 'evilnc-comment-or-uncomment-lines)
+    )
+#+end_src
+
+操作：加注释
+- 单行注释， =,/=
+- 多行注释，选中行 =,/=
+
+**** evil-snipe
+
+小功能ui。高亮查找的字符。 如查找m字符。 =fm= 当前行的m字符高亮。按 =;= 重复查找动作
+#+begin_src emacs-lisp :tangle "lisp/init-evil.el"
+(use-package evil-snipe
+  :ensure t
+  :diminish
+  :init
+  (evil-snipe-mode +1)
+  (evil-snipe-override-mode +1))
+#+end_src
+
+**** evil-matchit
+
+按 =%= 可以在函数、括号之间跳转
+
+参考我的文章[[http://xuchangwei.com/lisp/coding-emacs/coding-emacs.html#h:vscode-symbol-jump][(如何提高编程速度)]]
+
+#+begin_src emacs-lisp :tangle "lisp/init-evil.el"
+  ;;; 按 % 可以在函数、括号之间跳转
+  (use-package evil-matchit
+    :ensure
+    :init
+    (global-evil-matchit-mode 1))
+#+end_src
+
+*** 高阶用法（自定义 text-obj 或者 自定义 commands)
+
+- https://github.com/noctuid/evil-guide#modes
+- https://evil.readthedocs.io/en/latest/overview.html
+
+
+#+begin_src emacs-lisp :tangle "lisp/init-evil.el"
+  (message "Load init-evil done...")
+  (provide 'init-evil)
+#+end_src
+
+*我的建议*
+
+使用emacs原生按键。 用多了evil，你还是个vim用户，无法轻松操作无配置或精简内置配置的emacs。
+
+** =init-tools.el=
+
+*** =init-tools.el= config
+
+
+#+begin_src emacs-lisp :tangle "lisp/init-tools.el" :mkdirp yes
+#+end_src
+
+*** =init-tools.el= 多光标操作 =iedit= & =evil-multiedit=
+:PROPERTIES:
+:CUSTOM_ID: h:tools-iedit
+:END:
+
+在学习章节提到过[[#h:learn-module-up-packages][(精选 packages, 大大提升你的 Emacs 编辑效率)]]
+
+此插件需要配合着evil插件使用。
+
+#+begin_src emacs-lisp :tangle "lisp/init-tools.el"
+  ;;; 多光标操作 iedit & evil-multiedit
+  (use-package iedit
+    :ensure t
+    :init
+    (setq iedit-toggle-key-default nil)
+    :config
+    (define-key iedit-mode-keymap (kbd "M-h") 'iedit-restrict-function)
+    (define-key iedit-mode-keymap (kbd "M-i") 'iedit-restrict-current-line))
+
+  (use-package evil-multiedit
+    :ensure t
+    :commands (evil-multiedit-default-keybinds)
+    :init
+    (evil-multiedit-default-keybinds))
+#+end_src
+
+edit操作：
+- evil normal 状态下，选中单词 =viw= 再按 =R=. 进入 =evil-multiedit= 模式。 这时选中区域高亮，同时下方状态栏显示单词出现次数和当前所在位置
+- 在 =evil-multiedit= 模式下，使用vim方式操作。如
+  - =gg= 到匹配单词的第一次出现位置; =大G= 到匹配单词的最后一个; 按 =0= 光标跳到当前匹单词的开头
+  - =i= 插入模式输入字符，所有匹配的单词跟着一直修改
+  - esc 回到normal模式，按 =C-g= 退出edit模式
+
+*** =init-tools.el= 快速选中区域 =expand-region=
+:PROPERTIES:
+:CUSTOM_ID: h:tools-expand-region
+:END:
+
+在学习章节提到过[[#h:learn-module-up-packages][(精选 packages, 大大提升你的 Emacs 编辑效率)]]
+
+快速选中区域
+
+#+begin_src emacs-lisp :tangle "lisp/init-tools.el"
+  (use-package expand-region
+    :config
+    ;; 定义子菜单
+    (defadvice er/prepare-for-more-expansions-internal
+        (around helm-ag/prepare-for-more-expansions-internal activate)
+      ad-do-it
+      (let ((new-msg (concat (car ad-return-value)
+                             ", H to highlight in buffers"
+                             ", / to search in project, "
+                             "e iedit mode in functions"
+                             "f to search in files, "
+                             "b to search in opened buffers"))
+            (new-bindings (cdr ad-return-value)))
+        (cl-pushnew  ; 高亮
+         '("H" (lambda ()
+                 (interactive)
+                 (call-interactively
+                  'my/highlight-dwim))) ;自定库j-highlight-global
+         new-bindings)
+        (cl-pushnew ; 查找当前项目(git项目)目录中匹配选中字符串的文件
+         '("/" (lambda ()
+                 (interactive)
+                 (call-interactively
+                  'my/search-project-for-symbol-at-point))) ;自定库j-expand-region
+         new-bindings)
+        (cl-pushnew ; 等同于evil multiedit 中 R 操
+         '("e" (lambda ()
+                 (interactive)
+                 (call-interactively
+                  'evil-multiedit-match-all)))
+         new-bindings)
+        (cl-pushnew
+         '("f" (lambda ()
+                 (interactive)
+                 (call-interactively
+                  'find-file)))
+         new-bindings)
+        (cl-pushnew  ; 搜索选中的字符
+         '("b" (lambda ()
+                 (interactive)
+                 (call-interactively
+                  'consult-line)))
+         new-bindings)
+        (setq ad-return-value (cons new-msg new-bindings)))))
+
+
+  (use-package j-expand-region
+    :ensure nil)
+#+end_src
+
+扩大缩小区域操作：
+- 选中字符或光标位置
+- =M-x er/expand-region= 扩大区域。 回车回车扩大； - 减号缩小区域；0 重置 /查找
+- 在expand-region下，又自定义快捷键绑定可以方便操作。
+
+添加一个快捷键[[#h:keybindings-general][(=init-keybindings.el= 键位绑定 =general=)]]，让标记和搜索功能更方便[[#h:j-expand-region][(=j-expand-region.el= 库)]]： 
+
+#+begin_src emacs-lisp :tangle no :results none
+  ;;;###autoload
+  (defun my/search-project-for-symbol-at-point ()
+    (interactive)
+    (if (use-region-p)
+        (progn
+          (consult-ripgrep (project-root (project-current))
+                           (buffer-substring (region-beginning) (region-end))))))
+
+  (global-definer
+    "hc" 'my/clearn-highlight
+    "hH" 'my/highlight-dwim
+    "v" 'er/expand-region
+    )
+#+end_src
+
+扩大区域快捷操作：
+- =SPC v= 扩大区域. 之后可以使用 - 缩小区域
+- =SPC v e= 等同于evil multiedit[[#h:tools-iedit][(=init-tools.el= 多光标操作 =iedit= & =evil-multiedit=)]]中的 R 操作
+- =SPC v f= 调用 ~find-file~ 函数查找文件
+- =SPC v /= 查找当前项目(git项目)目录中匹配选中字符串的文件[[#h:j-expand-region][(=j-expand-region.el= 库)]]
+- =SPC v b= 调用 ~consult-line~ 查找当前文件中匹配选中字符串的行
+- =SPC v H= 文本高亮请阅读[[#h:tools-highlight-global][(=init-tools.el= 文本高亮 =symbol-overlay= & =highlight-global=)]]
+  
+*** =init-tools.el= 文本高亮 =symbol-overlay= & =highlight-global=
+:PROPERTIES:
+:CUSTOM_ID: h:tools-highlight-global
+:END:
+
+在学习章节提到过[[#h:learn-module-up-packages][(精选 packages, 大大提升你的 Emacs 编辑效率)]]
+
+高亮插件
+
+highlight-global是github插件，使用quelpa插件辅助安装[[#h:packages-quelpa][(=init-packages.el= 安装 quelpa 插)]] , 自定义了高亮函数[[#h:j-highlight-global][(=j-highlight-global.el= 库)]]做为快捷键引用[[#h:tools-expand-region][(=init-tools.el= 快速选中区域 =expand-region=)]]
+
+#+begin_src emacs-lisp :tangle "lisp/init-tools.el"
+  (use-package highlight-global
+    :ensure nil
+    :commands (highlight-frame-toggle)
+    :quelpa (highlight-global :fetcher github :repo "glen-dai/highlight-global")
+    :config
+    ;; 高亮默认随机红、粉、蓝、青、紫等颜色循环
+    (progn
+      (setq-default highlight-faces
+                    '(('hi-red-b . 0)
+                      ('hi-aquamarine . 0)
+                      ('hi-pink . 0)
+                      ('hi-blue-b . 0)))))
+#+end_src
+
+#+begin_src emacs-lisp :tangle "lisp/init-tools.el"
+  (use-package symbol-overlay
+    :ensure t
+    :config
+    (define-key symbol-overlay-map (kbd "h") 'nil))
+#+end_src
+
+#+begin_src emacs-lisp :tangle "lisp/init-tools.el"
+  (use-package j-highlight-global
+    :ensure nil)
+#+end_src
+
+高亮插件操作：
+- =SPC v H= 选中部分以一种颜色高亮。重复操作可以看到不高亮颜色。
+  - 场景：查找代码或日志时，标记重点区域
+  - general 快捷键 =SPC v= =SPC hh=
+- =M-x clear-highlight-frame= 清除颜色，或者 =SPC hc= 清除高亮颜色
+
+
+#+begin_src emacs-lisp :tangle "lisp/init-tools.el"
+  (message "Load init-tools done...")
+  (provide 'init-tools)
+#+end_src
+
+** =init-window.el=
+:PROPERTIES:
+:CUSTOM_ID: h:window
+:END:
+
+在学习章节提到过[[#h:learn-window][(窗口)]]
+
+Evil 的窗口选择操作
+C-w h/j/j/k
+
+*** =init-window.el= =window numbering=
+
+- <https://github.com/nschum/window-numbering.el>
+
+#+begin_src emacs-lisp :tangle "lisp/init-window.el" :mkdirp yes
+  ;;; 切换窗口
+  (use-package window-numbering
+    :ensure t
+    :init
+    :hook (after-init . window-numbering-mode))
+#+end_src
+
+- 切换窗口 =M-<窗口编号>= 
+
+定义快捷键
+#+begin_src emacs-lisp :tangle no
+  (global-definer
+    "0" 'select-window-0
+    "1" 'select-window-1
+    "2" 'select-window-2
+    "3" 'select-window-3
+    "4" 'select-window-4
+    "5" 'select-window-5
+    )
+
+  (+general-global-menu! "window" "w"
+    "/" 'split-window-right
+    "-" 'split-window-below
+    "m" 'delete-other-windows
+#+end_src
+
+- 左右分屏 =SPC w /=
+- 上下分屏 =SPC w -=
+- 删除所有其他窗口 =SPC w m=
+
+*** =init-window.el= =es-windows=
+
+- <https://github.com/sabof/es-windows>
+
+可以交换窗口、删除窗口、分屏
+#+begin_src emacs-lisp :tangle "lisp/init-window.el"
+  ;;; 可以交换窗口、删除窗口、分屏
+  (use-package es-windows
+    :ensure t)
+#+end_src
+
+*** =init-window.el= =Buffer move=
+
+- <https://github.com/nschum/window-numbering.el>
+
+移动窗口  
+#+begin_src emacs-lisp :tangle "lisp/init-window.el"
+  ;;; config
+  (use-package buffer-move
+    :ensure t)
+#+end_src
+
+=SPC w s= 指定交的换窗口
+
+*** =init-window.el= =Resize windows=
+- <https://github.com/dpsutton/resize-window>
+
+调整窗口大小
+#+begin_src emacs-lisp :tangle "lisp/init-window.el"
+  ;;; 调整窗口大小
+  (use-package resize-window
+    :ensure t
+    :init
+    (defvar resize-window-dispatch-alist
+      '((?n resize-window--enlarge-down " 向下Resize - Expand down " t)
+        (?p resize-window--enlarge-up " 向上Resize - Expand up" t)
+        (?f resize-window--enlarge-horizontally " 向右Resize - horizontally" t)
+        (?b resize-window--shrink-horizontally " 向左Resize - shrink horizontally" t)
+        (?r resize-window--reset-windows " 重置Resize - reset window layout" nil)
+        (?w resize-window--cycle-window-positive "  选择分屏Resize - cycle window" nil)
+        (?W resize-window--cycle-window-negative " Resize - cycle window" nil)
+        (?2 split-window-below " 水平Split window horizontally" nil)
+        (?3 split-window-right " 垂直Slit window vertically" nil)
+        (?0 resize-window--delete-window " 删除Delete window" nil)
+        (?K resize-window--kill-other-windows " Kill other windows (save state)" nil)
+        (?y resize-window--restore-windows " 恢复(when state) Restore window configuration" nil)
+        (?? resize-window--display-menu " Resize - display menu" nil))
+      "List of actions for `resize-window-dispatch-default.
+  Main data structure of the dispatcher with the form:
+  \(char function documentation match-capitals\)"))
+#+end_src
+
+*** =init-window.el= =Winner (builtin)=
+
+内置插件。用来切换2个不同窗口布局
+#+begin_src emacs-lisp :tangle "lisp/init-window.el"
+  ;;; 内置插件。用来切换2个不同窗口布局
+  (use-package winner
+    :ensure nil
+    :commands (winner-undo winner-redo)
+    :hook (after-init . winner-mode)
+    :init (setq winner-boring-buffers '("*Completions*"
+                                        "*Compile-Log*"
+                                        "*inferior-lisp*"
+                                        "*Fuzzy Completions*"
+                                        "*Apropos*"
+                                        "*Help*"
+                                        "*cvs*"
+                                        "*Buffer List*"
+                                        "*Ibuffer*"
+                                        "*esh command on file*")))
+#+end_src
+
+- 'winner-undo           ; SPC w u 返回布局
+- 'winner-redo           ; SPC w z 撤销返回布局。 和返回布局结合实现2个布局间切换
+
+*** =init-window.el= 关闭弹窗 =Popper=
+
+- <https://github.com/karthink/popper>
+
+#+begin_src emacs-lisp :tangle "lisp/init-window.el"
+  ;; Enforce rules for popups
+  (use-package popper
+    :defines popper-echo-dispatch-actions
+    :commands popper-group-by-directory
+    :bind (:map popper-mode-map
+                ("s-`" . popper-toggle-latest)
+                ("s-o"   . popper-cycle)
+                ("M-`" . popper-toggle-type))
+    :hook (emacs-startup . popper-mode)
+    :init
+    (setq popper-reference-buffers
+          '("\\*Messages\\*"
+            "Output\\*$" "\\*Pp Eval Output\\*$"
+            "\\*Compile-Log\\*"
+            "\\*Completions\\*"
+            "\\*Warnings\\*"
+            "\\*Flymake diagnostics.*\\*"
+            "\\*Async Shell Command\\*"
+            "\\*Apropos\\*"
+            "\\*Backtrace\\*"
+            "\\*prodigy\\*"
+            "\\*Calendar\\*"
+            "\\*Embark Actions\\*"
+            "\\*Finder\\*"
+            "\\*Kill Ring\\*"
+            "\\*Embark Export:.*\\*"
+            "\\*Edit Annotation.*\\*"
+            "\\*Flutter\\*"
+            bookmark-bmenu-mode
+            comint-mode
+            compilation-mode
+            help-mode helpful-mode
+            tabulated-list-mode
+            Buffer-menu-mode
+            occur-mode
+            gnus-article-mode devdocs-mode
+            grep-mode occur-mode rg-mode deadgrep-mode ag-mode pt-mode
+            ivy-occur-mode ivy-occur-grep-mode
+            process-menu-mode list-environment-mode cargo-process-mode
+            youdao-dictionary-mode osx-dictionary-mode fanyi-mode
+
+            "^\\*eshell.*\\*.*$" eshell-mode
+            "^\\*shell.*\\*.*$"  shell-mode
+            "^\\*terminal.*\\*.*$" term-mode
+            "^\\*vterm.*\\*.*$"  vterm-mode
+
+            "\\*DAP Templates\\*$" dap-server-log-mode
+            "\\*ELP Profiling Restuls\\*" profiler-report-mode
+            "\\*Flycheck errors\\*$" " \\*Flycheck checker\\*$"
+            "\\*Paradox Report\\*$" "\\*package update results\\*$" "\\*Package-Lint\\*$"
+            "\\*[Wo]*Man.*\\*$"
+            "\\*ert\\*$" overseer-buffer-mode
+            "\\*gud-debug\\*$"
+            "\\*lsp-help\\*$" "\\*lsp session\\*$"
+            "\\*quickrun\\*$"
+            "\\*tldr\\*$"
+            "\\*vc-.*\\*$"
+            "\\*eldoc\\*"
+            "^\\*elfeed-entry\\*$"
+            "^\\*macro expansion\\**"
+
+            "\\*Agenda Commands\\*" "\\*Org Select\\*" "\\*Capture\\*" "^CAPTURE-.*\\.org*"
+            "\\*Gofmt Errors\\*$" "\\*Go Test\\*$" godoc-mode
+            "\\*docker-containers\\*" "\\*docker-images\\*" "\\*docker-networks\\*" "\\*docker-volumes\\*"
+            "\\*prolog\\*" inferior-python-mode inf-ruby-mode swift-repl-mode
+            "\\*rustfmt\\*$" rustic-compilation-mode rustic-cargo-clippy-mode))
+
+    (when (display-grayscale-p)
+      (setq popper-mode-line
+            '(:eval
+              (concat
+               (propertize " " 'face 'mode-line-emphasis)
+               (propertize " " 'face 'mode-line-emphasis)))))
+
+    (setq popper-echo-dispatch-actions t)
+    (setq popper-group-function nil)
+    :config
+    (popper-echo-mode 1)
+
+    (with-no-warnings
+      (defun my-popper-fit-window-height (win)
+        "Determine the height of popup window WIN by fitting it to the buffer's content."
+        (fit-window-to-buffer
+         win
+         (floor (frame-height) 3)
+         (floor (frame-height) 3)))
+      (setq popper-window-height #'my-popper-fit-window-height)
+
+      (defun popper-close-window-hack (&rest _)
+        "Close popper window via `C-g'."
+        ;; `C-g' can deactivate region
+        (when (and (called-interactively-p 'interactive)
+                   (not (region-active-p))
+                   popper-open-popup-alist)
+          (let ((window (caar popper-open-popup-alist)))
+            (when (window-live-p window)
+              (delete-window window)))))
+      (advice-add #'keyboard-quit :before #'popper-close-window-hack)))
+#+end_src
+
+*按键绑定*
+
+我的模块化配置[[#h:keybindings-general][(=init-keybindings.el= 键位绑定 =general=)]]
+
+#+begin_src emacs-lisp :tangle no
+  (global-definer
+    ;; 这里是其他的快捷键
+    "0" 'select-window-0  ; SPC 0 切0号窗口
+    "1" 'select-window-1  ; SPC 1 切1号窗口
+    "2" 'select-window-2
+    "3" 'select-window-3
+    "4" 'select-window-4
+    "5" 'select-window-5)
+
+  (+general-global-menu! "window" "w"
+    "/" 'split-window-right   ; SPC w / 左右分屏
+    "-" 'split-window-below   ; SPC w - 上下分屏
+    "m" 'delete-other-windows ; SPC w m 仅保留当前窗口
+    "u" 'winner-undo           ; SPC w u 返回布局
+    "z" 'winner-redo           ; SPC w z 撤销返回布局。 和返回布局结合实现2个布局间切换
+    "w" 'esw/select-window     ; SPC w w 选择分屏方式 >向右分，<向左分，^向上分，v向下分
+    "s" 'esw/swap-two-windows  ; SPC w s 交换窗口 
+    "d" 'esw/delete-window     ; SPC w d 删除指定窗口
+    "=" 'balance-windows-area  ; SPC w = 等宽布局
+    "r" 'esw/move-window
+    "x" 'resize-window         ; SPC w x 调整窗口大小。如f水平变大；b缩小；n向下扩；p向上扩；
+    "H" 'buf-move-left         ; SPC w H 右边窗口左移
+    "L" 'buf-move-right        ; SPC w L 窗口右移
+    "J" 'buf-move-down         ; SPC w J 窗口下移
+    "K" 'buf-move-up)          ; SPC w K 窗口上移
+#+end_src
+
+#+begin_src emacs-lisp :tangle "lisp/init-window.el"
+  (message "Load init-window done...")
+  (provide 'init-window)
 #+end_src
 
 ** =init-org.el=
@@ -2296,48 +3115,149 @@ SCHEDULED: <2022-06-17 Fri 10:00 +1d>
 - 进行agenda  视图 =C-c a a=，设置优先级A， 按 =,=  逗号，输入a。
 - 查看重要且紧急的事，=C-c a c= 展示重要且紧急的事（必须有 TODO 状态）。
 
-*** =init-org.el= 调用 provide
 
 #+begin_src emacs-lisp :tangle "lisp/init-org.el"
   (message "Load init-org done...")
   (provide 'init-org)
 #+end_src
 
-** =init-keybindings.el=
-
-*** =init-keybindings.el= config
-
-#+begin_src emacs-lisp :tangle "lisp/init-keybindings.el" :mkdirp yes
-  ;;; config
-
-#+end_src
-
-*** =init-keybindings.el= 文件搜索
+** =init-persp.el= 工作区间管理
 :PROPERTIES:
-:CUSTOM_ID: h:keybindings-search-file
+:CUSTOM_ID: h:personspace
 :END:
 
-配置划分成不同文件，好以后方式方便查找
+在学习章节提到过[[#h:learn-personspace][(工作区间管理)]]
 
-#+begin_src emacs-lisp :tangle "lisp/init-keybindings.el"
-  ;;; 文件搜索
-  (global-set-key (kbd "C-c p f") 'project-find-file) ;;   查找文件，默认绑定在 C-x p f
-  (eval-after-load 'consult (global-set-key (kbd "C-c p s") 'consult-ripgrep))  ;;  查找文件内容
+*** =init-window.el= 窗口 =tab-bar(built-in)=
+
+#+begin_src emacs-lisp :tangle "lisp/init-persp.el" :mkdirp yes
+  (use-package tab-bar
+    :ensure nil
+    :init
+    (tab-bar-mode t)
+    (setq tab-bar-new-tab-choice "*scratch*") ;; buffer to show in new tabs
+    (setq tab-bar-close-button-show nil)      ;; hide tab close / X button
+    (setq tab-bar-show 1)                     ;; hide bar if <= 1 tabs open
+    (setq tab-bar-format '(tab-bar-format-tabs tab-bar-separator))
+
+    (custom-set-faces
+     '(tab-bar ((t (:inherit mode-line))))
+     '(tab-bar-tab ((t (:inherit mode-line :foreground "#993644"))))
+     '(tab-bar-tab-inactive ((t (:inherit mode-line-inactive :foreground "black")))))
+
+    (defvar ct/circle-numbers-alist
+      '((0 . "⓪")
+        (1 . "①")
+        (2 . "②")
+        (3 . "③")
+        (4 . "④")
+        (5 . "⑤")
+        (6 . "⑥")
+        (7 . "⑦")
+        (8 . "⑧")
+        (9 . "⑨"))
+      "Alist of integers to strings of circled unicode numbers.")
+
+    (defun ct/tab-bar-tab-name-format-default (tab i)
+      (let ((current-p (eq (car tab) 'current-tab))
+            (tab-num (if (and tab-bar-tab-hints (< i 10))
+                         (alist-get i ct/circle-numbers-alist) "")))
+        (propertize
+         (concat tab-num
+                 " "
+                 (alist-get 'name tab)
+                 (or (and tab-bar-close-button-show
+                          (not (eq tab-bar-close-button-show
+                                   (if current-p 'non-selected 'selected)))
+                          tab-bar-close-button)
+                     "")
+                 " ")
+         'face (funcall tab-bar-tab-face-function tab))))
+    (setq tab-bar-tab-name-format-function #'ct/tab-bar-tab-name-format-default)
+    (setq tab-bar-tab-hints t))
 #+end_src
 
-C-c 是给用户定义的快捷键，p 代表 project ， f 代表 find-file
+配置生效后，可以看到窗口上方有tab页。
 
-consult-ripgrep 需要安装 consult 和 ripgrep ， 方便查找关键字
+通过 =M-x tab-bar-new-tab= 生成一个的 =tab-bar= 。
 
-操作：快速找到文件
-- =C-c p f= 选择目标目录, 回车 如 =~/.emacs.d=
-- 输入要查找文件名对应的关键字符，即可打开文件。 如打开 =~/.emacs.d/lisp/init-basic.el= 文件， 输入basic即可
+=M-x tab-bar-rename= 保持tab-bar名字不变，不跟随文件变化 。
 
-*** =init-keybindings.el= 调用 provide
+*** =init-persp.el= 工作区间 =tabspaces=
+:PROPERTIES:
+:CUSTOM_ID: h:persp-tabspaces
+:END:
 
-#+begin_src emacs-lisp :tangle "lisp/init-keybindings.el"
-  (message "Load init-keybindings done...")
-  (provide 'init-keybindings)
+
+#+begin_src emacs-lisp :tangle "lisp/init-persp.el"
+  (use-package tabspaces
+    ;; use this next line only if you also use straight, otherwise ignore it.
+    :ensure t
+    :hook (after-init . tabspaces-mode) ;; use this only if you want the minor-mode loaded at startup.
+    :commands (tabspaces-switch-or-create-workspace
+               tabspaces-open-or-create-project-and-workspace)
+    :custom
+    (tabspaces-use-filtered-buffers-as-default t)
+    (tabspaces-default-tab "Default")
+    (tabspaces-remove-to-default t)
+    (tabspaces-include-buffers '("*scratch*"))
+    ;; maybe slow 关闭emacs后自动恢复工作空间。怕影响性能可以注释掉
+    (tabspaces-session t)
+    (tabspaces-session-auto-restore t)
+    :config
+    ;; Filter Buffers for Consult-Buffer
+
+    (with-eval-after-load 'consult
+      ;; hide full buffer list (still available with "b" prefix)
+      (consult-customize consult--source-buffer :hidden nil :default nil)
+      ;; set consult-workspace buffer list
+      (defvar consult--source-workspace
+        (list :name "Workspace Buffers"
+              :narrow ?w
+              :history 'buffer-name-history
+              :category 'buffer
+              :state #'consult--buffer-state
+              :default t
+              :items (lambda () (consult--buffer-query
+                                 :predicate #'tabspaces--local-buffer-p
+                                 :sort 'visibility
+                                 :as #'buffer-name)))
+
+        "Set workspace buffer list for consult-buffer.")
+      (add-to-list 'consult-buffer-sources 'consult--source-workspace)))
+#+end_src
+
+重启或执行 =M-x tabspaces-mode= 生效。
+
+=C-x b= 打开缓冲区，发现多了一个 =Workspace Buffer= ，这里的buffer优先使用。
+
+
+*按键绑定*
+
+#+begin_src emacs-lisp :tangle no
+  (+general-global-menu! "layout" "l"
+    "l" 'tabspaces-switch-or-create-workspace
+    "L" 'tabspaces-restore-session
+    "p" 'tabspaces-open-or-create-project-and-workspace
+    "f" 'tabspaces-project-switch-project-open-file
+    "s" 'tabspaces-save-session
+    "B" 'tabspaces-switch-buffer-and-tab
+    "b" 'tabspaces-switch-to-buffer
+    "R" 'tab-rename
+    "TAB" 'tab-bar-switch-to-recent-tab
+    "r" 'tabspaces-remove-current-buffer
+    "k" 'tabspaces-close-workspace)
+#+end_src
+
+*工作流*
+
+每一个工作空间都可以有布局
+
+
+
+#+begin_src emacs-lisp :tangle "lisp/init-persp.el"
+  (message "Load init-persp done...")
+  (provide 'init-persp)
 #+end_src
 
 ** =init-programming.el=
@@ -2347,10 +3267,12 @@ consult-ripgrep 需要安装 consult 和 ripgrep ， 方便查找关键字
 :CUSTOM_ID: h:c++
 :END:
 
-**** 使用 eglot 来编写、运行和调试 C/C++ 代码
+**** =init-programming.el= 代码编写 =eglot=
 :PROPERTIES:
 :CUSTOM_ID: h:c++-eglot
 :END:
+
+使用 eglot 来编写、运行和调试 C/C++ 代码
 
 *安装 mysys2*
 
@@ -2358,7 +3280,7 @@ consult-ripgrep 需要安装 consult 和 ripgrep ， 方便查找关键字
 
 2.安装 C/C++ 必要的软件工具
 
-#+begin_src sh :tangle no
+#+begin_src sh :tangle no :results none
   #安装c++必要软件 gcc gdb make clang clang-tool
   pacman -Syu
   pacman -S mingw-w64-x86_64-gcc mingw-w64-x86_64-gdb make mingw-w64-x86_64-clang mingw-w64-x86_64-clang-tools-extra
@@ -2392,18 +3314,18 @@ d:\msys64\usr\bin
 
 可以运行任意一个单文件程序
 #+begin_src emacs-lisp :tangle "lisp/init-programming.el"
-    ;;运行任意单文件程序 快捷键F5
-    (use-package quickrun
-      :ensure t
-      :commands (quickrun)
-      :init
-      (quickrun-add-command "c++/c1z"
-        '((:command . "g++")
-          (:exec . ("%c -std=c++1z %o -o %e %s"
-                    "%e %a"))
-          (:remove . ("%e")))
-        :default "c++"))
-    (global-set-key (kbd "<f5>") 'quickrun)
+  ;; 运行任意单文件程序 快捷键F5
+  (use-package quickrun
+    :ensure t
+    :commands (quickrun)
+    :init
+    (quickrun-add-command "c++/c1z"
+      '((:command . "g++")
+        (:exec . ("%c -std=c++1z %o -o %e %s"
+                  "%e %a"))
+        (:remove . ("%e")))
+      :default "c++"))
+  (global-set-key (kbd "<f5>") 'quickrun)
 #+end_src
 
 *使用 gdb 调试*
@@ -2496,13 +3418,18 @@ d:\msys64\usr\bin
 
 Emacs29新特性介绍：<https://emacs.liujiacai.net/post/031-emacs-29-feature-preview/>
 
-**** 安装 treesit-auto 插件
+**** =init-programming.el= 语法高亮 =treesit-auto=
+:PROPERTIES:
+:CUSTOM_ID: h:c++-treesit-auto
+:END:
+
 
 https://github.com/renzmann/treesit-auto
 
-语法高亮, =*ts-mode= , 性能要原生的好。
+语法高亮, =*ts-mode= , 性能要比原生的好。
 
-#+begin_src emacs-lisp :tangle no :results none
+#+begin_src emacs-lisp :tangle "lisp/init-programming.el"
+  ;;; treesit-auto
   ;; 语法高亮, *ts-mode , M-x treesit-auto-install-all
   (use-package treesit-auto
   :demand t
@@ -2511,20 +3438,33 @@ https://github.com/renzmann/treesit-auto
   (global-treesit-auto-mode))
 #+end_src
 
-安装完之后运行 =M-x treesit-auto-install-all= , 它自动下载各种语言的 =.dll= 文件, 文件安装在 =~/.emacs.d/tree-sitter=
+安装完之后运行 =M-x treesit-auto-install-all= , 它自动下载编译好的各种语言 =.dll= 文件, 文件安装在 =~/.emacs.d/tree-sitter=
 
 重启emacs，打开一个c++程序，查看当前的主模式 =C-h v= major=mode 可以看到是 =c++-ts-mode= ，而不是原先的 =c++-mode=
 
+默认情况下，treesit会对所有语言做映射 =*ts.mode=, 如果需要指定某些语言不映射，可这样写
 
-**** 配置 fontlock level
-
-#+begin_src emacs-lisp :tangle no :results none
-(setq treesit-font-lock-level 4)
+#+begin_src emacs-lisp :tangle no
+  (use-package treesit-auto
+    :demand t
+    :config
+    (progn
+    (setq treesit-font-lock-level 4) ; 任意能高亮的都高亮
+    (add-to-list 'major-mode-remap-alist '(c++-mode . c++-ts-mode)) ;指定不映射
+    )
+    :config
+    (global-treesit-auto-mode)
+    )
 #+end_src
 
-**** 跳转函数列表 consult-imenu
+**** =init-programming.el= 跳转函数列表 consult-imenu
+:PROPERTIES:
+:CUSTOM_ID: h:c++-consult-imenu
+:END:
 
-#+begin_src emacs-lisp :tangle "lisp/init-programming.el"
+在学习章节提到过[[#h:learn-c++-treesit][(使用 Treesit + eglot 来打造现代编程 IDE)]]
+
+#+begin_src emacs-lisp :tangle no :results none
 (+general-global-menu! "search" "s"
   "j" 'consult-imenu
   "p" 'consult-ripgrep
@@ -2532,15 +3472,29 @@ https://github.com/renzmann/treesit-auto
   "f" 'consult-focus-lines)
 #+end_src
 
-查找定义和引用
+上面配置在我的emacs模块配置[[#h:keybindings-general][（=init-keybindings.el= 键位绑定 =general=）]]
+
+修改了j对应自定义了my/imenu函数[[#h:j-consult][(=j-consult.el= 库)]]
+
+范例：跳转函数列表操作
+- =SPC s j= 跳转函数列表
+
+**** =init-programming.el= 查找定义和引用
+
+vim 模式是
+- gd 跳转函数定义
+- gr 查找函数引用
+- C-o 返回
 
 使用 ctrl-o 返回
+
 #+begin_example :tangle no
-xref-find-references
-xref-find-definitions
+  (global-definer
+    "gg" 'xref-find-definitions
+    "gr" 'xref-find-references
 #+end_example
 
-**** 添加 snippets 支持
+**** =init-programming.el= 添加 snippets 支持
 
 #+begin_src emacs-lisp :tangle "lisp/init-programming.el"
   (use-package yasnippet
@@ -2565,371 +3519,194 @@ xref-find-definitions
     :after yasnippet)
 #+end_src
 
-**** 在头文件和源文件之间进行跳转
+自定义代码片段
+- =M-x yas-new-snippet= 创建新代码片段
+  #+begin_example
+    # -*- mode: snippet -*-
+    # name: <name>  指Snippet的名称
+    # key: <key>  指Snippet的名称
+    # contributor : Jasper Hsu <xcwhome@163.com>  作者信息
+    # --
+    (message "hello from my yasnippet")$0
+  #+end_example
+- =C-c C-c=完成编程，选择片段生效的模式，保存指定位置 =~/.emacs.d/snippets/<xxx>-mode/<name>=
+- =M-x yas-describe-tables= 查看
+
+**** =init-programming.el= 在头文件和源文件之间进行跳转
 
 ff-find-related-file
 
 
 
 
-*** =init-programming.el= 调用 provide
-
 #+begin_src emacs-lisp :tangle "lisp/init-programming.el"
   (message "Load init-programming done...")
   (provide 'init-programming)
 #+end_src
 
-** =init-evil.el=
+** =init-keybindings.el=
+
+*** =init-keybindings.el= config
+
+#+begin_src emacs-lisp :tangle "lisp/init-keybindings.el" :mkdirp yes
+  ;;; config
+#+end_src
+
+*** =init-keybindings.el= 文件搜索
 :PROPERTIES:
-:CUSTOM_ID: h:evil
+:CUSTOM_ID: h:keybindings-search-file
 :END:
 
-在学习章节提到过[[#h:learn-evil][(evil)]]
+配置划分成不同文件，好以后方式方便查找
 
-*** =init-evil.el= 安装
+#+begin_src emacs-lisp :tangle "lisp/init-keybindings.el"
+  ;;; 文件搜索
+  (global-set-key (kbd "C-c p f") 'project-find-file) ;;   查找文件，默认绑定在 C-x p f
+  (global-set-key (kbd "C-c p s") 'consult-ripgrep)  ;;  查找文件内容
+#+end_src
+
+C-c 是给用户定义的快捷键，p 代表 project ， f 代表 find-file
+
+consult-ripgrep 需要安装 consult 和 ripgrep ， 方便查找关键字
+
+操作：快速找到文件
+- =C-c p f= 选择目标目录, 回车 如 =~/.emacs.d=
+- 输入要查找文件名对应的关键字符，即可打开文件。 如打开 =~/.emacs.d/lisp/init-basic.el= 文件， 输入basic即可
+
+*** =init-keybindings.el= 键位绑定 =general=
 :PROPERTIES:
-:CUSTOM_ID: h:evil-init
+:CUSTOM_ID: h:keybindings-general
 :END:
-
-
-#+begin_src emacs-lisp :tangle no :results none
-  ;;; evil 
-  (use-package evil
-    :ensure t
-    :init
-    (setq evil-want-keybinding nil) ;不使用自带的键位绑定。默认加载不同模式下键位绑定
-    (setq evil-want-C-u-scroll t) ;C-u 实现向上滚动。默认C-u 是emacs中的功能
-    (evil-mode)
-
-    ;; https://emacs.stackexchange.com/questions/46371/how-can-i-get-ret-to-follow-org-mode-links-when-using-evil-mode
-    (with-eval-after-load 'evil-maps
-      (define-key evil-motion-state-map (kbd "RET") nil)) ;如果有链接，按回车能访问这个链接
-    )
-#+end_src
-
-
-安装undo-tree
-#+begin_src emacs-lisp :tangle no :results none
-  ;;; evil 使用undo-tree来管理undo redo
-  (use-package undo-tree
-    :diminish
-    :init
-    (global-undo-tree-mode 1)
-    (setq undo-tree-auto-save-history nil)
-    (evil-set-undo-system 'undo-tree))
-#+end_src
-
-*Emacs中使用vim和外部使用vim的区别*
-
-vim 中有normal和insert模式，在emacs中是各种state, 如 noarmal state, insert state
-
-- Normal State (N) :: 这是 Evil 默认的“静止状态”，其中定义了 vi 绑定的主体。 =M-x evil-normal-state=
-
-- Insert State (I) :: 这是插入文本的状态，其中未修改的键将在缓冲区中插入相应的字符。
-
-- Emacs State (E) :: 一种尽可能接近默认 Emacs 行为的状态，通过 =C-z= 从emacs和 vi 相互切换。
-
-- Visual State (V) :: 用于选择文本区域的状态。
-
-- Motion State (M) 运动状态 （M） :: 一种特殊状态，适用于只读缓冲区，其中运动可用，但编辑操作不可用。只读的文档一般都是Motion state 如帮助文档。 =M-x evil-motion-state=
-
-- Replace State (R) 替换状态 （R） :: 一种特殊状态，与插入状态非常相似，只不过它替换文本而不是插入。 按住大写的 =R= , 一直替换状态
-
-
-*Evil 基础用法*
-
-增删改查 (text-obj, commands, replace)
-- text-obj 更好地操作文本
-  - 选中单词 viw
-  - 删除单词 diw
-- 跳到r字符的位置： fr
-- commands
-  - =:= 进行命令行模式。 :%s/commands/111/ 可以替换, 按 u 回退 
-    
-evil-guide: <https://github.com/noctuid/evil-guide.git>
-
-上述文档花2小时认真读就可以完全从vim用户切到emacs上使用了。
-
-比较全的evil配置
-#+begin_src emacs-lisp :tangle "lisp/init-evil.el" :mkdirp yes
-  ;;; evil 
-  (use-package evil
-    :ensure t
-    :init
-    (setq evil-want-keybinding nil) ;不使用自带的键位绑定。默认加载不同模式下键位绑定
-    (setq evil-want-C-u-scroll t) ;C-u 实现向上滚动。默认C-u 是emacs中的功能
-    (evil-mode)
-
-    ;; https://emacs.stackexchange.com/questions/46371/how-can-i-get-ret-to-follow-org-mode-links-when-using-evil-mode
-    (with-eval-after-load 'evil-maps
-      (define-key evil-motion-state-map (kbd "RET") nil)) ;如果有链接，按回车能访问这个链接
-
-    ;;; 自定义设置
-    ;; 在进行插入模式后，希望使用emacs的快捷键，而又不希望进入 Emacs State
-    (setcdr evil-insert-state-map nil)
-    (define-key evil-insert-state-map [escape] 'evil-normal-state) ;按 [Esc] 回到normal state. 下面会介绍更方便的evil-escape插件
-
-    ;; 加空行, 默认 o + Esc 需要2次操作. 下面的设置直接在normal 模式中操作
-    (define-key evil-normal-state-map (kbd "[ SPC") (lambda () (interactive) (evil-insert-newline-above) (forward-line))) ; 向上加空行
-    (define-key evil-normal-state-map (kbd "] SPC") (lambda () (interactive) (evil-insert-newline-below) (forward-line -1))) ; 向上加空行
-
-    ;; 在normal state中切换不同的buffer
-    (define-key evil-normal-state-map (kbd "[ b") 'previous-buffer) ;切到前一个buffer
-    (define-key evil-normal-state-map (kbd "] b") 'next-buffer)
-    (define-key evil-motion-state-map (kbd "[ b") 'previous-buffer)
-    (define-key evil-motion-state-map (kbd "] b") 'next-buffer)
-
-    ;; 在dired模式下，添加快捷键
-    (evil-define-key 'normal dired-mode-map ; 只修改dired模式下normal模式的快捷键绑定
-      (kbd "<RET>") 'dired-find-alternate-file
-      (kbd "C-k") 'dired-up-directory ;往上一级目录
-      "`" 'dired-open-term
-      "q" 'quit-window ; q 退出。默认没有。 可以查看emacs state下的q绑定的函数 =C-x d= 进入dired， =C-z= 进入emacs state， =C-h k= 按 q 可查到对应的函数为 quit-window
-      "o" 'dired-find-file-other-window ; 在另外一个窗口打开文件
-      "z" 'dired-get-size
-      ")" 'dired-omit-mode)
-    )
-
-
-
-
-
-  ;;; evil 使用undo-tree来管理undo redo
-  (use-package undo-tree
-    :ensure t
-    :diminish
-    :init
-    (global-undo-tree-mode 1)
-    (setq undo-tree-auto-save-history nil)
-    (evil-set-undo-system 'undo-tree))
-#+end_src
-
-*** =init.evil.el= 自定义快捷键
-:PROPERTIES:
-:CUSTOM_ID: h:evil-custom-keybinding
-:END:
-
-
-*定义不同 state 下面的快捷键*
-
-
-#+begin_src emacs-lisp :tangle no :results none
-  ;;; 自定义设置
-  ;; 在进行插入模式后，希望使用emacs的快捷键，而又不希望进入 Emacs State
-  (setcdr evil-insert-state-map nil)
-  (define-key evil-insert-state-map [escape] 'evil-normal-state) ;按 [Esc] 回到normal state
-
-  ;; 加空行, 默认 o + Esc 需要2次操作. 下面的设置直接在normal 模式中操作
-  (define-key evil-normal-state-map (kbd "[ SPC") (lambda () (interactive) (evil-insert-newline-above) (forward-line))) ; [ + 空格，向上加空行
-  (define-key evil-normal-state-map (kbd "] SPC") (lambda () (interactive) (evil-insert-newline-below) (forward-line -1))) ; [ + 空格，向上加空行
-
-  ;; 在normal state中切换不同的buffer
-  (define-key evil-normal-state-map (kbd "[ b") 'previous-buffer) ; [ + b 切到前一个buffer
-  (define-key evil-normal-state-map (kbd "] b") 'next-buffer)
-  (define-key evil-motion-state-map (kbd "[ b") 'previous-buffer)
-  (define-key evil-motion-state-map (kbd "] b") 'next-buffer)
-
-  ;; 在dired模式下，添加快捷键
-  (evil-define-key 'normal dired-mode-map ; 只修改dired模式下normal模式的快捷键绑定
-    (kbd "<RET>") 'dired-find-alternate-file
-    (kbd "C-k") 'dired-up-directory ;往上一级目录
-    "`" 'dired-open-term
-    "q" 'quit-window ; q 退出。默认没有。 可以查看emacs state下的q绑定的函数 =C-x d= 进入dired， =C-z= 进入emacs state， =C-h k= 按 q 可查到对应的函数为 quit-window
-    "o" 'dired-find-file-other-window ; 在另外一个窗口打开文件
-    "z" 'dired-get-size
-    ")" 'dired-omit-mode)
-#+end_src
-
-
-*spacemacs like 快捷键如何定义*
 
 general插件中global-definer在init-basic.el中定义[[#h:basic-general][(=init-basic.el= general)]]
 
-#+begin_src emacs-lisp :tangle "lisp/init-evil.el"
+#+begin_src emacs-lisp :tangle "lisp/init-keybindings.el"
   (use-package general
     :init
-    ;; global-definer 对应leader键为空格
+    ;; global-definer 对应leader键为空格 SPC
     (global-definer
       "!" 'shell-command ;空格+! SPC ! 进入shell命令行
       "SPC" 'execute-extended-command ; 按2下空格SPC-SPC就可以实现 M-x 的效果
       "'" 'vertico-repeat
       "+" 'text-scale-increase
       "-" 'text-scale-decrease
-      "u" 'universal-argument ;SPC u 相当于emacs的C-u 
-      "hdf" 'describe-function ;SPC hdf 相当于emacs的C-h f
-      "hdv" 'describe-variable ;SPC hdv 相当于emacs的C-h v
-      "hdk" 'describe-key ;SPC hdk 相当于emacs的C-h k
-      ;; 查看init-funcs.el 自定义函数
-      "hh" 'my/highlight-dwim ;SPC hh 高亮选中区域并标上颜色
-      "hc" 'my/clearn-highlight ;SPC hc 清除高亮颜色
-      "v" 'er/expand-region ;SPC v 扩大区域
+      "u" 'universal-argument    ; SPC u 相当于emacs的C-u 
+      "hdf" 'describe-function   ; SPC hdf 相当于emacs的C-h f
+      "hdv" 'describe-variable   ; SPC hdv 相当于emacs的C-h v
+      "hdk" 'describe-key        ; SPC hdk 相当于emacs的C-h k
+      ;; 查看自定义函数库j-highlight-global, j-expand-region
+      "hh" 'my/highlight-dwim    ; SPC hh 高亮选中区域并标上颜色
+      "hc" 'my/clearn-highlight  ; SPC hc 清除高亮颜色
+      ;; 切换窗口
+      "v" 'er/expand-region      ; SPC v 扩大区域
+      "0" 'select-window-0       ; SPC 0 切0号窗口
+      "1" 'select-window-1       ; SPC 1 切1号窗口
+      "2" 'select-window-2
+      "3" 'select-window-3
+      "4" 'select-window-4
+      "5" 'select-window-5
+      ;; 函数定义、引用跳转
+      "gg" 'xref-find-definitions
+      "gr" 'xref-find-references
       )
-    ;; leader 键为SPC空格，子leader键为b. 如 SPC b b查看buffer缓冲区
+    ;; 子菜单
+    ;;(+general-global-menu! "<name>" "<keyword>" 
+    ;; leader 键为SPC空格，name为描述，子leader键为keyword. 如 SPC b b查看buffer缓冲区
+
+    ;; SPC s 针对函数列表跳转的快捷键
+    (+general-global-menu! "search" "s"
+      "j" 'my/imenu              ; SPC s j 函数列表跳转(常用)
+      "p" 'consult-ripgrep       ; SPC s p 查找文件内容(常用)
+      "k" 'consult-keep-lines    ; SPC s k 查找的内容覆盖整个文件
+      "f" 'consult-focus-lines)  ; SPC s f 在选中区域，隐藏匹配字符的行. 再次执行恢复显示
+
+    ;; SPC b 针对buffer缓冲区的快捷键
     (+general-global-menu! "buffer" "b"
       "d" 'kill-current-buffer
-      "b" '(consult-buffer :which-key "consult buffer") ; 查看buffer缓冲区
+      "b" '(consult-buffer :which-key "consult buffer") ; SPC b b 查看buffer缓冲区(常用)
       "B" 'switch-to-buffer
       "p" 'previous-buffer
       "R" 'rename-buffer
       "M" '((lambda () (interactive) (switch-to-buffer "*Messages*")) 
-            :which-key "messages-buffer") ; SPC b M查看*Message*缓冲区
+            :which-key "messages-buffer") ; SPC b M查看*Message*缓冲区(常用 配合SPC b b快速切换)
       "n" 'next-buffer
       "i" 'ibuffer
       "f" 'my-open-current-directory
       "k" 'kill-buffer
-
       "y" 'copy-buffer-name
       "K" 'kill-other-buffers)
+
+    (+general-global-menu! "layout" "l"
+      "l" 'tabspaces-switch-or-create-workspace           ; SPC l l 切换工作空间(1)
+      "L" 'tabspaces-restore-session                      ; SPC l L 恢复工作空间(5)
+      "p" 'tabspaces-open-or-create-project-and-workspace ; SPC l p 打开一个目录并创建workspace(3)
+      "f" 'tabspaces-project-switch-project-open-file
+      "s" 'tabspaces-save-session                         ; SPC l s 保存工作空间(4)
+      "B" 'tabspaces-switch-buffer-and-tab
+      "b" 'tabspaces-switch-to-buffer
+      "R" 'tab-rename                                     ; SPC l R 重命名tab-bar
+      "TAB" 'tab-bar-switch-to-recent-tab                 ; SPC l TAB 在两个挨着最近的空间进行切换(2)
+      "r" 'tabspaces-remove-current-buffer
+      "k" 'tabspaces-close-workspace)
+
+    ;; SPC f 针对文件快捷键
+    (+general-global-menu! "file" "f"
+      "f" 'find-file
+      "r" 'consult-recent-file     ; SPC f r 列出最近打开过的文件(常用)
+      "L" 'consult-locate          ; SPC f L 文件查找
+      "d" 'consult-dir
+      "ed" 'open-my-init-file
+      "s" 'save-buffer
+      "w" 'sudo-edit
+      "S" 'save-some-buffers
+      "j"  'dired-jump
+      "y" 'copy-file-name
+      "R" 'my/rename-current-buffer-file
+      "k" 'my/delete-file-and-buffer
+      "!" 'my/exec-shell-on-buffer)
+
+    ;; SPC w 针对窗口的快捷键
+    (+general-global-menu! "window" "w"
+      "/" 'split-window-right    ; SPC w / 左右分屏
+      "-" 'split-window-below    ; SPC w - 上下分屏
+      "m" 'delete-other-windows  ; SPC w m 仅保留当前窗口
+      "u" 'winner-undo           ; SPC w u 返回布局
+      "z" 'winner-redo           ; SPC w z 撤销返回布局。 和返回布局结合实现2个布局间切换
+      "w" 'esw/select-window     ; SPC w w 选择分屏方式 >向右分，<向左分，^向上分，v向下分
+      "s" 'esw/swap-two-windows  ; SPC w s 交换窗口 
+      "d" 'esw/delete-window     ; SPC w d 删除指定窗口
+      "=" 'balance-windows-area  ; SPC w = 等宽布局
+      "r" 'esw/move-window
+      "x" 'resize-window         ; SPC w x 调整窗口大小。如f水平变大；b缩小；n向下扩；p向上扩；
+      "H" 'buf-move-left         ; SPC w H 右边窗口左移
+      "L" 'buf-move-right        ; SPC w L 窗口右移
+      "J" 'buf-move-down         ; SPC w J 窗口下移
+      "K" 'buf-move-up)          ; SPC w K 窗口上移
+
+    ;; SPC p 针对项目的快捷键
+    (+general-global-menu! "project" "p"
+      "f" 'project-find-file    ; SPC p f 在项目中快速找到文件(常用)
+      "r" 'consult-recent-file
+      "s" 'project-find-regexp
+      "d" 'project-dired
+      "b" 'consult-project-buffer
+      "e" 'project-eshell
+      "m" 'my/project-run-makefile-target
+      "c" 'project-compile
+      "t" 'my/project-citre
+      "p" 'project-switch-project
+      "i" 'my/project-info
+      "a" 'project-remember-projects-under
+      "x" 'project-forget-project)
     )
 #+end_src
 
 参考配置： https://github.com/zilongshanren/emacs.d/blob/eglot/lisp/init-keybindings.el 实现自己的文件、窗口、项目多种快捷键绑定
 
-*** 相关插件列表
 
-**** evil-escape插件回退到normal state
-
-任何状态下按 =kj= 就能回到normal state。很实用，相当于把esc键集中在右手, 一只手就可以操作vim常用功能。
-#+begin_src emacs-lisp :tangle "lisp/init-evil.el"
-  ;; kj 退回到普通模式
-  (use-package evil-escape
-    :ensure t
-    :init
-    ;; {{ https://github.com/syl20bnr/evil-escape
-    (setq-default evil-escape-delay 0.3)
-    (setq evil-escape-excluded-major-modes '(dired-mode))
-    (setq-default evil-escape-key-sequence "kj")
-    ;; disable evil-escape when input method is on
-    (evil-escape-mode 1)
-    ;; }}
-  )
-#+end_src
-
-**** evil-anzu
-
-小功能ui。 当用 =Shift *= 查找单词重复出现几次时，下方状态栏会多一个标识显示，显示当前重复出现单词的位置和总重复次数。
-#+begin_src emacs-lisp :tangle "lisp/init-evil.el"
-  ;;下方状态栏显示单词重复出现位置
-  (use-package evil-anzu
-    :ensure t
-    :after evil
-    :diminish
-    :demand t
-    :init
-    (global-anzu-mode t))
-#+end_src
-
-**** evil-collections
-
-使用社区的按键绑定。相对稳定不会改变
-
-同时可以设置不同模式中默认的evil状态
-
-#+begin_src emacs-lisp :tangle "lisp/init-evil.el"
-  ;;; 使用社区稳定的按键绑定。 并设置不同模式中默认的evil状态
-  (use-package evil-collection
-    :ensure t
-    :demand t
-    :config
-    (setq evil-collection-mode-list (remove 'lispy evil-collection-mode-list)) ; 移除社区中插件的改键对你键位影响
-    (evil-collection-init)
-
-    ;; 设置进入mode时对应的vim 模式
-    (cl-loop for (mode . state) in
-             '((org-agenda-mode . normal) ;进入agenda时默认Normal State状态
-               (Custom-mode . emacs)
-               (eshell-mode . emacs) ;进入eshell模式时默认Emacs State状态
-               (makey-key-mode . motion))
-             do (evil-set-initial-state mode state)))
-#+end_src
-
-**** evil-surround
-
-S用法，选中一个单词后加引号。
-- =viw S "= 相当于原生vim text object用法 =viw Shift i "= 操作 
-
-#+begin_src emacs-lisp :tangle "lisp/init-evil.el"
-  ;;; S用法，选中一个单词后加引号。viw S " 相当于原生vim text object用法 viw Shift i " 
-  (use-package evil-surround
-    :ensure t
-    :init
-    (global-evil-surround-mode 1))
-#+end_src
-
-**** evil-nerd-commenter
-
-对不同语言加的注释
-
-#+begin_src emacs-lisp :tangle "lisp/init-evil.el"
-  ;;; 添加不同语言的注释
-  (use-package evil-nerd-commenter
-    :init
-    ;; normal 或 visual 模式下按 ,/ 可加注释
-    ;; (define-key evil-normal-state-map (kbd ",ci") 'evilnc-comment-or-uncomment-lines)
-    (define-key evil-normal-state-map (kbd ",/") 'evilnc-comment-or-uncomment-lines)
-    (define-key evil-visual-state-map (kbd ",") 'evilnc-comment-or-uncomment-lines)
-    )
-#+end_src
-
-操作：加注释
-- 单行注释， =,/=
-- 多行注释，选中行 =,/=
-
-**** evil-snipe
-
-小功能ui。高亮查找的字符。 如查找m字符。 =fm= 当前行的m字符高亮。按 =;= 重复查找动作
-#+begin_src emacs-lisp :tangle "lisp/init-evil.el"
-(use-package evil-snipe
-  :ensure t
-  :diminish
-  :init
-  (evil-snipe-mode +1)
-  (evil-snipe-override-mode +1))
-#+end_src
-
-**** evil-matchit
-
-按 =%= 可以在函数、括号之间跳转
-
-参考我的文章[[http://xuchangwei.com/lisp/coding-emacs/coding-emacs.html#h:vscode-symbol-jump][(如何提高编程速度)]]
-
-#+begin_src emacs-lisp :tangle "lisp/init-evil.el"
-  ;;; 按 % 可以在函数、括号之间跳转
-  (use-package evil-matchit
-    :ensure
-    :init
-    (global-evil-matchit-mode 1))
-#+end_src
-
-*** 高阶用法（自定义 text-obj 或者 自定义 commands)
-
-- https://github.com/noctuid/evil-guide#modes
-- https://evil.readthedocs.io/en/latest/overview.html
-
-*** =init-evil.el= 调用 provide
-
-#+begin_src emacs-lisp :tangle "lisp/init-evil.el"
-  (message "Load init-evil done...")
-  (provide 'init-evil)
-#+end_src
-
-*我的建议*
-
-使用emacs原生按键。 用多了evil，你还是个vim用户，无法轻松操作无配置或精简内置配置的emacs。
-
-** =init-window.el=
-
-*** =init-window.el= config
-
-#+begin_src emacs-lisp :tangle "lisp/init-window.el" :mkdirp yes
-  ;;; config
-
-#+end_src
-*** =init-window.el= 调用 provide
-
-#+begin_src emacs-lisp :tangle "lisp/init-window.el"
-  (message "Load init-window done...")
-  (provide 'init-window)
+#+begin_src emacs-lisp :tangle "lisp/init-keybindings.el"
+  (message "Load init-keybindings done...")
+  (provide 'init-keybindings)
 #+end_src
 
 ** =init-funcs.el=
@@ -2943,12 +3720,160 @@ S用法，选中一个单词后加引号。
 
   ;; 这一行代码，将函数 open-init-file 绑定到 <f4> 键上
   (global-set-key (kbd "<f4>") 'open-init-file)
+#+end_src
+
+#+begin_src emacs-lisp :tangle "lisp/init-funcs.el"
+  (message "Load init-funcs done...")
+  (provide 'init-funcs)
+#+end_src
 
 
-  ;;; 批量写
-  (defun embark-export-write ()
-    "Export the current vertico results to a writable buffer if possible.
-  Supports exporting consult-grep to wgrep, file to wdeired, and consult-location to occur-edit"
+* 我的自定义库 
+
+一个自定义库会对某一个软件包做扩展，软件包配置文件会分别引用它们。
+
+** =j-consult.el= 库
+:PROPERTIES:
+:CUSTOM_ID: h:j-consult
+:END:
+
+- 我的emacs模块配置[[#h:completion-consult][(=init-completion.el= 增强文件内搜索 =consult=)]]
+- 跳转函数列表 consult-imenup[[#h:c++-consult-imenu][(=init-programming.el= 跳转函数列表 consult-imenu)]]
+
+#+begin_src emacs-lisp :tangle "j-lisp/j-consult.el" :mkdirp yes
+  ;;; j-consult.el --- Extensions for Consult -*- lexical-binding: t -*-
+
+  ;; Copyright (C) 2024  Jasper Hsu
+
+  ;; Author: Jasper Hsu <xcwhome@163.com>
+  ;; URL: https://xuchangwei.com/lisp/jasper-emacs.html
+  ;; Version: 0.1.0
+  ;; Package-Requires: ((emacs "30.1"))
+
+  ;; This file is NOT part of GNU Emacs.
+
+  ;; This program is free software; you can redistribute it and/or modify
+  ;; it under the terms of the GNU General Public License as published by
+  ;; the Free Software Foundation, either version 3 of the License, or (at
+  ;; your option) any later version.
+  ;;
+  ;; This program is distributed in the hope that it will be useful,
+  ;; but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ;; GNU General Public License for more details.
+  ;;
+  ;; You should have received a copy of the GNU General Public License
+  ;; along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+  ;;; Commentary:
+  ;;
+  ;; Remember that every piece of Elisp that I write is for my own
+  ;; educational and recreational purposes.  I do not recommend that
+  ;; you copy any of this if you are not certain of what it does.
+
+  ;;; Code:
+
+  ;;;; 配置搜索中文文件
+
+  (require 'consult)
+
+  ;; PC提前安装 everyting 及其客户端ES. 利用M-x consult-locate搜索
+  ;; 如 #学习#.txt
+  ;; (progn
+  ;;   (setq consult-locate-args (encode-coding-string "es.exe -i -p -r" 'gbk))
+  ;;   (add-to-list 'process-coding-system-alist '("es" gbk . gbk))
+  ;;   )
+    (if (eq system-type 'windows-nt)
+        (progn
+          (add-to-list 'process-coding-system-alist '("es" gbk . gbk))
+          (add-to-list 'process-coding-system-alist '("explorer" gbk . gbk))
+          (setq consult-locate-args (encode-coding-string "es.exe -i -p -r" 'gbk))))
+
+  ;; make consult-ripgrep work 有时consult-ripgrep搜索不了
+  (cond
+   ;; macOS
+   ((eq system-type 'darwin)
+    "afplay")
+   ;; Windows
+   ((eq system-type 'windows-nt)
+    (add-to-list 'process-coding-system-alist 
+                 '("[rR][gG]" . (utf-8-dos . windows-1251-dos)))
+    )
+   (t
+    "Nothing"))
+
+  ;;;; 函数定义跳转
+  (defun my/imenu ()
+    "跳转函数列表，当模式为org-mode跳转标题列表"
+    (interactive)
+    (if (eq major-mode #'org-mode)
+        (call-interactively #'consult-org-heading)
+      (call-interactively #'consult-imenu)))
+
+  (provide 'j-consult)
+  ;;; j-consult.el ends here
+#+end_src
+
+** =j-embark.el= 库
+:PROPERTIES:
+:CUSTOM_ID: h:j-embark
+:END:
+
+我的emacs模块配置[[#h:completion-embark][(=init-completion.el= minibuffer增强 =embark=)]]
+
+#+begin_src emacs-lisp :tangle "j-lisp/j-embark.el"
+  ;;; j-embark.el --- Extensions for Embark -*- lexical-binding: t -*-
+
+  ;; Copyright (C) 2024  Jasper Hsu
+
+  ;; Author: Jasper Hsu <xcwhome@163.com>
+  ;; URL: https://xuchangwei.com/lisp/jasper-emacs.html
+  ;; Version: 0.1.0
+  ;; Package-Requires: ((emacs "30.1"))
+
+  ;; This file is NOT part of GNU Emacs.
+
+  ;; This program is free software; you can redistribute it and/or modify
+  ;; it under the terms of the GNU General Public License as published by
+  ;; the Free Software Foundation, either version 3 of the License, or (at
+  ;; your option) any later version.
+  ;;
+  ;; This program is distributed in the hope that it will be useful,
+  ;; but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ;; GNU General Public License for more details.
+  ;;
+  ;; You should have received a copy of the GNU General Public License
+  ;; along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+  ;;; Commentary:
+  ;;
+  ;; Remember that every piece of Elisp that I write is for my own
+  ;; educational and recreational purposes.  I do not recommend that
+  ;; you copy any of this if you are not certain of what it does.
+
+  ;;; Code:
+
+  (require 'embark)
+
+
+  ;;;; 批量改写; 配合query-replace-regexp实现文本替换
+  ;; 范例：批量替换操作
+  ;; - ~M-x consult-ripgrep~  默认会在以 git 为根目录搜索。如 =#hello= ，搜索包含hello字符的文件。 ~C-n/C-p~ 下上搜索同时可以预览。
+  ;; - ~C-c C-e~ 打开写
+  ;; - ~M-x query-replace-regexp~ 输入hello 回车， 替换为hello 回车。 按 y 同意当前行替换，n 不同意修改
+  ;; - ~C-c C-c~ 执行替换，按 q 退出
+  ;; 
+  ;; 范例：当前buffer替换操作
+  ;; - =C-s= 搜索， 输入hello
+  ;; - =C-c C-e= 编辑
+  ;; - ~M-x query-replace-regexp~ 输入要替换的内容
+  ;; - ~C-c C-c~ 执行替换，按 q 退出
+  (defun my/embark-export-write()
+   "Export the current vertico results to a writable buffer if
+  possible.Supports exporting
+  consult-grep to wgrep, file to
+  wdeired, and consult-location to occur-edit."
     (interactive)
     (require 'embark)
     (require 'wgrep)
@@ -2962,23 +3887,22 @@ S用法，选中一个单词后加引号。
         ('consult-location (let ((embark-after-export-hook #'occur-edit-mode))
                              (embark-export)))
         (x (user-error "embark category %S doesn't support writable export" x)))))
-#+end_src
 
-*** =init-funcs.el= 超级前端-打开PC文件管理器
-:PROPERTIES:
-:CUSTOM_ID: h:funcs-front-explorer
-:END:
-在学习章节提到过[[#h:learn-funcs-front-explorer][(使用 Emacs 来打开文件管理器)]]
 
-#+begin_src emacs-lisp :tangle "lisp/init-funcs.el"
-  ;;; 使用 Emacs 来打开文件管理器
-  (defun consult-directory-externally (file)
+
+  ;;;; 使用 Emacs 打开windows文件管理器
+  ;; 函数在embark-file-map 映射为E
+  ;; (define-key embark-file-map (kbd "E") #'consult-directory-externally)
+  ;; 范例: 快速打开文件所在目录
+  ;; - =M-x my/consult-directory-externally= 输入文件路径，如 =~/.emacs.d/auto-save-list/.saves-2000-JASPER~=
+  ;; - =C-x C-f= 选择文件时，可以用embark来打开， =C;= 选择E，用文件管理器打开对应目录的
+  (defun my/consult-directory-externally (file)
     "Open FILE externally using the default application of the system."
     (interactive "fOpen externally: ")
     (if (and (eq system-type 'windows-nt)
              (fboundp 'w32-shell-execute))
-        ;;(shell-command-to-string (encode-coding-string (replace-regexp-in-string "/" "\\\\\\\\"
-        (shell-command-to-string (encode-coding-string (replace-regexp-in-string "/" "\\\\"
+        (shell-command-to-string (encode-coding-string (replace-regexp-in-string "/" "\\\\\\\\"
+        ;;(shell-command-to-string (encode-coding-string (replace-regexp-in-string "/" "\\\\"
               (format "explorer.exe %s" (file-name-directory (expand-file-name file)))) 'gbk))
       (call-process (pcase system-type
                       ('darwin "open")
@@ -2987,53 +3911,112 @@ S用法，选中一个单词后加引号。
                     nil 0 nil
                     (file-name-directory (expand-file-name file)))))
 
-  (require 'embark)
-  (define-key embark-file-map (kbd "E") #'consult-directory-externally)
-
   ;;打开当前文件的目录
-  (defun my-open-current-directory ()
+  (defun my/open-current-directory ()
     (interactive)
     (consult-directory-externally default-directory))
+
+  (provide 'j-embark)
+  ;;; j-embark.el ends here
 #+end_src
 
-*** =init-funcs.el= expand-region
+** =j-expand-region.el= 库
 :PROPERTIES:
-:CUSTOM_ID: h:funcs-expand-region
+:CUSTOM_ID: h:j-expand-region
 :END:
 
-在学习章节提到过[[#h:learn-module-up-packages][(精选 packages, 大大提升你的 Emacs 编辑效率)]]
+- expand-region[[#h:tools-expand-region][(=init-tools.el= expand-region)]] [[#h:j-expand-region][(=j-expand-region.el= 库)]]
+#+begin_src emacs-lisp :tangle "j-lisp/j-expand-region.el"
+  ;;; j-expand-region.el --- Extensions for expand-region -*- lexical-binding: t -*-
 
-#+begin_src emacs-lisp :tangle "lisp/init-funcs.el"
-;;;###autoload
-(defun my/search-project-for-symbol-at-point ()
-  (interactive)
-  (if (use-region-p)
-      (progn
-        (consult-ripgrep (project-root (project-current))
-                         (buffer-substring (region-beginning) (region-end))))))
+  ;; Copyright (C) 2024  Jasper Hsu
+
+  ;; Author: Jasper Hsu <xcwhome@163.com>
+  ;; URL: https://xuchangwei.com/lisp/jasper-emacs.html
+  ;; Version: 0.1.0
+  ;; Package-Requires: ((emacs "30.1"))
+
+  ;; This file is NOT part of GNU Emacs.
+
+  ;; This program is free software; you can redistribute it and/or modify
+  ;; it under the terms of the GNU General Public License as published by
+  ;; the Free Software Foundation, either version 3 of the License, or (at
+  ;; your option) any later version.
+  ;;
+  ;; This program is distributed in the hope that it will be useful,
+  ;; but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ;; GNU General Public License for more details.
+  ;;
+  ;; You should have received a copy of the GNU General Public License
+  ;; along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+  ;;; Commentary:
+  ;;
+  ;; Remember that every piece of Elisp that I write is for my own
+  ;; educational and recreational purposes.  I do not recommend that
+  ;; you copy any of this if you are not certain of what it does.
+
+  ;;; Code:
+
+  (require 'expand-region)
+
+  ;;;###autoload
+  (defun my/search-project-for-symbol-at-point ()
+    "查找当前项目(git项目)目录中匹配选中字符串的文件"
+    (interactive)
+    (if (use-region-p)
+        (progn
+          (consult-ripgrep (project-root (project-current))
+                           (buffer-substring (region-beginning) (region-end))))))
+
+  (provide 'j-expand-region)
+  ;;; j-expand-region.el ends here
 #+end_src
 
-在init-evil.el自定义键位绑定中定义
-#+begin_src emacs-lisp :tangle no :results none
-  (global-definer
-  "hc" 'my/clearn-highlight
-  "hH" 'my/highlight-dwim
-  "v" 'er/expand-region
-  )
-#+end_src
-
-*** =init-funcs.el= interactive replace
+** =j-evil.el= 库
 :PROPERTIES:
-:CUSTOM_ID: h:funcs-evil-quick-replace
+:CUSTOM_ID: h:j-evil
 :END:
 
-在学习章节提到过[[#h:learn-module-up-packages][(精选 packages, 大大提升你的 Emacs 编辑效率)]]
+- evil[[#h:evil][(=init-evil.el=)]]
 
-交互式替换文本. 在evil模式中，选中的单词填写在 =:%s/<word>//= 中
+#+begin_src emacs-lisp :tangle "j-lisp/j-evil.el"
+  ;;; j-evil.el --- Extensions for evil -*- lexical-binding: t -*-
 
-#+begin_src emacs-lisp :tangle "lisp/init-funcs.el"
+  ;; Copyright (C) 2024  Jasper Hsu
+
+  ;; Author: Jasper Hsu <xcwhome@163.com>
+  ;; URL: https://xuchangwei.com/lisp/jasper-emacs.html
+  ;; Version: 0.1.0
+  ;; Package-Requires: ((emacs "30.1"))
+
+  ;; This file is NOT part of GNU Emacs.
+
+  ;; This program is free software; you can redistribute it and/or modify
+  ;; it under the terms of the GNU General Public License as published by
+  ;; the Free Software Foundation, either version 3 of the License, or (at
+  ;; your option) any later version.
+  ;;
+  ;; This program is distributed in the hope that it will be useful,
+  ;; but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ;; GNU General Public License for more details.
+  ;;
+  ;; You should have received a copy of the GNU General Public License
+  ;; along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+  ;;; Commentary:
+  ;;
+  ;; Remember that every piece of Elisp that I write is for my own
+  ;; educational and recreational purposes.  I do not recommend that
+  ;; you copy any of this if you are not certain of what it does.
+
+  ;;; Code:
+
   ;;;###autoload
   (defun my/evil-quick-replace (beg end )
+    "交互式替换文本"
     (interactive "r")
     (when (evil-visual-state-p)
       (evil-exit-visual-state)
@@ -3043,22 +4026,59 @@ S用法，选中一个单词后加引号。
             (lambda () (backward-char 2))
           (evil-ex command-string)))))
 
-  (define-key evil-visual-state-map (kbd "C-r") 'my/evil-quick-replace)
+  ;;(define-key evil-visual-state-map (kbd "C-r") 'my/evil-quick-replace)
+
+  (provide 'j-evil)
+  ;;; j-evil.el ends here
 #+end_src
 
-交互式替换文本操作：
-- =SPC v= 或者选中要替换的字符串，按 =C-r= 替换
-
-*** =init-funcs.el= symbol-overlay & highlight-global
+** =j-highlight-global.el= 库
 :PROPERTIES:
-:CUSTOM_ID: h:funcs-symbol-overly
+:CUSTOM_ID: h:j-highlight-global
 :END:
 
-在学习章节提到过[[#h:learn-module-up-packages][(精选 packages, 大大提升你的 Emacs 编辑效率)]]
 
-#+begin_src emacs-lisp :tangle "lisp/init-funcs.el"
+- symbol-overlay & highlight-global[[#h:j-highlight-global][(=j-highlight-global.el= 库)]] [[#h:tools-highlight-global][(=init-tools.el= 文本高亮 =symbol-overlay= & =highlight-global=)]]
+
+#+begin_src emacs-lisp :tangle "j-lisp/j-highlight-global.el"
+  ;;; j-highlight-global.el --- Extensions for highlight-global -*- lexical-binding: t -*-
+
+  ;; Copyright (C) 2024  Jasper Hsu
+
+  ;; Author: Jasper Hsu <xcwhome@163.com>
+  ;; URL: https://xuchangwei.com/lisp/jasper-emacs.html
+  ;; Version: 0.1.0
+  ;; Package-Requires: ((emacs "30.1"))
+
+  ;; This file is NOT part of GNU Emacs.
+
+  ;; This program is free software; you can redistribute it and/or modify
+  ;; it under the terms of the GNU General Public License as published by
+  ;; the Free Software Foundation, either version 3 of the License, or (at
+  ;; your option) any later version.
+  ;;
+  ;; This program is distributed in the hope that it will be useful,
+  ;; but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ;; GNU General Public License for more details.
+  ;;
+  ;; You should have received a copy of the GNU General Public License
+  ;; along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+  ;;; Commentary:
+  ;;
+  ;; Remember that every piece of Elisp that I write is for my own
+  ;; educational and recreational purposes.  I do not recommend that
+  ;; you copy any of this if you are not certain of what it does.
+
+  ;;; Code:
+
+  ;;; 选中文本高亮，general插件中做了键位绑定
+
   ;;;###autoload
-  (defun my/highlight-dwim () ;do what i mean 如果选中区域调用highlight-frame-toggle高亮,没有则调用symbol-overlay高亮
+  (defun my/highlight-dwim ()
+    "do what i mean 如果选中区域调用highlight-frame-toggle高亮,
+  没有则调用symbol-overlay高亮"
     (interactive)
     (if (use-region-p)
         (progn
@@ -3066,18 +4086,13 @@ S用法，选中一个单词后加引号。
           (deactivate-mark))
       (symbol-overlay-put)))
 
-
   ;;;###autoload
   (defun my/clearn-highlight ()
     (interactive)
     (clear-highlight-frame)
     (symbol-overlay-remove-all))
-#+end_src
 
-*** =init-funcs.el= 调用 provide
-
-#+begin_src emacs-lisp :tangle "lisp/init-funcs.el"
-  (message "Load init-funcs done...")
-  (provide 'init-funcs)
+  (provide 'j-highlight-global)
+  ;;; j-highlight-global.el ends here
 #+end_src
 
