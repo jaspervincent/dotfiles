@@ -47,6 +47,7 @@
   ;; use this next line only if you also use straight, otherwise ignore it.
   :ensure t
   :hook (after-init . tabspaces-mode) ;; use this only if you want the minor-mode loaded at startup.
+  :defer t
   :commands (tabspaces-switch-or-create-workspace
              tabspaces-open-or-create-project-and-workspace)
   :custom
@@ -55,8 +56,8 @@
   (tabspaces-remove-to-default t)
   (tabspaces-include-buffers '("*scratch*"))
   ;; maybe slow 关闭emacs后自动恢复工作空间。怕影响性能可以注释掉
-  (tabspaces-session t)
-  (tabspaces-session-auto-restore t)
+  ;;(tabspaces-session t)
+  ;;(tabspaces-session-auto-restore t)
   :config
   ;; Filter Buffers for Consult-Buffer
 

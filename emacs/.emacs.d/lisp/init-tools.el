@@ -1,5 +1,3 @@
-
-
 ;;; 多光标操作 iedit & evil-multiedit
 (use-package iedit
   :ensure t
@@ -68,7 +66,7 @@
 (use-package highlight-global
   :ensure nil
   :commands (highlight-frame-toggle)
-  :quelpa (highlight-global :fetcher github :repo "glen-dai/highlight-global")
+  :quelpa (highlight-global :fetcher github :repo "glen-dai/highlight-global" :upgrade nil)
   :config
   ;; 高亮默认随机红、粉、蓝、青、紫等颜色循环
   (progn

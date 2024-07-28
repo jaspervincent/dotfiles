@@ -1,21 +1,23 @@
 ;; 内置补全功能n
 ;;(setq tab-always-indent 'complete)           ;; 使用 TAB 来列出当前补全选项
 
-(use-package company
+;;; corfu 轻量补全  替代company
+(use-package corfu
   :ensure t
   :init
-  (global-company-mode t)                    ;; 全局开启 company 补全
-  :config
-  (setq company-idle-delay 0)                ;; 补全时间快些
-  (setq company-minimum-prefix-length 1)     ;; 最少输入1个字符开启
-  (setq company-show-numbers t)              ;; 给选项编号 (按快捷键 M-1、M-2 等等来进行选择)
-  (setq company-dabbrev-other-buffers 'all)  ;; 从所有缓冲区收集补全信息
-  (setq company-tooltip-align-annotations t) ;; 右侧附加注释
-  (setq company-selection-wrap-around t)
-  (setq company-transformers '(company-sort-by-occurrence)) ; 根据选择的频率进行排序，如果不喜欢可以去掉
-  :bind (:map company-active-map
-              ("C-n" . 'company-select-next)
-              ("C-p" . 'company-select-previous)))  ;; 使用 `C-n` 与 `C-p` 来选择补全项，默认选择上一条和下一条候选项命令 M-n M-p
+  (progn
+    (setq corfu-auto t)
+    (setq corfu-cycle t)
+    (setq corfu-quit-at-boundary t)
+    (setq corfu-quit-no-match t)
+    (setq corfu-preview-current nil)
+    (setq corfu-min-width 80)
+    (setq corfu-max-width 100)
+    (setq corfu-auto-delay 0.2)
+    (setq corfu-auto-prefix 1)
+    (setq corfu-on-exact-match nil)
+    (global-corfu-mode)
+    ))
 
 ;;; minibuffer增强，模糊搜索 (orderless)
 (use-package orderless

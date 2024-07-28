@@ -6,33 +6,32 @@
 
 ;;; Code:
 
-;; 判断操作系统， 定义一个新变量
+;;; 判断操作系统， 定义一个新变量
 (setq *is-a-mac* (eq system-type 'darwin))
 (setq *win64* (eq system-type 'windows-nt))
 (setq *cygwin* (eq system-type 'cygwin) )
 (setq *linux* (or (eq system-type 'gnu/linux) (eq system-type 'linux)) )
 (setq *unix* (or *linux* (eq system-type 'usg-unix-v) (eq system-type 'berkeley-unix)) )
 
-;; 禁用备份和锁定文件
+;;; 禁用备份和锁定文件
 (setq make-backup-files nil)
 (setq backup-inhibited nil) ; Not sure if needed, given `make-backup-files'
 (setq create-lockfiles nil)
 
-;; 指定自己义配置
+;;; 指定自己义配置
 (setq custom-file (make-temp-file "emacs-custom-")) ;没有则自动创建emacs-custom-开头随机文件
 (load custom-file 'no-error 'no-message)
 
-;; 始终从 *scratch* 缓冲区开始
+;;; 始终从 *scratch* 缓冲区开始
 (setq initial-buffer-choice t)
 
-;; 加载目录
+;;; 加载目录
 (mapc
  (lambda (string)
    (add-to-list 'load-path (locate-user-emacs-file string)))
  '("lisp" "j-lisp"))
 
-;;;; 软件包
-
+;;; 软件包
 (setq package-vc-register-as-project nil) ; Emacs 30
 
 ;; 设置插件源优先级
@@ -58,7 +57,7 @@
 (when (not package-archive-contents)
   (package-refresh-contents))
 
-(defvar prot-emacs-my-packages
+(defvar j-emacs-my-packages
   '(vertico tmr)
   "List of symbols representing the packages I develop/maintain.")
 
@@ -67,15 +66,15 @@
       `(,@(mapcar
            (lambda (package)
              (cons package "gnu-elpa-devel"))
-           prot-emacs-my-packages)))
+           j-emacs-my-packages)))
 
 ;; make use-package default behavior better
 ;; with `use-package-always-ensure' you won't need ":ensure t" all the time
 ;; with `use-package-always-defer' you won't need ":defer t" all the time
-;;(setq use-package-always-ensure t
-;;      use-package-always-defer t
-;;      use-package-enable-imenu-support t
-;;      use-package-expand-minimally t)
+(setq use-package-always-ensure t           ; 自动安装
+     use-package-always-defer t            ; 软件包延迟加载 
+     use-package-enable-imenu-support t
+     use-package-expand-minimally t)
 
 ;; 加载模块
 (load (locate-user-emacs-file "jasper-emacs-pre-custom.el") :no-error :no-message)

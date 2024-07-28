@@ -1,5 +1,4 @@
 ;;; config
-
 ;;; 文件搜索
 (global-set-key (kbd "C-c p f") 'project-find-file) ;;   查找文件，默认绑定在 C-x p f
 (global-set-key (kbd "C-c p s") 'consult-ripgrep)  ;;  查找文件内容
@@ -8,8 +7,9 @@
   :init
   ;; global-definer 对应leader键为空格 SPC
   (global-definer
-    "!" 'shell-command ;空格+! SPC ! 进入shell命令行
-    "SPC" 'execute-extended-command ; 按2下空格SPC-SPC就可以实现 M-x 的效果
+    "!" 'shell-command                ; 空格+! SPC ! 进入shell命令行
+    "SPC" 'execute-extended-command   ; 按2下空格SPC-SPC就可以实现 M-x 的效果
+    "TAB" 'spacemacs/alternate-buffer ; SPC TAB 在最近的2个buffer之间切换
     "'" 'vertico-repeat
     "+" 'text-scale-increase
     "-" 'text-scale-decrease
@@ -56,8 +56,8 @@
     "i" 'ibuffer
     "f" 'my-open-current-directory
     "k" 'kill-buffer
-    "y" 'copy-buffer-name
-    "K" 'kill-other-buffers)
+    "y" 'fast/copy-buffer-name
+    "K" 'fast/kill-other-buffers)
 
   (+general-global-menu! "layout" "l"
     "l" 'tabspaces-switch-or-create-workspace           ; SPC l l 切换工作空间(1)
@@ -74,16 +74,16 @@
 
   ;; SPC f 针对文件快捷键
   (+general-global-menu! "file" "f"
-    "f" 'find-file
+    "f" 'find-file               ; SPC f f 查找文件
     "r" 'consult-recent-file     ; SPC f r 列出最近打开过的文件(常用)
     "L" 'consult-locate          ; SPC f L 文件查找
     "d" 'consult-dir
-    "ed" 'open-my-init-file
-    "s" 'save-buffer
+    "ed" 'fast/open-my-init-file
+    "s" 'save-buffer             ; SPC f s 保存文件
     "w" 'sudo-edit
     "S" 'save-some-buffers
-    "j"  'dired-jump
-    "y" 'copy-file-name
+    "j"  'dired-jump             ; SPC f j 跳到目录
+    "y" 'fast/copy-file-name
     "R" 'my/rename-current-buffer-file
     "k" 'my/delete-file-and-buffer
     "!" 'my/exec-shell-on-buffer)

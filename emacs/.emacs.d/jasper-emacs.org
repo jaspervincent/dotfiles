@@ -34,11 +34,11 @@ xx.el 已经写好了，但并没有生效，需要重启一下Emacs，让Emacs�
 
 + Website: <https://xuchangwei.com/lisp/jasper-emacs.html>
 + Git repositories:
-  - GitHub: <https://github.com/jaspervincent/dotfiles.git>
+  - GitHub: <https://github.com/jaspervincent/dotfiles>
 
 #+toc: headlines 8 insert TOC here, with eight headline levels
 
-* init.el(学习)
+* =init.el= (学习)
 :PROPERTIES:
 :HEADER-ARGS: :tangle no
 :END:
@@ -49,6 +49,8 @@ xx.el 已经写好了，但并没有生效，需要重启一下Emacs，让Emacs�
   :HEADER-ARGS: :tangle init.el
   :END:
 #+end_src
+
+本文emacs安装在windows环境中，使用 mysys2 工具安装。
 
 ** 改键
 :PROPERTIES:
@@ -434,7 +436,7 @@ git clone --depth=1 https://github.com/manateelazycat/awesome-tab.git
 
   ;;(use-package awesome-tab
   ;;  :ensure nil
-  ;;  :quelpa (awesome-tab :fetcher github :repo "manateelazycat/awesome-tab")
+  ;;  :quelpa (awesome-tab :fetcher github :repo "manateelazycat/awesome-tab" :upgrade nil)
   ;;  :init (awesome-tab-mode t)
   ;;  )
 
@@ -728,34 +730,20 @@ customize theme 内置主题
 拆分init.el文件
 
 #+begin_example
-  ├── init.el
-  ├── lisp
-  │  ├── init-basic.el      # 基础配置
-  │  ├── init-elpa.el       # 插件源
-  │  ├── init-org.el        # org mode
-  │  ├── init-recentf.el    # 最近打开文件  
-  │  ├── init-site-lisp.el  # 非 elpa 源
-  │  ├── init-themes.el     # 主题
-  │  └── init-utils.el      # 自定义工具
-
   #----------
   ├── custom.el
-  ├── early-init.el
-  ├── init.el
+  ├── early-init.el              #启动前初始化
+  ├── init.el                    #主配置
   ├── lisp
-  │   ├── init-basic.el           #默认的配置
-  │   ├── init-c.el
-  │   ├── init-completion.el     #补全
-  │   ├── init-const.el
-  │   ├── init-custom.el
-  │   ├── init-funcs.el          #自定义函数
-  │   ├── init-keybindings.el
-  │   ├── init-lisp.el
-  │   ├── init-org.el
   │   ├── init-package.el        #插件源
-  │   ├── init-tools.el
+  │   ├── init-basic.el          #默认的配置
   │   ├── init-ui.el             #视觉相关
-  │   └── init-writing.el
+  │   ├── init-completion.el     #补全
+  │   ├── init-tools.el
+  │   ├── init-org.el
+  │   ├── init-keybindings.el
+  │   ├── init-funcs.el          #自定义函数
+  │   ├── init-c.el
 #+end_example
 
 加载配置
@@ -843,50 +831,41 @@ Org-mode 下的文学编程将颠覆你对于 Emacs 的看法。因为我们也�
 
 ** 模块列表
 
-*** 1
+1
 
-*文件搜索键位绑定*
+- 文件搜索键位绑定 [[#h:keybindings-search-file][我的emacs模块配置(=init-keybindings.el= 文件搜索)]]
 
-[[#h:keybindings-search-file][我的emacs模块配置(=init-keybindings.el= 文件搜索)]]
-
-*** 2
-*一些好用的包*
+2.一些好用的包
 
 - restart-emacs
 
 - savehist 记住使用过的命令[[#h:basic-session][(=init-basic.el= 历史命令 =savehist=)]]
-
 - 显示文件行、列、大小 ，美化状态栏
   - simple[[#h:basic-simple][(=init-basic.el= 内置包 =simple=)]]
   - keycast[[#h:modeline-keycast][(=init-modeline.el= 按键显示 =keycast=)]]
   - doom-modeline [[#h:ui-doom-emacs][(=init-ui.el= 主题 =doom-emacs=)]]
-*** org
 
-- org
-  - org todo[[#h:org-todo][(=init-org.el= org todo)]]
-  - org agenda[[#h:org-agenda][(=init-org.el= org agenda)]]
-  - org capture[[#h:org-capture][(=init-org.el= org capture)]]
-  - org effect[[#h:org-effect][(=init-org.el= org effect)]]
-  - org tags[[#h:org-tags][(=init-org.el= org tags)]]
-  - org priority[[#h:org-priority][(=init-org.el= org priority)]]
-*** 4
+3.org
+- org todo[[#h:org-todo][(=init-org.el= org todo)]]
+- org agenda[[#h:org-agenda][(=init-org.el= org agenda)]]
+- org capture[[#h:org-capture][(=init-org.el= org capture)]]
+- org effect[[#h:org-effect][(=init-org.el= org effect)]]
+- org tags[[#h:org-tags][(=init-org.el= org tags)]]
+- org priority[[#h:org-priority][(=init-org.el= org priority)]]
 
+4
 - ox-hugo来写博客
 - eglot emacs29版本内置[[#h:c++-eglot][(=init-programming.el= 代码编写 =eglot=)]]
-*** evil
-:PROPERTIES:
-:CUSTOM_ID: h:learn-evil
-:END:
 
+5.evil
+<<h:learn-evil>>
 
 前期vim用户快速切emacs用户
 
 - evil[[#h:evil][(=init-evil.el=)]]
   
-*** 精选 packages, 大大提升你的 Emacs 编辑效率
-:PROPERTIES:
-:CUSTOM_ID: h:learn-module-up-packages
-:END:
+6.精选 packages, 大大提升你的 Emacs 编辑效率
+<<h:learn-module-up-packages>>
 
 - 多光标操作 iedit & evil-multiedit[[#h:tools-iedit][(=init-tools.el= 多光标操作 iedit & evil-multiedit)]]
 - expand-region[[#h:tools-expand-region][(=init-tools.el= 快速选中区域 =expand-region=)]] [[#h:j-expand-region][(=j-expand-region.el= 库)]]
@@ -894,10 +873,8 @@ Org-mode 下的文学编程将颠覆你对于 Emacs 的看法。因为我们也�
 - 安装 quelpa 插件[[#h:packages-quelpa][(=init-packages.el= 安装 quelpa 插件)]]
 - symbol-overlay & highlight-global[[#h:j-highlight-global][(=j-highlight-global.el= 库)]] [[#h:tools-highlight-global][(=init-tools.el= 文本高亮 =symbol-overlay= & =highlight-global=)]]
 
-*** 使用 Treesit + eglot 来打造现代编程 IDE
-:PROPERTIES:
-:CUSTOM_ID: h:learn-c++-treesit
-:END:
+7.使用 Treesit + eglot 来打造现代编程 IDE
+<<h:learn-c++-treesit>>
 
 - 安装 treesit-auto 插件[[#h:c++-treesit-auto][(=init-programming.el= 语法高亮 =treesit-auto=)]]
 - 跳转函数列表 consult-imenup[[#h:c++-consult-imenu][(=init-programming.el= 跳转函数列表 consult-imenu)]]
@@ -905,22 +882,29 @@ Org-mode 下的文学编程将颠覆你对于 Emacs 的看法。因为我们也�
 - 添加 snippets 支持
 - 在头文件和源文件之间进行跳转
 
-*** 窗口
-:PROPERTIES:
-:CUSTOM_ID: h:learn-window
-:END:
+8.窗口
+<<h:learn-window>>
 
 - windows[[#h:window][(=init-window.el=)]]
   
-*** 工作区间管理
-:PROPERTIES:
-:CUSTOM_ID: h:learn-personspace
-:END:
-
-
+9.工作区间管理
 - personspace[[#h:personspace][(=init-persp.el= 工作区间管理)]]
 
-*** org 进阶
+10.org 进阶
+- Org Download[[#h:org-jietu][(=init-org.el= org 截图)]]
+- Org Protocol[[#h:org-protocol][(=init-org.el= 从网页摘取内容 Org Protocol)]]
+- Spell checking[[#h:org-spell][(=init-org.el= 拼写检查 Spell checkin)]]
+- Fanyi Dictionary[[#h:org-fanyi][(=init-org.el= 翻译 Fanyi Dictionar)]]
+- Some useful keybindings
+
+11.Org Roam
+- corfu 来进行补全
+- Org Oram
+- Org roam UI
+
+12.Emacs 配置问题排查
+
+13.优化性能，借鉴其他人的配置
 
 ** 清理学习内容
 #+begin_src emacs-lisp :tangle no
@@ -950,6 +934,7 @@ Org-mode 下的文学编程将颠覆你对于 Emacs 的看法。因为我们也�
 这里使用标准的 =package.el= 来管理我的Emacs包。
 ([[#h:package.el][=init.el= 配置软件包]])
 
+
 * Emacs主配置文件 (=init.el=)
 
 #+begin_src emacs-lisp :tangle "init.el"
@@ -968,7 +953,7 @@ Org-mode 下的文学编程将颠覆你对于 Emacs 的看法。因为我们也�
 
 *** =init.el= 判断操作系统
 #+begin_src emacs-lisp :tangle "init.el"
-  ;; 判断操作系统， 定义一个新变量
+  ;;; 判断操作系统， 定义一个新变量
   (setq *is-a-mac* (eq system-type 'darwin))
   (setq *win64* (eq system-type 'windows-nt))
   (setq *cygwin* (eq system-type 'cygwin) )
@@ -981,7 +966,7 @@ Org-mode 下的文学编程将颠覆你对于 Emacs 的看法。因为我们也�
 默认情况下，Emacs 会尝试锁定文件，以免它们被其他程序修改。它还保留备份。这些是我不需要的功能
 
 #+begin_src emacs-lisp :tangle "init.el"
-  ;; 禁用备份和锁定文件
+  ;;; 禁用备份和锁定文件
   (setq make-backup-files nil)
   (setq backup-inhibited nil) ; Not sure if needed, given `make-backup-files'
   (setq create-lockfiles nil)
@@ -992,7 +977,7 @@ Org-mode 下的文学编程将颠覆你对于 Emacs 的看法。因为我们也�
 默认情况下，Emacs 将持久自定义写入用户的 init 文件末尾。当用户 =M-x customize= 或与之相关时，Emacs 都会写这些内容。指定自定义文件位置与init.el区分开。
 
 #+begin_src emacs-lisp :tangle "init.el"
-  ;; 指定自己义配置
+  ;;; 指定自己义配置
   (setq custom-file (make-temp-file "emacs-custom-")) ;没有则自动创建emacs-custom-开头随机文件
   (load custom-file 'no-error 'no-message)
 #+end_src
@@ -1000,7 +985,7 @@ Org-mode 下的文学编程将颠覆你对于 Emacs 的看法。因为我们也�
 ** =init.el= 始终从 =*scratch*= 缓冲区开始
 
 #+begin_src emacs-lisp :tangle "init.el"
-  ;; 始终从 *scratch* 缓冲区开始
+  ;;; 始终从 *scratch* 缓冲区开始
   (setq initial-buffer-choice t)
 #+end_src
 
@@ -1018,7 +1003,7 @@ Org-mode 下的文学编程将颠覆你对于 Emacs 的看法。因为我们也�
   
 
 #+begin_src emacs-lisp :tangle "init.el"
-  ;; 加载目录
+  ;;; 加载目录
   (mapc
    (lambda (string)
      (add-to-list 'load-path (locate-user-emacs-file string)))
@@ -1034,8 +1019,7 @@ package.el 内置于 Emacs 中。我们不需要显式加载它，在需要时�
 early-init.el 处激活缓存[[#h:package-cache][(=early-init.el= 初始化包缓存)]]
 
 #+begin_src emacs-lisp :tangle "init.el"
-  ;;;; 软件包
-
+  ;;; 软件包
   (setq package-vc-register-as-project nil) ; Emacs 30
 
   ;; 设置插件源优先级
@@ -1064,7 +1048,7 @@ early-init.el 处激活缓存[[#h:package-cache][(=early-init.el= 初始化包�
 
 强制指定某些软件的源
 #+begin_src emacs-lisp :tangle "init.el"
-  (defvar prot-emacs-my-packages
+  (defvar j-emacs-my-packages
     '(vertico tmr)
     "List of symbols representing the packages I develop/maintain.")
 
@@ -1073,20 +1057,57 @@ early-init.el 处激活缓存[[#h:package-cache][(=early-init.el= 初始化包�
         `(,@(mapcar
              (lambda (package)
                (cons package "gnu-elpa-devel"))
-             prot-emacs-my-packages)))
+             j-emacs-my-packages)))
 #+end_src
 
-*** use-pacakge 插件
+*** =init.el= use-pacakge 插件
 
 29版本后内置包
+
+
 #+begin_src emacs-lisp :tangle "init.el"
   ;; make use-package default behavior better
   ;; with `use-package-always-ensure' you won't need ":ensure t" all the time
   ;; with `use-package-always-defer' you won't need ":defer t" all the time
-  ;;(setq use-package-always-ensure t
-  ;;      use-package-always-defer t
-  ;;      use-package-enable-imenu-support t
-  ;;      use-package-expand-minimally t)
+  (setq use-package-always-ensure t           ; 自动安装
+       use-package-always-defer t            ; 软件包延迟加载 
+       use-package-enable-imenu-support t
+       use-package-expand-minimally t)
+#+end_src
+
+使用样例
+#+begin_src emacs-lisp :tangle no
+  ;;; xxx包
+  (use-package xxx
+    :ensure nil                          ; 确认安装，nil表示不需要安装。nil 可配置内置包。
+    :pin melpa                           ; 指向插件源
+    :defer nil                           ; 是否要延迟加载
+    :demand nil                          ; 是否立即执行，t 即忽略延迟加载
+    :diminish (flymake " Flym.")         ; 状态栏显示的样式
+    :after yasnippet                     ; 别的包安装后启动. 多个包用括号括起来(abc ddd)
+    :custom                              ; 相当于(setq <key> <value>)
+    (ivy-use-virtual-buffers t)
+    :hook                                 ; hook模式的绑定
+    (prog-mode . flycheck-mode)
+    :commands (isearch-moccur isearch-all)    
+    :init                                ; 在加载插件前执行一些命令
+    (setq smooth-scrolling-margin 2)
+    :config                              ; 在加载插件后执行一些命令
+    (smooth-scrolling-mode t)
+    :bind                                 ; 快捷键的绑定，全局
+    (("<f2>" . xx) ("M-p" . xx2))
+    :bind                                 ; 指定映射绑定, bind可以写多个 
+    ( :map global-map
+      ("<insert>" . nil)
+      ("<menu>" . nil)
+      ("C-z" . nil) ; I have a window manager, thanks!
+      ("C-x C-z" . nil) ; same idea as above
+      ("M-`" . nil)
+      ("M-SPC" . cycle-spacing)
+      ("M-=" . count-words)
+      :map prog-mode-map          
+      ("c" . rainbow-mode)
+      ))
 #+end_src
 
 ** =init.el= 加载各个模块
@@ -1151,7 +1172,7 @@ early-init.el 处激活缓存[[#h:package-cache][(=early-init.el= 初始化包�
 #+end_src
 
 
-* 我的Emacs模块配置
+* 我的Emacs模块配置(=lisp/=)
 :PROPERTIES:
 :CUSTOM_ID: h:modules
 :END:
@@ -1159,7 +1180,6 @@ early-init.el 处激活缓存[[#h:package-cache][(=early-init.el= 初始化包�
 =init.el= 部分中，通过 ~load-path~ 让 Emacs 可以运行他们的代码[[#h:i-dir][(=init.el= 加载目录)]]。本章的副标题定义了模块，每个模块都加载在我的 =init.el= 末尾调用[[#h:i-modules][(=init.el= 加载各模块)]]
 
 ** =init-packages.el=
-*** =init-packages.el= config
 
 #+begin_src emacs-lisp :tangle "lisp/init-packages.el" :mkdirp yes
   ;;; config
@@ -1170,7 +1190,7 @@ early-init.el 处激活缓存[[#h:package-cache][(=early-init.el= 初始化包�
 :CUSTOM_ID: h:packages-quelpa
 :END:
 
-在学习章节提到过[[#h:learn-module-up-packages][(精选 packages, 大大提升你的 Emacs 编辑效率)]]
+在学习章节提到过[[h:learn-module-up-packages][(精选 packages, 大大提升你的 Emacs 编辑效率)]]
 
 #+begin_comment :tangle no
 ,#+begin_src emacs-lisp :tangle no :results none
@@ -1200,6 +1220,86 @@ early-init.el 处激活缓存[[#h:package-cache][(=early-init.el= 初始化包�
        :url "https://github.com/quelpa/quelpa-use-package.git")))
 #+end_src
 
+*** =ini-package.el= vc =package-vc.el=
+:PROPERTIES:
+:CUSTOM_ID: h:packages-vc
+:END:
+
+
+#+begin_src emacs-lisp :tangle no
+  ;;; 添加vc宏方便安装非elpa源包
+  (require 'cl-lib)
+  (require 'use-package-core)
+
+  (cl-defun slot/vc-install (&key (fetcher "github") repo name rev backend)
+    (let* ((url (format "https://www.%s.com/%s" fetcher repo))
+           (iname (when name (intern name)))
+           (package-name (or iname (intern (file-name-base repo)))))
+      (unless (package-installed-p package-name)
+        (package-vc-install url iname rev backend))))
+
+  (defvar package-vc-use-package-keyword :vc)
+
+  (defun package-vc-use-package-set-keyword ()
+    (unless (member package-vc-use-package-keyword use-package-keywords)
+      (setq use-package-keywords
+            (let* ((pos (cl-position :unless use-package-keywords))
+                   (head (cl-subseq use-package-keywords 0 (+ 1 pos)))
+                   (tail (nthcdr (+ 1 pos) use-package-keywords)))
+              (append head (list package-vc-use-package-keyword) tail)))))
+
+  (defun use-package-normalize/:vc (name-symbol keyword args)
+    (let ((arg (car args)))
+      (pcase arg
+        ((or `nil `t) (list name-symbol))
+        ((pred symbolp) args)
+        ((pred listp) (cond
+                       ((listp (car arg)) arg)
+                       ((string-match "^:" (symbol-name (car arg))) (cons name-symbol arg))
+                       ((symbolp (car arg)) args)))
+        (_ nil))))
+
+  (defun use-package-handler/:vc (name-symbol keyword args rest state)
+    (let ((body (use-package-process-keywords name-symbol rest state)))
+      ;; This happens at macro expansion time, not when the expanded code is
+      ;; compiled or evaluated.
+      (if args
+          (use-package-concat
+           `((unless (package-installed-p ',(pcase (car args)
+                                              ((pred symbolp) (car args))
+                                              ((pred listp) (car (car args)))))
+               (apply #'slot/vc-install ',(cdr args))))
+           body)
+        body)))
+
+  (defun package-vc-use-package-override-:ensure (func name-symbol keyword ensure rest state)
+    (let ((ensure (if (plist-member rest :vc)
+                      nil
+                    ensure)))
+      (funcall func name-symbol keyword ensure rest state)))
+
+  (defun package-vc-use-package-activate-advice ()
+    (advice-add
+     'use-package-handler/:ensure
+     :around
+     #'package-vc-use-package-override-:ensure))
+
+  (defun package-vc-use-package-deactivate-advice ()
+    (advice-remove
+     'use-package-handler/:ensure
+     #'package-vc-use-package-override-:ensure))
+
+  ;; register keyword on require
+  (package-vc-use-package-set-keyword)
+#+end_src
+
+
+样例：
+#+begin_src emacs-lisp :tangle no
+  (use-package org-roam-ui
+    :ensure nil
+    :vc (:fetcher "github" :repo "org-roam/org-roam-ui"))
+#+end_src
 
 #+begin_src emacs-lisp :tangle "lisp/init-packages.el"
   (message "Load init-packages done...")
@@ -1579,11 +1679,6 @@ org-mode
 
 ** =init-modeline.el=
 
-*** =init-modeline.el= 配置
-:PROPERTIES:
-:CUSTOM_ID: h:modeline-config
-:END:
-
 
 #+begin_src emacs-lisp :tangle "lisp/init-modeline.el" :mkdirp yes
   ;;; config
@@ -1666,7 +1761,8 @@ modeline上显示我的所有的按键和执行的命令
 
 他是一个用于代码补全的插件
 
-#+begin_src emacs-lisp :tangle "lisp/init-completion.el"
+#+begin_src emacs-lisp :tangle no
+  ;;; company 补全。 替换方案 corfu 更轻量
   (use-package company
     :ensure t
     :init
@@ -1682,6 +1778,34 @@ modeline上显示我的所有的按键和执行的命令
     :bind (:map company-active-map
                 ("C-n" . 'company-select-next)
                 ("C-p" . 'company-select-previous)))  ;; 使用 `C-n` 与 `C-p` 来选择补全项，默认选择上一条和下一条候选项命令 M-n M-p
+#+end_src
+
+*** =init-completion.el= 补全 =corfu=
+:PROPERTIES:
+:CUSTOM_ID: h:completion-corfu
+:END:
+
+*安装 corfu 来进行补全*
+
+之前的company软件包可以去掉了，这个更轻量
+#+begin_src emacs-lisp :tangle "lisp/init-completion.el"
+  ;;; corfu 轻量补全  替代company
+  (use-package corfu
+    :ensure t
+    :init
+    (progn
+      (setq corfu-auto t)
+      (setq corfu-cycle t)
+      (setq corfu-quit-at-boundary t)
+      (setq corfu-quit-no-match t)
+      (setq corfu-preview-current nil)
+      (setq corfu-min-width 80)
+      (setq corfu-max-width 100)
+      (setq corfu-auto-delay 0.2)
+      (setq corfu-auto-prefix 1)
+      (setq corfu-on-exact-match nil)
+      (global-corfu-mode)
+      ))
 #+end_src
 
 *** =init-completion.el= minibuffer增强 =orderless=
@@ -2044,7 +2168,7 @@ orderless 支持 =M-x= 模糊搜索，可以无序的。 如 edebug-defun 函数
 :CUSTOM_ID: h:evil
 :END:
 
-在学习章节提到过[[#h:learn-evil][(evil)]]
+在学习章节提到过[[h:learn-evil][(evil)]]
 
 *** =init-evil.el= 安装
 :PROPERTIES:
@@ -2114,7 +2238,7 @@ evil-guide: <https://github.com/noctuid/evil-guide.git>
 
 *interactive replace 交互式替换文本*
 
-在学习章节提到过[[#h:learn-module-up-packages][(精选 packages, 大大提升你的 Emacs 编辑效率)]]
+在学习章节提到过[[h:learn-module-up-packages][(精选 packages, 大大提升你的 Emacs 编辑效率)]]
 
 交互式替换文本. 在evil模式中，选中的单词填写在 =:%s/<word>//= 中
 
@@ -2411,22 +2535,16 @@ S用法，选中一个单词后加引号。
 
 ** =init-tools.el=
 
-*** =init-tools.el= config
-
-
-#+begin_src emacs-lisp :tangle "lisp/init-tools.el" :mkdirp yes
-#+end_src
-
 *** =init-tools.el= 多光标操作 =iedit= & =evil-multiedit=
 :PROPERTIES:
 :CUSTOM_ID: h:tools-iedit
 :END:
 
-在学习章节提到过[[#h:learn-module-up-packages][(精选 packages, 大大提升你的 Emacs 编辑效率)]]
+在学习章节提到过[[h:learn-module-up-packages][(精选 packages, 大大提升你的 Emacs 编辑效率)]]
 
 此插件需要配合着evil插件使用。
 
-#+begin_src emacs-lisp :tangle "lisp/init-tools.el"
+#+begin_src emacs-lisp :tangle "lisp/init-tools.el" :mkdirp yes
   ;;; 多光标操作 iedit & evil-multiedit
   (use-package iedit
     :ensure t
@@ -2455,7 +2573,7 @@ edit操作：
 :CUSTOM_ID: h:tools-expand-region
 :END:
 
-在学习章节提到过[[#h:learn-module-up-packages][(精选 packages, 大大提升你的 Emacs 编辑效率)]]
+在学习章节提到过[[h:learn-module-up-packages][(精选 packages, 大大提升你的 Emacs 编辑效率)]]
 
 快速选中区域
 
@@ -2547,7 +2665,7 @@ edit操作：
 :CUSTOM_ID: h:tools-highlight-global
 :END:
 
-在学习章节提到过[[#h:learn-module-up-packages][(精选 packages, 大大提升你的 Emacs 编辑效率)]]
+在学习章节提到过[[h:learn-module-up-packages][(精选 packages, 大大提升你的 Emacs 编辑效率)]]
 
 高亮插件
 
@@ -2557,7 +2675,7 @@ highlight-global是github插件，使用quelpa插件辅助安装[[#h:packages-qu
   (use-package highlight-global
     :ensure nil
     :commands (highlight-frame-toggle)
-    :quelpa (highlight-global :fetcher github :repo "glen-dai/highlight-global")
+    :quelpa (highlight-global :fetcher github :repo "glen-dai/highlight-global" :upgrade nil)
     :config
     ;; 高亮默认随机红、粉、蓝、青、紫等颜色循环
     (progn
@@ -2597,7 +2715,7 @@ highlight-global是github插件，使用quelpa插件辅助安装[[#h:packages-qu
 :CUSTOM_ID: h:window
 :END:
 
-在学习章节提到过[[#h:learn-window][(窗口)]]
+在学习中提供过[[h:learn-window][(窗口)]]
 
 Evil 的窗口选择操作
 C-w h/j/j/k
@@ -2689,7 +2807,7 @@ C-w h/j/j/k
   \(char function documentation match-capitals\)"))
 #+end_src
 
-*** =init-window.el= =Winner (builtin)=
+*** =init-window.el= =Winner(builtin)=
 
 内置插件。用来切换2个不同窗口布局
 #+begin_src emacs-lisp :tangle "lisp/init-window.el"
@@ -2871,31 +2989,37 @@ C-w h/j/j/k
 #+begin_src emacs-lisp :tangle "lisp/init-org.el" :mkdirp yes
   ;;; config
 
-  ;;; 使用旧版快捷键<s +Tab
-  (with-eval-after-load 'org
-    (require 'org-tempo))
-
-  ;; 禁用左尖括号
-  (setq electric-pair-inhibit-predicate
-        `(lambda (c)
-           (if (char-equal c ?\<) t (,electric-pair-inhibit-predicate c))))
-
-  (add-hook 'org-mode-hook
-            (lambda ()
-              (setq-local electric-pair-inhibit-predicate
-                          `(lambda (c)
-                             (if (char-equal c ?\<) t (,electric-pair-inhibit-predicate c))))))
+  (with-eval-after-load 'org  ; 启动org文件时加载
+    ;; 使用旧版快捷键<s +Tab
+    (require 'org-tempo)
+    
+    ;; 其他
+    (require 'org-protocol) ; 加载内置包, 在摘取网页内容时会用到
+    (setq org-image-actual-width nil) ; 内嵌图片是否显示实际宽度, 默认为t
+    (setq org-return-follows-link t)  ; 链接位置回车，使用外部程序打开
+    
+    ;; 禁用左尖括号
+    (setq electric-pair-inhibit-predicate
+  	`(lambda (c)
+             (if (char-equal c ?\<) t (,electric-pair-inhibit-predicate c))))
+    
+    (add-hook 'org-mode-hook
+              (lambda ()
+                (setq-local electric-pair-inhibit-predicate
+                            `(lambda (c)
+                               (if (char-equal c ?\<) t (,electric-pair-inhibit-predicate c))))))
+  )
 #+end_src
 
 *** =init-org.el= 安装最新org包
 
 #+begin_src emacs-lisp :tangle "lisp/init-org.el"
   ;;; 安装 org，这个配置一定要配置在 use-package 的初始化之前，否则无法正常安装
-  (assq-delete-all 'org package--builtins)
-  (assq-delete-all 'org package--builtin-versions)
-  (use-package org
-    :pin gnu-elpa
-    :ensure t)
+  ;; (assq-delete-all 'org package--builtins)
+  ;; (assq-delete-all 'org package--builtin-versions)
+  ;; (use-package org
+  ;;   :pin gnu-elpa
+  ;;   :ensure t)
 
   (use-package org-contrib  ;非org的官方贡献的插件
     :ensure t
@@ -2909,10 +3033,13 @@ C-w h/j/j/k
 
 
 #+begin_src emacs-lisp :tangle "lisp/init-org.el"
-  ;;; 自定义org todo  C-c C-t 
-  (setq org-todo-keywords
-        (quote ((sequence "TODO(t)" "STARTED(s)" "|" "DONE(d!/!)")
-                (sequence "WAITING(w@/!)" "SOMEDAY(S)" "|" "CANCELLED(c@/!)" "MEETING(m)" "PHONE(p)"))))
+
+  (with-eval-after-load 'org  ; 启动org文件时加载
+    ;; 自定义org todo  C-c C-t 
+    (setq org-todo-keywords
+  	(quote ((sequence "TODO(t)" "STARTED(s)" "|" "DONE(d!/!)")
+  		(sequence "WAITING(w@/!)" "SOMEDAY(S)" "|" "CANCELLED(c@/!)" "MEETING(m)" "PHONE(p)"))))
+  )
 #+end_src
 
 以上代码让你在为一个标题提供待办事项状态时添加了一个键序列，你可以键入 =C-c C-t= 来查看效果。
@@ -2965,10 +3092,15 @@ SCHEDULED: <2022-06-10 Fri 10:00 +1d>
 目的是要引入 check list
 
 #+begin_src emacs-lisp :tangle "lisp/init-org.el"
-  (require 'org-checklist)
-  ;; need repeat task and properties
-  (setq org-log-done t)
-  (setq org-log-into-drawer t)
+  (with-eval-after-load 'org
+    ;; 引入checklist, 自动更新状态
+    ;; org-set-property 添加 RESET_CHECK_BOXS, 设置为t
+    (require 'org-checklist)
+    ;; need repeat task and properties
+    (setq org-log-done t)
+    (setq org-log-into-drawer t)
+
+  )
 #+end_src
 
 通过 =M-x org-set-property=  添加 =RESET_CHECK_BOXES= 。 =RESET_CHECK_BOXES=  设置为 =t= 开启， 会在 =PROPERTIES= 中增加属性。
@@ -3028,6 +3160,7 @@ SCHEDULED: <2022-06-17 Fri 10:00 +1d>
 
 
 #+begin_src emacs-lisp :tangle "lisp/init-org.el"
+  ;;; 日历
   ;; C-c C-s schedule
   ;; C-c C-d deadline
   (global-set-key (kbd "C-c a") 'org-agenda)
@@ -3045,7 +3178,7 @@ SCHEDULED: <2022-06-17 Fri 10:00 +1d>
 :CUSTOM_ID: h:org-capture
 :END:
 
-#+begin_src emacs-lisp :tangle "lisp/init-org.el"
+#+begin_src emacs-lisp :tangle no
   (setq org-capture-templates
         '(("t" "Todo" entry (file+headline "~/gtd.org" "Workspace")
            "* TODO [#B] %?\n  %i\n %U"
@@ -3073,6 +3206,23 @@ SCHEDULED: <2022-06-17 Fri 10:00 +1d>
 操作：
 - =C-c a t= 向指定文件中写内容。 =C-c C-c= 完成. 会记录到gtd.org文件中
 - 在文件中设置开始时间 =C-c C-s= 21:00 点， 再执行 =C-c a a= 就可看到日程更新了。
+
+我用以下配置
+#+begin_src emacs-lisp :tangle "lisp/init-org.el"
+  (setq org-capture-templates
+        '(("t" "Todo" entry (file+headline "~/gtd.org" "Workspace")
+           "* TODO [#B] %?\n  %i\n %U"
+           :empty-lines 1)
+  	;; 用来摘取网页内容
+          ("x" "Web Collections" entry
+           (file+headline org-agenda-file-note "Web")
+           "* %U %:annotation\n\n%:initial\n\n%?")
+  	))
+
+  (setq org-agenda-file-note (expand-file-name "~/notes.org")) ; 保存网页内容
+
+  (global-set-key (kbd "C-c r") 'org-capture)
+#+end_src
 
 *** =init-org.el= org effect
 :PROPERTIES:
@@ -3120,6 +3270,388 @@ SCHEDULED: <2022-06-17 Fri 10:00 +1d>
 - 进行agenda  视图 =C-c a a=，设置优先级A， 按 =,=  逗号，输入a。
 - 查看重要且紧急的事，=C-c a c= 展示重要且紧急的事（必须有 TODO 状态）。
 
+*** =init-org.el= org 截图
+:PROPERTIES:
+:CUSTOM_ID: h:org-jietu
+:END:
+
+- org-download 29版本支持不友好
+- 自定义函数，灵活点
+
+*org-download*
+
+#+begin_src emacs-lisp :tangle no
+  ;;; 截图
+  (use-package org-download
+      :ensure t
+      :demand t
+      :after org
+      :config
+      (add-hook 'dired-mode-hook 'org-download-enable)
+      (setq org-download-screenshot-method "powershell -c Add-Type -AssemblyName System.Windows.Forms;$image = [Windows.Forms.Clipboard]::GetImage();$image.Save('%s', [System.Drawing.Imaging.ImageFormat]::Png)")
+      (defun org-download-annotate-default (link)
+        "Annotate LINK with the time of download."
+        (make-string 0 ?\s))
+      (setq org-download-image-attr-list
+  	    `(,(concat "\n#+DOWNLOADED: screenshot @ "
+                       (format-time-string "%Y-%m-%d %a %H:%M:%S" (current-time))
+                       "\n#+CAPTION: \n#+ATTR_ORG: :width 80%"
+                       "\n#+ATTR_HTML: :width 80%")))
+      (setq-default org-download-heading-lvl nil
+                    org-download-image-dir "./images"
+                    ;; org-download-screenshot-method "screencapture -i %s"
+  		    org-download-timestamp "%Y%m%d_%H%M%S_"
+                    org-download-screenshot-file (expand-file-name "screenshot.jpg" temporary-file-directory)))
+
+#+end_src
+
+安装截图工具
+- Linux / MacOS
+  -  snipaste
+- pc
+  - 系统截图工具 ~<Win>+<shift>+s~
+  -  ~pacman -S mingw-w64-x86_64-imagemagick~
+
+使用方法
+- 使用系统截图工具 (=Windows= 下用 ~<Win>+<shift>+s~) 将截图保存到剪贴板
+- =M-x org-download-screenshot= 将剪贴板中图片粘贴到org文件中.
+
+org-toggle-inline-images
+
+
+*自定义函数*
+
+- j-org-download.el[[#h:j-org-download][(=j-org-download.el= 库)]]
+
+#+begin_src emacs-lisp :tangle "lisp/init-org.el"
+  ;;; 截图
+  (use-package j-org-download
+    :ensure nil
+    :demand t
+    :bind
+    ("<f2>" . my/org-insert-clipboard-image))
+#+end_src
+
+提示输入图片显示大小，默认800px, 可以指定如 80%显示。
+
+可以使用压缩工具来压缩图片，这样使用的ffmpeg媒体流处理工具。官方下载安装配置path路径就可使用。
+
+
+*改变图片大小*
+
+显示和关闭内嵌图片 =M-x org-toggle-inline-images=
+
+#+begin_example
+  ,#+CAPTION:  <图片标题>
+  ,#+ATTR_ORG: :width 800px
+  ,#+ATTR_HTML: :width 800px
+#+end_example
+
+
+默认在org中 =org-image-actual-width= 变量值t, 显示的图片大小是实际图片大小.
+修改变量的值，按指定大小显示。
+
+#+begin_example
+  - 配置文件中设置变量的值
+  (setq org-image-actual-width nil)
+
+  - 单独为文件设置局部变量，方法是在 org 文件的第1行加下面内容
+  # -*- org-image-actual-width: nil; -*-
+#+end_example
+
+*使用yasnippets创建图片属性段*
+
+
+- =M-x yas-new-snippet= 创建新代码片段
+
+  #+begin_example
+    # -*- mode: snippet -*-
+    # key: imw
+    # name: image-width
+    # --
+    ,#+DOWNLOADED: screenshot @ `(format-time-string "%Y%m%d %a %H:%M:%S" (current-time))`
+    ,#+CAPTION: $0
+    ,#+ATTR_ORG: :width ${1:80%}
+    ,#+ATTR_HTML: :width ${2:80%}
+  #+end_example
+
+  =$0= 光标位置， =$1..n= 使用tab, shift-tab切换占位符位置，可以设置默认值如 =${1:aa}=
+
+  =`()`= 可以写lisp语法
+- =C-c C-c=完成编程，选择片段生效的模式，保存指定位置 =~/.emacs.d/snippets/org-mode/<name>=
+- =M-x yas-describe-tables= 查看
+- =M-x yas-visit-snippet-file= 编辑
+
+imw后按TAB键补全
+#+begin_example
+,#+DOWNLOADED: screenshot @ 20240728 周日 12:29:42
+,#+CAPTION: 
+,#+ATTR_ORG: :width 80%
+,#+ATTR_HTML: :width 80%
+#+end_example
+
+*** =init-org.el= 从网页摘取内容 Org Protocol
+:PROPERTIES:
+:CUSTOM_ID: h:org-protocol
+:END:
+
+
+官方文档：<https://orgmode.org/worg/org-contrib/org-protocol.html>
+
+从网页摘取内容
+
+1.Step 1: Get emacsclient to work
+
+设置快速打开emacs. Emacs 需要开启 Server Mode，代码如下：
+#+begin_src emacs-lisp :tangle no
+  (server-mode 1)
+  (require 'org-protocol) ; 加载内置包
+#+end_src
+
+
+2.创建注册表文件 org-protocol.reg
+
+指定emacsclientw位置
+
+PC
+#+begin_example
+Windows Registry Editor Version 5.00
+
+[HKEY_CLASSES_ROOT\org-protocol]
+"URL Protocol"=""
+@="URL:Org Protocol"
+
+[HKEY_CLASSES_ROOT\org-protocol\shell]
+
+[HKEY_CLASSES_ROOT\org-protocol\shell\open]
+
+[HKEY_CLASSES_ROOT\org-protocol\shell\open\command]
+@="\"D:\\msys64\\mingw64\\bin\\emacsclientw.exe\"  \"%1\""
+#+end_example
+
+双击注册文件运行。
+
+3.add org templates
+
+定义capture模板，用来快速摘取网页内容[[#h:org-capture][(=init-org.el= org capture)]]
+
+#+begin_src emacs-lisp :tangle no
+(setq org-agenda-file-note (expand-file-name "~/notes.org"))
+(setq org-capture-templates
+      '(
+        ("x" "Web Collections" entry
+         (file+headline org-agenda-file-note "Web")
+         "* %U %:annotation\n\n%:initial\n\n%?")
+        ))
+#+end_src
+
+4.add chrome bookmark
+
+在chrome浏览器上添加新标签，将下面js代码复制进行地址，标签名自定义，保存
+
+#+begin_example
+javascript:location.href='org-protocol://capture?template=x&url=%27+encodeURIComponent(location.href)+%27&title=%27+encodeURIComponent(document.title)+%27&body=%27+encodeURIComponent(function(){var html = "";var sel = window.getSelection();if (sel.rangeCount) {var container = document.createElement("div");for (var i = 0, len = sel.rangeCount; i < len; ++i) {container.appendChild(sel.getRangeAt(i).cloneContents());}html = container.innerHTML;}var dataDom = document.createElement(%27div%27);dataDom.innerHTML = html;dataDom.querySelectorAll(%27a%27).forEach(function(item, idx) {console.log(%27find a link%27);var url = new URL(item.href, window.location.href).href;var content = item.innerText;item.innerText = %27[[%27+url+%27][%27+content+%27]]%27;});[%27p%27, %27h1%27, %27h2%27, %27h3%27, %27h4%27].forEach(function(tag, idx){dataDom.querySelectorAll(tag).forEach(function(item, index) {var content = item.innerHTML.trim();if (content.length > 0) {item.innerHTML = content + %27&#13;&#10;';}});});return dataDom.innerText.trim();}())
+#+end_example
+
+使用： 选中网页文字, 点击标签。网页的内容就会写到org-capture中，=C-c C-c= 完成，
+内容被保存在 =~/notes.org=
+
+5.return follow link
+
+在org中的光标在连接位置回车不能打开链接。如下设置回车后可在浏览器中打开。
+
+#+begin_src emacs-lisp :tangle no :results none
+(setq org-return-follows-link t)  ; 链接位置回车，使用外部程序打开
+#+end_src
+
+*** =init-org.el= 拼写检查 Spell checking
+:PROPERTIES:
+:CUSTOM_ID: h:org-spell
+:END:
+
+
+#+begin_src emacs-lisp :tangle "lisp/init-org.el"
+  (use-package flyspell-correct
+    :ensure t
+    :init)
+
+  ;; ispell 为内置包，需要使用外部程序来做语法检查
+  (use-package ispell
+    :ensure nil
+    :init
+    (setq ispell-program-name "aspell")
+    (dolist (hook '(text-mode-hook))
+      (add-hook hook (lambda () (flyspell-mode 1))))
+    (setq ispell-personal-dictionary "d:/msys64/mingw64/lib/aspell-0.60/en_GB")
+    )
+
+  (define-key evil-insert-state-map (kbd "C-;") 'flyspell-correct-previous)
+#+end_src
+
+*Install spell*
+
+PC: mysys2 中安装
+#+begin_src sh  :tangle no :results none
+  pacman -S mingw64/mingw-w64-x86_64-aspell    #程序
+  pacman -S mingw64/mingw-w64-x86_64-aspell-en #英语语法检查文件
+#+end_src
+
+*Configuration*
+
+1.add "*C:\msys64\mingw64\bin" to to PATH
+2.Error: The file "c:\msys64\mingw64/lib/aspell-0.60/﻿en_US" can not be opened for reading.
+
+使用：
+- =M-x ispell-minor-mode= =flyspell-mode= 手动激活
+- =M-x flyspell-correct-previous= 或使用绑定的快捷键 =C;= 选择正常的拼写
+
+*** =init-org.el= 翻译 Fanyi Dictionary
+:PROPERTIES:
+:CUSTOM_ID: h:org-fanyi
+:END:
+
+
+有多种翻译工具，这里使用fanyi软件包
+
+#+begin_src emacs-lisp :tangle no
+  ;;; 有道翻译
+  (use-package youdao-dictionary
+    :ensure t
+    :commands (youdao-dictionary-search-at-point+)
+    :init
+    (global-set-key (kbd "C-c y") 'youdao-dictionary-search-at-point+))
+#+end_src
+
+#+begin_src emacs-lisp :tangle "lisp/init-org.el"
+  ;;; fanyi翻译
+  (use-package fanyi
+    :ensure t
+    :custom
+    (fanyi-providers '(;; 海词
+                       ;; fanyi-haici-provider
+                       ;; 有道同义词词典
+                       fanyi-youdao-thesaurus-provider
+                       ;; Etymonline
+                       fanyi-etymon-provider
+                       ;; Longman
+                       ;; fanyi-longman-provider)
+                     )))
+#+end_src
+
+fanyi使用
+- 光标停在单词处执行 =M-x fanyi-dwim2=
+
+*Some useful keybindings*
+
+#+begin_example
+C-RET  for creating new headlines
+M-RET  for creating new lists
+M-left/right/up/down
+#+end_example
+
+*** =init-org.el= 双链笔记 =org-Roam=
+
+双链笔记系统
+
+*安装 Org Oram*
+
+在 HOME 新建一个 org 目录夹，用来存储你的 org roam 笔记。
+
+#+begin_src emacs-lisp :tangle "lisp/init-org.el"
+  (use-package org-roam
+    :ensure t
+    :custom
+    (org-roam-directory (file-truename "~/org"))  ; 默认笔记目录，提前手动创建好
+    :bind (("C-c n l" . org-roam-buffer-toggle)  ; 显示反向链接
+           ("C-c n f" . org-roam-node-find)      ; 查找
+           ("C-c n g" . org-roam-graph)
+           ("C-c n i" . org-roam-node-insert)    ; 插入
+           ("C-c n c" . org-roam-capture)        ; 捕获
+           ;; Dailies
+           ("C-c n j" . org-roam-dailies-capture-today)) ; 记日志功能
+    :config
+    ;; If you're using a vertical completion framework, you might want a more informative completion interface
+    ;; 可以按标题搜索、tags搜索
+    (setq org-roam-node-display-template (concat "${title:*} " (propertize "${tags:10}" 'face 'org-tag)))
+    (org-roam-db-autosync-mode)    ; 刷新数据 sqlite3 库 ~/.emacs.d/org-roam.db
+    ;; If using org-roam-protocol
+    (require 'org-roam-protocol))
+#+end_src
+
+*Org roam 基本使用*
+
+新建笔记和查找笔记
+
+- org-roam-node-find(=C-c n f=) 如果没有，会创建新节点. 如节点名为 Elisp
+  - 输入节点名， =Alt-回车= 创建
+- 在新建节点上 =C-c C-c= 保存
+- org-roam-capture(=C-c n c=)
+
+  创建一条新笔记. 未来可以预设不同主题的默认模板. 每一条笔记就是一个 org 文件
+
+- org-roam-insert(=C-c n i=)
+
+  插入一条笔记的链接
+
+  在查找笔记时利用 org-roam-find 的界面
+
+  若笔记不存在, 则利用 org-roam-capture 的界面创建笔记
+  
+- =C-c C-k= 删除当前capture
+  
+加tags
+- 添加tag =M-x org-roam-tag-add= , 使用 C-c n f 可以看到对应的tag
+
+建立笔记引用
+
+#+begin_example
+  [[]]
+  如：
+  [[输入要引用的节点名称，自动补全]]
+#+end_example
+
+查找引用
+- =M-x org-roam-buffer-toggle=
+
+已有的 headline 转换为一个节点
+- =M-x org-id-get-create=  标题下会多个ID，
+- =M-x refile node 把当前标题移动一个已存在节点上.
+
+刷新数据库
+
+所有文件都保存后刷新库
+
+- 自动更新: 通过 (org-roam-db-autosync-mode) 实现
+- 手动更新 =M-x org-roam-db-sync=
+
+**** =init-org.el= org =org-roam-ui=
+org-roam-ui 在pc下安装存在问题。系统默认按linux 系统安装tar解压. windows 上面需要使用 system32/tar 这个程序去解压。
+  
+解决方式： 使用vc来安装. 在emacs30已经集成(package-vc.el)
+
+
+方法如下
+
+*直接从 github 安装插件*
+
+
+#+begin_src emacs-lisp :tangle no
+  (use-package org-roam-ui
+    :ensure nil
+    :vc (:fetcher "github" :repo "org-roam/org-roam-ui"))
+#+end_src
+
+#+begin_src emacs-lisp :tangle "lisp/init-org.el"
+  (use-package org-roam-ui
+    :ensure t
+    :after org-roam)
+#+end_src
+
+鼠标操作, 节点右键从emacs中打开笔记
+
+可视化
+
+实时显示链接
 
 #+begin_src emacs-lisp :tangle "lisp/init-org.el"
   (message "Load init-org done...")
@@ -3130,8 +3662,6 @@ SCHEDULED: <2022-06-17 Fri 10:00 +1d>
 :PROPERTIES:
 :CUSTOM_ID: h:personspace
 :END:
-
-在学习章节提到过[[#h:learn-personspace][(工作区间管理)]]
 
 *** =init-window.el= 窗口 =tab-bar(built-in)=
 
@@ -3199,6 +3729,7 @@ SCHEDULED: <2022-06-17 Fri 10:00 +1d>
     ;; use this next line only if you also use straight, otherwise ignore it.
     :ensure t
     :hook (after-init . tabspaces-mode) ;; use this only if you want the minor-mode loaded at startup.
+    :defer t
     :commands (tabspaces-switch-or-create-workspace
                tabspaces-open-or-create-project-and-workspace)
     :custom
@@ -3207,8 +3738,8 @@ SCHEDULED: <2022-06-17 Fri 10:00 +1d>
     (tabspaces-remove-to-default t)
     (tabspaces-include-buffers '("*scratch*"))
     ;; maybe slow 关闭emacs后自动恢复工作空间。怕影响性能可以注释掉
-    (tabspaces-session t)
-    (tabspaces-session-auto-restore t)
+    ;;(tabspaces-session t)
+    ;;(tabspaces-session-auto-restore t)
     :config
     ;; Filter Buffers for Consult-Buffer
 
@@ -3469,7 +4000,7 @@ https://github.com/renzmann/treesit-auto
 :CUSTOM_ID: h:c++-consult-imenu
 :END:
 
-在学习章节提到过[[#h:learn-c++-treesit][(使用 Treesit + eglot 来打造现代编程 IDE)]]
+在学习章节提到过[[h:learn-c++-treesit][(使用 Treesit + eglot 来打造现代编程 IDE)]]
 
 #+begin_src emacs-lisp :tangle no :results none
 (+general-global-menu! "search" "s"
@@ -3534,10 +4065,16 @@ vim 模式是
     # key: <key>  指Snippet的名称
     # contributor : Jasper Hsu <xcwhome@163.com>  作者信息
     # --
-    (message "hello from my yasnippet")$0
+    `(message "hello from my yasnippet")`$0
+    Hello ${1:world)
   #+end_example
+
+  =$0= 光标位置， =$1..n= 使用tab, shift-tab切换占位符位置，可以设置默认值如 =${1:aa}=
+
+  =`()`= 可以写lisp语法
 - =C-c C-c=完成编程，选择片段生效的模式，保存指定位置 =~/.emacs.d/snippets/<xxx>-mode/<name>=
 - =M-x yas-describe-tables= 查看
+- =M-x yas-visit-snippet-file= 编辑
 
 **** =init-programming.el= 在头文件和源文件之间进行跳转
 
@@ -3553,12 +4090,6 @@ ff-find-related-file
 
 ** =init-keybindings.el=
 
-*** =init-keybindings.el= config
-
-#+begin_src emacs-lisp :tangle "lisp/init-keybindings.el" :mkdirp yes
-  ;;; config
-#+end_src
-
 *** =init-keybindings.el= 文件搜索
 :PROPERTIES:
 :CUSTOM_ID: h:keybindings-search-file
@@ -3566,7 +4097,8 @@ ff-find-related-file
 
 配置划分成不同文件，好以后方式方便查找
 
-#+begin_src emacs-lisp :tangle "lisp/init-keybindings.el"
+#+begin_src emacs-lisp :tangle "lisp/init-keybindings.el" :mkdirp yes
+  ;;; config
   ;;; 文件搜索
   (global-set-key (kbd "C-c p f") 'project-find-file) ;;   查找文件，默认绑定在 C-x p f
   (global-set-key (kbd "C-c p s") 'consult-ripgrep)  ;;  查找文件内容
@@ -3592,8 +4124,9 @@ general插件中global-definer在init-basic.el中定义[[#h:basic-general][(=ini
     :init
     ;; global-definer 对应leader键为空格 SPC
     (global-definer
-      "!" 'shell-command ;空格+! SPC ! 进入shell命令行
-      "SPC" 'execute-extended-command ; 按2下空格SPC-SPC就可以实现 M-x 的效果
+      "!" 'shell-command                ; 空格+! SPC ! 进入shell命令行
+      "SPC" 'execute-extended-command   ; 按2下空格SPC-SPC就可以实现 M-x 的效果
+      "TAB" 'spacemacs/alternate-buffer ; SPC TAB 在最近的2个buffer之间切换
       "'" 'vertico-repeat
       "+" 'text-scale-increase
       "-" 'text-scale-decrease
@@ -3640,8 +4173,8 @@ general插件中global-definer在init-basic.el中定义[[#h:basic-general][(=ini
       "i" 'ibuffer
       "f" 'my-open-current-directory
       "k" 'kill-buffer
-      "y" 'copy-buffer-name
-      "K" 'kill-other-buffers)
+      "y" 'fast/copy-buffer-name
+      "K" 'fast/kill-other-buffers)
 
     (+general-global-menu! "layout" "l"
       "l" 'tabspaces-switch-or-create-workspace           ; SPC l l 切换工作空间(1)
@@ -3658,16 +4191,16 @@ general插件中global-definer在init-basic.el中定义[[#h:basic-general][(=ini
 
     ;; SPC f 针对文件快捷键
     (+general-global-menu! "file" "f"
-      "f" 'find-file
+      "f" 'find-file               ; SPC f f 查找文件
       "r" 'consult-recent-file     ; SPC f r 列出最近打开过的文件(常用)
       "L" 'consult-locate          ; SPC f L 文件查找
       "d" 'consult-dir
-      "ed" 'open-my-init-file
-      "s" 'save-buffer
+      "ed" 'fast/open-my-init-file
+      "s" 'save-buffer             ; SPC f s 保存文件
       "w" 'sudo-edit
       "S" 'save-some-buffers
-      "j"  'dired-jump
-      "y" 'copy-file-name
+      "j"  'dired-jump             ; SPC f j 跳到目录
+      "y" 'fast/copy-file-name
       "R" 'my/rename-current-buffer-file
       "k" 'my/delete-file-and-buffer
       "!" 'my/exec-shell-on-buffer)
@@ -3720,13 +4253,23 @@ general插件中global-definer在init-basic.el中定义[[#h:basic-general][(=ini
 
 
 #+begin_src emacs-lisp :tangle "lisp/init-funcs.el" :mkdirp yes
-  ;;; 快速打开配置文件
-  (defun open-init-file()
-    (interactive)
-    (find-file "~/.emacs.d/init.el"))
+  ;;(defun open-init-file()
+  ;;  (interactive)
+  ;;  (find-file "~/.emacs.d/init.el"))
+  ;;
+  ;;;; 这一行代码，将函数 open-init-file 绑定到 <f4> 键上
+  ;;(global-set-key (kbd "<f4>") 'open-init-file)
 
-  ;; 这一行代码，将函数 open-init-file 绑定到 <f4> 键上
-  (global-set-key (kbd "<f4>") 'open-init-file)
+
+  ;;; 快捷使用emacs
+  (use-package j-emacs-fast
+    :ensure nil
+    :demand t
+    :diminish
+    :bind 
+    ( :map global-map
+      ("<f4>" . fast/open-my-init-file) ; 快速打开配置文件
+      ))
 #+end_src
 
 #+begin_src emacs-lisp :tangle "lisp/init-funcs.el"
@@ -3735,7 +4278,7 @@ general插件中global-definer在init-basic.el中定义[[#h:basic-general][(=ini
 #+end_src
 
 
-* 我的自定义库 
+* 我的自定义库(=j-lisp/=)
 
 一个自定义库会对某一个软件包做扩展，软件包配置文件会分别引用它们。
 
@@ -4103,3 +4646,358 @@ general插件中global-definer在init-basic.el中定义[[#h:basic-general][(=ini
   ;;; j-highlight-global.el ends here
 #+end_src
 
+** =j-org-download.el= 库
+:PROPERTIES:
+:CUSTOM_ID: h:j-org-download
+:END:
+
+
+
+#+begin_src emacs-lisp :tangle "j-lisp/j-org-download.el"
+  ;;; j-org-download.el --- Extensions for org -*- lexical-binding: t -*-
+
+  ;; Copyright (C) 2024  Jasper Hsu
+
+  ;; Author: Jasper Hsu <xcwhome@163.com>
+  ;; URL: https://xuchangwei.com/lisp/jasper-emacs.html
+  ;; Version: 0.1.0
+  ;; Package-Requires: ((emacs "30.1"))
+
+  ;; This file is NOT part of GNU Emacs.
+
+  ;; This program is free software; you can redistribute it and/or modify
+  ;; it under the terms of the GNU General Public License as published by
+  ;; the Free Software Foundation, either version 3 of the License, or (at
+  ;; your option) any later version.
+  ;;
+  ;; This program is distributed in the hope that it will be useful,
+  ;; but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ;; GNU General Public License for more details.
+  ;;
+  ;; You should have received a copy of the GNU General Public License
+  ;; along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+  ;;; Commentary:
+  ;;
+  ;; Remember that every piece of Elisp that I write is for my own
+  ;; educational and recreational purposes.  I do not recommend that
+  ;; you copy any of this if you are not certain of what it does.
+
+  ;;; Code:
+
+  ;;;; 截图
+  ;; 将剪切板中内容粘贴到org文件中
+
+  ;;;###autoload
+  (defun my/org-insert-clipboard-image (width)
+    "保存目录 `foldername'
+  图片名称 `imgName'
+  图片显示与关闭 `org-redisplay-inline-images'
+  图片的质量跟是否采用压缩有关"
+    (interactive (list
+                  (read-string (format "Input image width, default is 800: ")
+                               nil nil "800")))
+    ;; 设置图片存放的文件夹位置为 `当前Org文件同名.assets'
+    (setq foldername "./images/")
+    (if (not (file-exists-p foldername))
+        (mkdir foldername))
+    ;; 设置图片的文件名，格式为 `img_年月日_时分秒.png'
+    (setq srcImgName (concat "img_" (format-time-string "%Y%m%d_%H%M%S") "_src.png"))
+    (setq imgName (concat "img_" (format-time-string "%Y%m%d_%H%M%S") ".png"))
+    ;; 图片文件的相对路径
+    (setq srcRelativeFilename (concat "./images/" srcImgName))
+    (setq relativeFilename (concat "./images/" imgName))
+    ;; 根据不同的操作系统设置不同的命令行工具
+    (cond ((string-equal system-type "gnu/linux")
+           (shell-command (concat "xclip -selection clipboard -t image/png -o > " relativeFilename)))
+          ((string-equal system-type "darwin")
+           (shell-command (concat "pngpaste " relativeFilename)))
+          ((string-equal system-type "windows-nt")
+           ;; 原 (shell-command (concat "powershell -command \"Add-Type -AssemblyName System.Windows.Forms;if ($([System.Windows.Forms.Clipboard]::ContainsImage())) {$image = [System.Windows.Forms.Clipboard]::GetImage();[System.Drawing.Bitmap]$image.Save('"relativeFilename "',[System.Drawing.Imaging.ImageFormat]::Png); Write-Output 'clipboard content saved as file'} else {Write-Output 'clipboard does not contain image data'}\""))))
+           ;; 简单压缩 (shell-command (concat "powershell -command \"Add-Type -AssemblyName System.Windows.Forms; if ($([System.Windows.Forms.Clipboard]::ContainsImage())) { $image = [System.Windows.Forms.Clipboard]::GetImage(); $image.Save('"srcRelativeFilename "', [System.Drawing.Imaging.ImageFormat]::Png); Write-Output 'Clipboard content saved as file'; & ffmpeg -i "srcRelativeFilename " -q:v 4 -loglevel quiet -y "relativeFilename " } else { Write-Output 'Clipboard does not contain image data' }\""))))
+           ;; (shell-command (concat "powershell -command \"Add-Type -AssemblyName System.Windows.Forms; if ($([System.Windows.Forms.Clipboard]::ContainsImage())) { $image = [System.Windows.Forms.Clipboard]::GetImage(); $image.Save('"srcRelativeFilename "', [System.Drawing.Imaging.ImageFormat]::Png); Write-Output 'Clipboard content saved as file'; & ffmpeg -i "srcRelativeFilename " -q:v 4 -loglevel quiet -y "relativeFilename " ;& Remove-Item -Path "srcRelativeFilename" -Force} else { Write-Output 'Clipboard does not contain image data' }\""))))
+           ;;调色板压缩 (shell-command (concat "powershell -command \"Add-Type -AssemblyName System.Windows.Forms; if ($([System.Windows.Forms.Clipboard]::ContainsImage())) { $image = [System.Windows.Forms.Clipboard]::GetImage(); $image.Save('"srcRelativeFilename "', [System.Drawing.Imaging.ImageFormat]::Png); Write-Output 'Clipboard content saved as file'; ffmpeg -i "srcRelativeFilename " -vf 'palettegen=max_colors=256:stats_mode=single' -loglevel quiet -y  out_3.png ; ffmpeg -i "srcRelativeFilename " -i out_3.png -lavfi '[0][1:v] paletteuse' -pix_fmt pal8 -loglevel quiet -y "relativeFilename "} else { Write-Output 'Clipboard does not contain image data' }\""))))
+           (shell-command (concat "powershell -command \"Add-Type -AssemblyName System.Windows.Forms; if ($([System.Windows.Forms.Clipboard]::ContainsImage())) { $image = [System.Windows.Forms.Clipboard]::GetImage(); $image.Save('"srcRelativeFilename "', [System.Drawing.Imaging.ImageFormat]::Png); Write-Output 'Clipboard content saved as file'; ffmpeg -i "srcRelativeFilename " -vf 'palettegen=max_colors=256:stats_mode=single' -loglevel quiet -y  out_3.png ; ffmpeg -i "srcRelativeFilename " -i out_3.png -lavfi '[0][1:v] paletteuse' -pix_fmt pal8 -loglevel quiet -y "relativeFilename "; Remove-Item -Path "srcRelativeFilename" -Force ; Remove-Item -Path out_3.png  -Force} else { Write-Output 'Clipboard does not contain image data' }\""))))
+    ;; 给粘贴好的图片链接加上宽度属性，方便导出
+    (insert (concat "\n#+DOWNLOADED: screenshot @ "
+                    (format-time-string "%Y-%m-%d %a %H:%M:%S" (current-time))
+                    "\n#+CAPTION: \n#+ATTR_ORG: :width "
+                    width
+                    "\n#+ATTR_LATEX: :width "
+                    (if (>= (/ (string-to-number width) 800.0) 1.0)
+                        "1.0"
+                      (number-to-string (/ (string-to-number width) 800.0)))
+                    "\\linewidth :float nil\n"
+                    "#+ATTR_HTML: :width "
+                    width
+                    "\n[[file:" relativeFilename "]]\n"))
+    ;; 重新显示一下图片
+    (org-redisplay-inline-images)
+    (message "OKKKKKK")
+    )
+
+  ;;(global-set-key (kbd "<f2>") 'my/org-insert-clipboard-image)
+
+
+  (provide 'j-org-download)
+  ;;; j-org-download.el ends here
+#+end_src
+
+** =j-emacs-fast.el= 库
+:PROPERTIES:
+:CUSTOM_ID: h:j-emacs-fast
+:END:
+
+
+#+begin_src emacs-lisp :tangle "j-lisp/j-emacs-fast.el"
+  ;;; j-emacs-fast.el --- Extensions for org -*- lexical-binding: t -*-
+
+  ;; Copyright (C) 2024  Jasper Hsu
+
+  ;; Author: Jasper Hsu <xcwhome@163.com>
+  ;; URL: https://xuchangwei.com/lisp/jasper-emacs.html
+  ;; Version: 0.1.0
+  ;; Package-Requires: ((emacs "30.1"))
+
+  ;; This file is NOT part of GNU Emacs.
+
+  ;; This program is free software; you can redistribute it and/or modify
+  ;; it under the terms of the GNU General Public License as published by
+  ;; the Free Software Foundation, either version 3 of the License, or (at
+  ;; your option) any later version.
+  ;;
+  ;; This program is distributed in the hope that it will be useful,
+  ;; but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ;; GNU General Public License for more details.
+  ;;
+  ;; You should have received a copy of the GNU General Public License
+  ;; along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+  ;;; Commentary:
+  ;;
+  ;; Remember that every piece of Elisp that I write is for my own
+  ;; educational and recreational purposes.  I do not recommend that
+  ;; you copy any of this if you are not certain of what it does.
+
+  ;;; Code:
+
+  ;;;; 放置一些快捷使用emacs函数
+
+  ;;; Dos2Unix/Unix2Dos
+  (defun fast/dos2unix ()
+    "Convert the current buffer to UNIX file format."
+    (interactive)
+    (set-buffer-file-coding-system 'undecided-unix nil))
+
+  (defun fast/unix2dos ()
+    "Convert the current buffer to DOS file format."
+    (interactive)
+    (set-buffer-file-coding-system 'undecided-dos nil))
+
+
+  ;;; 文件操作
+  (defun fast/open-my-init-file()
+    "快速打开主配置文件"
+    (interactive)
+    (find-file (expand-file-name "init.el" user-emacs-directory )))
+
+  (defun fast/copy-file-name ()
+    "复制文件绝对路径，使用 =C-y= 粘贴
+  Copy the current buffer file name to the clipboard."
+    (interactive)
+    (if-let ((filename (if (equal major-mode 'dired-mode)
+                           default-directory
+                         (buffer-file-name))))
+        (progn
+          (kill-new filename)
+          (message "Copied '%s'" filename))
+      (warn "Current buffer is not attached to a file!")))
+
+  ;;; buffer缓冲区
+  (defun fast/copy-buffer-name ()
+    "复制缓冲区名
+  Copy name of the current buffer."
+    (interactive)
+    (kill-new (buffer-name)))
+
+  (defun fast/kill-other-buffers ()
+    "杀掉其他缓冲区
+  Kill all other buffers."
+    (interactive)
+    (mapc 'kill-buffer
+          (delq (current-buffer)
+                (cl-remove-if-not 'buffer-file-name (buffer-list)))))
+
+  ;;; 返回上一个buffer
+  (defun spacemacs/alternate-buffer (&optional window)
+    "Switch back and forth between current and last buffer in the
+  current window.
+  If `spacemacs-layouts-restrict-spc-tab' is `t' then this only switches between
+  the current layouts buffers."
+    (interactive)
+    (cl-destructuring-bind (buf start pos)
+        (if (bound-and-true-p spacemacs-layouts-restrict-spc-tab)
+            (let ((buffer-list (persp-buffer-list))
+                  (my-buffer (window-buffer window)))
+              ;; find buffer of the same persp in window
+              (seq-find (lambda (it) ;; predicate
+                          (and (not (eq (car it) my-buffer))
+                               (member (car it) buffer-list)))
+                        (window-prev-buffers)
+                        ;; default if found none
+                        (list nil nil nil)))
+          (or (cl-find (window-buffer window) (window-prev-buffers)
+                       :key #'car :test-not #'eq)
+              (list (other-buffer) nil nil)))
+      (if (not buf)
+          (message "Last buffer not found.")
+        (set-window-buffer-start-and-point window buf start pos))))
+
+  (provide 'j-emacs-fast)
+  ;;; j-emacs-fast.el ends here
+#+end_src
+
+
+
+* Emacs 配置问题排查
+
+配置最好用git管理起来。
+
+** 配置有问题，启动不了怎么办？
+
+#+begin_src sh
+emacs-debug –init
+#+end_src
+
+** 不能安装包，提示签名错误
+
+Failed to verify signature archive-contents.sig
+
+#+begin_example
+(setq package-check-signature nil)
+#+end_example
+
+** 包解压失败，
+
+a pax extended header, 包解压失败，可以使用 use-package :vc 直接安装
+
+使用 mysys2 的时候，系统会使用 unix 的 tar 去解压会有问题 windows 上面需要使用 system32/tar 这个程序去解压。
+
+解决办法可以是
+#+begin_src  sh :tangle no
+mv /usr/bin/tar /usr/bin/tarbak
+#+end_src
+
+
+* 优化性能，借鉴其他人的配置
+
+how to Profile performace
+
+** 运行时性能
+
+- =M-x profiler-start= 选择cpu+mem
+- 复现卡的操作。比如光标移动卡顿，反复重现
+- =M-x profiler-report= 打开报告，分析
+
+** 度量启动性能
+
+#+begin_src emacs-lisp :tangle no
+  (use-package benchmark-init
+    :ensure t
+    :demand t
+    :config
+    ;; To disable collection of benchmark data after init is done.
+    (add-hook 'after-init-hook 'benchmark-init/deactivate))
+#+end_src
+
+- =benchmark-init/show-durations-tree= 树状展示耗时
+- =benchmark-init/show-durations-tabulated= 排序展示， 鼠标点击字段进行排序。 分析
+
+启动时间
+#+begin_src emacs-lisp :tangle no
+  (defun efs/display-startup-time ()
+    (message "启动加载时间Emacs loaded in %s with %d garbage collections."
+             (format "%.2f seconds"
+                     (float-time
+                     (time-subtract after-init-time before-init-time)))
+             gcs-done))
+
+  (add-hook 'emacs-startup-hook #'efs/display-startup-time)
+#+end_src
+
+减小gc次数
+- 在开始加载时gc设置大些，加载完成后gc调小
+
+#+begin_src emacs-lisp :tangle no
+  ;;; beginning of init.el
+  ;; The default is 800 kilobytes.  Measured in bytes.
+  (setq gc-cons-threshold (* 50 1000 1000))
+
+  ;; ................
+
+  ;;; end of init.el
+  ;; Make gc pauses faster by decreasing the threshold.
+  (setq gc-cons-threshold (* 2 1000 1000))
+#+end_src
+
+不要加载任何包裹！ 
+
+use-package 哪些操作可以优化性能, 几种不同的方法来延迟包加载：
+- :hook - 首次调用其中一个钩子时，将加载包
+- :bind - 首次使用其中一个键绑定时，将加载包
+- :commands - 当使用其中一个命令时，将加载包
+- :mode - 首次打开具有特定扩展名的文件时，将加载包
+- :after - 在其他特定包加载后加载此包
+- :defer - 如果您不使用任何其他选项，则此选项将延迟加载到启动后
+
+<https://systemcrafters.net/emacs-from-scratch/cut-start-up-time-in-half/>
+
+** 借鉴大佬的配置，作为框架
+
+社区配置
+
+Spacemacs & DoomEmacs
+
+个人配置
+- https://github.com/purcell/emacs.d
+- https://github.com/bbatsov/prelude
+- https://github.com/bbatsov/prelude
+- https://github.com/seagle0128/.emacs.d
+- https://github.com/zilongshanren/emacs.d （子龙山人）
+
+** 小技巧：
+
+#+begin_src emacs-lisp :tangle no :results none
+  ;;; 返回上一个buffer
+  (defun spacemacs/alternate-buffer (&optional window)
+    "Switch back and forth between current and last buffer in the
+  current window.
+  If `spacemacs-layouts-restrict-spc-tab' is `t' then this only switches between
+  the current layouts buffers."
+    (interactive)
+    (cl-destructuring-bind (buf start pos)
+        (if (bound-and-true-p spacemacs-layouts-restrict-spc-tab)
+            (let ((buffer-list (persp-buffer-list))
+                  (my-buffer (window-buffer window)))
+              ;; find buffer of the same persp in window
+              (seq-find (lambda (it) ;; predicate
+                          (and (not (eq (car it) my-buffer))
+                               (member (car it) buffer-list)))
+                        (window-prev-buffers)
+                        ;; default if found none
+                        (list nil nil nil)))
+          (or (cl-find (window-buffer window) (window-prev-buffers)
+                       :key #'car :test-not #'eq)
+              (list (other-buffer) nil nil)))
+      (if (not buf)
+          (message "Last buffer not found.")
+        (set-window-buffer-start-and-point window buf start pos))))
+#+end_src
+
+按键绑定：
+
+#+begin_example
+"TAB" 'spacemacs/alternate-buffer
+#+end_example
