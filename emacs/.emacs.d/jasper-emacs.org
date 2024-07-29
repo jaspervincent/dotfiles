@@ -52,7 +52,12 @@ xx.el 已经写好了，但并没有生效，需要重启一下Emacs，让Emacs�
 
 ** 安装
 
-本文emacs安装在windows环境中，使用 [[https://www.msys2.org/][msys2]] 工具安装。
+本文emacs安装在windows环境中，使用 [[https://www.msys2.org/][msys2]] 工具安装。如安装到 =D:\msys64=, 并设置PATH变量(=D:\msys64\mingw64\bin=, =D:\msys64\usr\bin=)
+
+更新msys2, 如下更新命令执行2遍
+#+begin_src sh :tangle no :results none
+  pacman -Suy
+#+end_src
 
 添加msys2右键菜单： 创建 emacs-shell.reg注册表添加如下内容，双击执行即可
 #+begin_example
@@ -66,10 +71,18 @@ xx.el 已经写好了，但并没有生效，需要重启一下Emacs，让Emacs�
   @="d:\\msys64\\msys2_shell.cmd -mingw64 -here"
 #+end_example
 
+安装emacs
+#+begin_src sh :tangle no :results none
+  pacman -S mingw-w64-x86_64-emacs
+#+end_src
+
 *** 二进制安装
 
 
 *** 源码安装
+
+- https://savannah.gnu.org/projects/emacs/ (官方地址，推荐)
+- https://github.com/emacs-mirror/emacs (github镜像)
 
 下载源码，查看INSTALL文件中不同操作系统安装指引
 
@@ -78,6 +91,9 @@ nt/INSTALL.W64
 
 参考：<https://eason0210.github.io/post/install-gccemacs/>
 
+#+begin_src sh :tangle no :results none
+  git clone -b master git://git.sv.gnu.org/emacs.git
+#+end_src
 
 
 
@@ -2475,7 +2491,7 @@ general插件中global-definer在init-basic.el中定义[[#h:basic-general][(=ini
   ;;; 使用社区稳定的按键绑定。 并设置不同模式中默认的evil状态
   (use-package evil-collection
     :ensure t
-    :demand t
+    :after evil
     :config
     (setq evil-collection-mode-list (remove 'lispy evil-collection-mode-list)) ; 移除社区中插件的改键对你键位影响
     (evil-collection-init)
@@ -3445,18 +3461,18 @@ imw后按TAB键补全
 
 PC
 #+begin_example
-Windows Registry Editor Version 5.00
+  Windows Registry Editor Version 5.00
 
-[HKEY_CLASSES_ROOT\org-protocol]
-"URL Protocol"=""
-@="URL:Org Protocol"
+  [HKEY_CLASSES_ROOT\org-protocol]
+  "URL Protocol"=""
+  @="URL:Org Protocol"
 
-[HKEY_CLASSES_ROOT\org-protocol\shell]
+  [HKEY_CLASSES_ROOT\org-protocol\shell]
 
-[HKEY_CLASSES_ROOT\org-protocol\shell\open]
+  [HKEY_CLASSES_ROOT\org-protocol\shell\open]
 
-[HKEY_CLASSES_ROOT\org-protocol\shell\open\command]
-@="\"D:\\msys64\\mingw64\\bin\\emacsclientw.exe\"  \"%1\""
+  [HKEY_CLASSES_ROOT\org-protocol\shell\open\command]
+  @="\"D:\\msys64\\mingw64\\bin\\emacsclientw.exe\"  \"%1\""
 #+end_example
 
 双击注册文件运行。
@@ -3480,7 +3496,7 @@ Windows Registry Editor Version 5.00
 在chrome浏览器上添加新标签，将下面js代码复制进行地址，标签名自定义，保存
 
 #+begin_example
-javascript:location.href='org-protocol://capture?template=x&url=%27+encodeURIComponent(location.href)+%27&title=%27+encodeURIComponent(document.title)+%27&body=%27+encodeURIComponent(function(){var html = "";var sel = window.getSelection();if (sel.rangeCount) {var container = document.createElement("div");for (var i = 0, len = sel.rangeCount; i < len; ++i) {container.appendChild(sel.getRangeAt(i).cloneContents());}html = container.innerHTML;}var dataDom = document.createElement(%27div%27);dataDom.innerHTML = html;dataDom.querySelectorAll(%27a%27).forEach(function(item, idx) {console.log(%27find a link%27);var url = new URL(item.href, window.location.href).href;var content = item.innerText;item.innerText = %27[[%27+url+%27][%27+content+%27]]%27;});[%27p%27, %27h1%27, %27h2%27, %27h3%27, %27h4%27].forEach(function(tag, idx){dataDom.querySelectorAll(tag).forEach(function(item, index) {var content = item.innerHTML.trim();if (content.length > 0) {item.innerHTML = content + %27&#13;&#10;';}});});return dataDom.innerText.trim();}())
+  javascript:location.href='org-protocol://capture?template=x&url=%27+encodeURIComponent(location.href)+%27&title=%27+encodeURIComponent(document.title)+%27&body=%27+encodeURIComponent(function(){var html = "";var sel = window.getSelection();if (sel.rangeCount) {var container = document.createElement("div");for (var i = 0, len = sel.rangeCount; i < len; ++i) {container.appendChild(sel.getRangeAt(i).cloneContents());}html = container.innerHTML;}var dataDom = document.createElement(%27div%27);dataDom.innerHTML = html;dataDom.querySelectorAll(%27a%27).forEach(function(item, idx) {console.log(%27find a link%27);var url = new URL(item.href, window.location.href).href;var content = item.innerText;item.innerText = %27[[%27+url+%27][%27+content+%27]]%27;});[%27p%27, %27h1%27, %27h2%27, %27h3%27, %27h4%27].forEach(function(tag, idx){dataDom.querySelectorAll(tag).forEach(function(item, index) {var content = item.innerHTML.trim();if (content.length > 0) {item.innerHTML = content + %27&#13;&#10;';}});});return dataDom.innerText.trim();}())
 #+end_example
 
 使用： 选中网页文字, 点击标签。网页的内容就会写到org-capture中，=C-c C-c= 完成，

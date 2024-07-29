@@ -78,7 +78,7 @@
 ;;; 使用社区稳定的按键绑定。 并设置不同模式中默认的evil状态
 (use-package evil-collection
   :ensure t
-  :demand t
+  :after evil
   :config
   (setq evil-collection-mode-list (remove 'lispy evil-collection-mode-list)) ; 移除社区中插件的改键对你键位影响
   (evil-collection-init)

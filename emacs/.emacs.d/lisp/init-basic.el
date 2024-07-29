@@ -24,7 +24,7 @@
 (setq default-buffer-file-coding-system 'utf-8)
 
 ;; 开启服务
-;;(server-mode 1)
+(server-mode 1)
 
 (electric-pair-mode t)                       ; 括号补全
 (add-hook 'prog-mode-hook #'show-paren-mode) ; 编程模式下，光标在括号上时高亮另一个括号
