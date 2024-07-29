@@ -124,12 +124,12 @@ nt/INSTALL.W64
 
 编译 Emac
 #+begin_src sh :tangle no :results none
-  ./autogen.sh
+  ./autogen.sh  #如果提示版本不够 pacman -Su autoconf
   ./configure --prefix=/d/programs/emacs --without-dbus
 
   echo $(nproc)
 
-  make -j6
+  make -j4
   make install
   #make install prefix=/d/opt/emacs #指定安装目录
 #+end_src
@@ -258,17 +258,17 @@ C-h f 寻找函数的帮助信息
 创建注册表文件 emacs-context.reg
 
 #+begin_src sh :tangle no :results none
-Windows Registry Editor Version 5.00
+  Windows Registry Editor Version 5.00
 
-[HKEY_CLASSES_ROOT\*\shell]
-[HKEY_CLASSES_ROOT\*\shell\openwemacs]
-@="&Edit with Emacs"
-[HKEY_CLASSES_ROOT\*\shell\openwemacs\command]
-@="C:\\emax64\\bin\\emacsclientw.exe -n \"%1\""
-[HKEY_CLASSES_ROOT\Directory\shell\openwemacs]
-@="Edit &with Emacs"
-[HKEY_CLASSES_ROOT\Directory\shell\openwemacs\command]
-@="C:\\emax64\\bin\\emacsclientw.exe -n \"%1\""
+  [HKEY_CLASSES_ROOT\*\shell]
+  [HKEY_CLASSES_ROOT\*\shell\openwemacs]
+  @="&Edit with Emacs"
+  [HKEY_CLASSES_ROOT\*\shell\openwemacs\command]
+  @="D:\\msys64\\mingw64\\bin\\emacsclientw.exe -n \"%1\""
+  [HKEY_CLASSES_ROOT\Directory\shell\openwemacs]
+  @="Edit &with Emacs"
+  [HKEY_CLASSES_ROOT\Directory\shell\openwemacs\command]
+  @="D:\\msys64\\mingw64\\bin\\emacsclientw.exe -n \"%1\""
 #+end_src
 
 
