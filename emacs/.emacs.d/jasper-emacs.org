@@ -71,13 +71,13 @@ xx.el 已经写好了，但并没有生效，需要重启一下Emacs，让Emacs�
   @="d:\\msys64\\msys2_shell.cmd -mingw64 -here"
 #+end_example
 
+
+*** 二进制安装
+
 安装emacs
 #+begin_src sh :tangle no :results none
   pacman -S mingw-w64-x86_64-emacs
 #+end_src
-
-*** 二进制安装
-
 
 *** 源码安装
 
@@ -91,9 +91,69 @@ nt/INSTALL.W64
 
 参考：<https://eason0210.github.io/post/install-gccemacs/>
 
+在 Mingw64 终端中执行以下命令安装依赖。
+#+begin_src sh :tangle no :results none
+  pacman -S --needed base-devel \
+  mingw-w64-x86_64-toolchain \
+  mingw-w64-x86_64-xpm-nox \
+  mingw-w64-x86_64-gmp \
+  mingw-w64-x86_64-gnutls \
+  mingw-w64-x86_64-libtiff \
+  mingw-w64-x86_64-giflib \
+  mingw-w64-x86_64-libpng \
+  mingw-w64-x86_64-libjpeg-turbo \
+  mingw-w64-x86_64-librsvg \
+  mingw-w64-x86_64-libwebp \
+  mingw-w64-x86_64-lcms2 \
+  mingw-w64-x86_64-libxml2 \
+  mingw-w64-x86_64-zlib \
+  mingw-w64-x86_64-harfbuzz \
+  mingw-w64-x86_64-libgccjit \
+  mingw-w64-x86_64-sqlite3 \
+  mingw-w64-x86_64-tree-sitter
+#+end_src
+
+下载 Emacs 源代码
 #+begin_src sh :tangle no :results none
   git clone -b master git://git.sv.gnu.org/emacs.git
+  cd emacs
+
+  #如果执行./autogen.sh过程中出错，可能是因为克隆代码后 checkout 时用了 CRLF.
+  git config core.autocrlf false
 #+end_src
+
+编译 Emac
+#+begin_src sh :tangle no :results none
+  ./autogen.sh
+  ./configure --prefix=/d/programs/emacs --without-dbus
+
+  echo $(nproc)
+
+  make -j6
+  make install
+  #make install prefix=/d/opt/emacs #指定安装目录
+#+end_src
+1. ~echo $(nproc)~ 会显示当前系统的 CPU 核心数；然后在 ~make -j4~ 就是使用 4 个核心进行编译, 推荐使用总数的一半，既提高了编译速度，也不影响其他应用的运行。
+2. 如果需要卸载的话在源码目录里面 ~make uninstall~ 就可以了。建议安装在指定目录，注意在路径中使用斜杠"/", 而不是反斜杠"\"。
+3. 如果编译过程出错了，记得 ~make clean~ 之后重新 ~configure~ 再 ~make~ 。
+
+测试运行 Emacs
+
+=bin\runemacs.exe -Q=
+
+从 mingw64 shell 外部运行 Emacs 时，您需要
+将 d：\msys64\mingw64\bin 添加到您的 Windows PATH，或复制所需的
+DLL 添加到 Emacs 的 bin/ 目录中。 否则，TLS 等功能会导致
+取决于那些DLL将丢失
+
+将 =d:\programs\emacs\bin= 加入到环境变量。 如果和msys2中的emacs同存，将path中的源码安装的路径放在msys2的emacs前面。
+
+创建快捷方式
+
+请右键选择新建快捷方式，选择bin\runemacs.exe, 并起个名。 右键快捷方式 =属性= ，目标处添加命令行选项 =--debug-init= 
+
+
+追加参数启动 --debug-init
 
 
 
