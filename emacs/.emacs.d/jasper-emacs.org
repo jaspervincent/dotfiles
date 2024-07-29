@@ -50,7 +50,36 @@ xx.el 已经写好了，但并没有生效，需要重启一下Emacs，让Emacs�
   :END:
 #+end_src
 
-本文emacs安装在windows环境中，使用 mysys2 工具安装。
+** 安装
+
+本文emacs安装在windows环境中，使用 [[https://www.msys2.org/][msys2]] 工具安装。
+
+添加msys2右键菜单： 创建 emacs-shell.reg注册表添加如下内容，双击执行即可
+#+begin_example
+  Windows Registry Editor Version 5.00
+
+  [HKEY_CLASSES_ROOT\Directory\Background\shell\MSYS2]
+  @="MSYS2 Bash Here"
+  "Icon"="d:\\msys64\\msys2.ico"
+
+  [HKEY_CLASSES_ROOT\Directory\Background\shell\MSYS2\command]
+  @="d:\\msys64\\msys2_shell.cmd -mingw64 -here"
+#+end_example
+
+*** 二进制安装
+
+
+*** 源码安装
+
+下载源码，查看INSTALL文件中不同操作系统安装指引
+
+*windows*
+nt/INSTALL.W64
+
+参考：<https://eason0210.github.io/post/install-gccemacs/>
+
+
+
 
 ** 改键
 :PROPERTIES:
@@ -72,6 +101,7 @@ Mac 只需要改大写键，Windows 对齐mac的布局
 
 来把 Left Window 键改成 Left Alt 键，Left Alt 键改成 A
 pp 键，大小写键改成 Ctrl 键。
+
 
 官方下载：<https://github.com/randyrants/sharpkeys>，安装后 win 菜单搜
 索 sharpkey，修改完成后写入注册表重新开机生效。
@@ -1341,7 +1371,7 @@ early-init.el 处激活缓存[[#h:package-cache][(=early-init.el= 初始化包�
   (setq default-buffer-file-coding-system 'utf-8)
 
   ;; 开启服务
-  ;;(server-mode 1)
+  (server-mode 1)
 
   (electric-pair-mode t)                       ; 括号补全
   (add-hook 'prog-mode-hook #'show-paren-mode) ; 编程模式下，光标在括号上时高亮另一个括号
