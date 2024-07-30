@@ -32,6 +32,35 @@
   :ensure t
   :pin nongnu)
 
+;;; Org-mode (personal information manager)
+(use-package org
+  :ensure nil
+  :init
+  (setq org-imenu-depth 7)
+
+  (add-to-list 'safe-local-variable-values '(org-hide-leading-stars . t))
+  (add-to-list 'safe-local-variable-values '(org-hide-macro-markers . t))
+  :bind
+  ( :map global-map
+    ("C-c l" . org-store-link) ; 存储当前连接
+    ("C-c o" . org-open-at-point-global)
+    :map org-mode-map
+    ("C-c M-l" . org-insert-last-stored-link) ; 插入最近存储的连接
+    ("C-c C-M-l" . org-toggle-link-display) ; 显示连接内容
+    :map ctl-x-x-map
+    ("i" . j-org-id-headlines) ; 为标题创建属性CUSTOM_ID
+    ("h" . j-org-ox-html)      ; org导出为html
+    ))
+;;;; links
+(use-package org
+  :ensure nil
+  :config
+  (require 'j-org) ; for the above commands
+
+  (setq org-link-context-for-files t)
+  (setq org-link-keep-stored-after-insertion nil)
+  (setq org-id-link-to-org-use-id 'create-if-interactive-and-no-custom-id))
+
 (with-eval-after-load 'org  ; 启动org文件时加载
   ;; 自定义org todo  C-c C-t 
   (setq org-todo-keywords

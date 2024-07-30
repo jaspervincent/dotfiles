@@ -3090,7 +3090,7 @@ C-w h/j/j/k
 :CUSTOM_ID: h:org-built-in
 :END:
 
-在学习章节提到过[[h:learn-org-built-in][(还想使用旧版快捷)]]
+在学习章节提到过[[h:learn-org-built-in][(还想使用)]]
 
 #+begin_src emacs-lisp :tangle "lisp/init-org.el" :mkdirp yes
   ;;; config
@@ -3130,6 +3130,35 @@ C-w h/j/j/k
   (use-package org-contrib  ;非org的官方贡献的插件
     :ensure t
     :pin nongnu)
+
+  ;;; Org-mode (personal information manager)
+  (use-package org
+    :ensure nil
+    :init
+    (setq org-imenu-depth 7)
+
+    (add-to-list 'safe-local-variable-values '(org-hide-leading-stars . t))
+    (add-to-list 'safe-local-variable-values '(org-hide-macro-markers . t))
+    :bind
+    ( :map global-map
+      ("C-c l" . org-store-link) ; 存储当前连接
+      ("C-c o" . org-open-at-point-global)
+      :map org-mode-map
+      ("C-c M-l" . org-insert-last-stored-link) ; 插入最近存储的连接
+      ("C-c C-M-l" . org-toggle-link-display) ; 显示连接内容
+      :map ctl-x-x-map
+      ("i" . j-org-id-headlines) ; 为标题创建属性CUSTOM_ID
+      ("h" . j-org-ox-html)      ; org导出为html
+      ))
+  ;;;; links
+  (use-package org
+    :ensure nil
+    :config
+    (require 'j-org) ; for the above commands
+
+    (setq org-link-context-for-files t)
+    (setq org-link-keep-stored-after-insertion nil)
+    (setq org-id-link-to-org-use-id 'create-if-interactive-and-no-custom-id))
 #+end_src
 
 *** =init-org.el= org todo
@@ -4848,6 +4877,108 @@ general插件中global-definer在init-basic.el中定义[[#h:basic-general][(=ini
 
   (provide 'j-org-download)
   ;;; j-org-download.el ends here
+#+end_src
+
+** =j-org.el= 库
+:PROPERTIES:
+:CUSTOM_ID: h:j-org
+:END:
+
+
+
+#+begin_src emacs-lisp :tangle "j-lisp/j-org.el"
+  ;;; j-org.el --- Extensions for org -*- lexical-binding: t -*-
+
+  ;; Copyright (C) 2024  Jasper Hsu
+
+  ;; Author: Jasper Hsu <xcwhome@163.com>
+  ;; URL: https://xuchangwei.com/lisp/jasper-emacs.html
+  ;; Version: 0.1.0
+  ;; Package-Requires: ((emacs "30.1"))
+
+  ;; This file is NOT part of GNU Emacs.
+
+  ;; This program is free software; you can redistribute it and/or modify
+  ;; it under the terms of the GNU General Public License as published by
+  ;; the Free Software Foundation, either version 3 of the License, or (at
+  ;; your option) any later version.
+  ;;
+  ;; This program is distributed in the hope that it will be useful,
+  ;; but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ;; GNU General Public License for more details.
+  ;;
+  ;; You should have received a copy of the GNU General Public License
+  ;; along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+  ;;; Commentary:
+  ;;
+  ;; Remember that every piece of Elisp that I write is for my own
+  ;; educational and recreational purposes.  I do not recommend that
+  ;; you copy any of this if you are not certain of what it does.
+
+  ;;; Code:
+
+  ;;;; org-export
+
+  (declare-function org-html-export-as-html "org")
+  (declare-function org-texinfo-export-to-info "org")
+
+  ;;;###autoload
+  (defun j-org-ox-html ()
+    "导出为html
+  Streamline HTML export."
+    (interactive)
+    (org-html-export-as-html nil nil nil t nil))
+
+  ;;;###autoload
+  (defun j-org-ox-texinfo ()
+    "导出Info
+  Streamline Info export."
+    (interactive)
+    (org-texinfo-export-to-info))
+
+  ;;;; org-id
+
+  (declare-function org-id-add-location "org")
+  (declare-function org-with-point-at "org")
+  (declare-function org-entry-get "org")
+  (declare-function org-id-new "org")
+  (declare-function org-entry-put "org")
+
+  ;; Original idea:
+  ;; <https://writequit.org/articles/emacs-org-mode-generate-ids.html>.
+  (defun j-org--id-get ()
+    "获取当前的CUSTOM_ID
+  Get the CUSTOM_ID of the current entry.
+  If the entry already has a CUSTOM_ID, return it as-is, else
+  create a new one."
+    (let* ((pos (point))
+           (id (org-entry-get pos "CUSTOM_ID")))
+      (if (and id (stringp id) (string-match-p "\\S-" id))
+          id
+        (setq id (org-id-new "h"))
+        (org-entry-put pos "CUSTOM_ID" id)
+        id)))
+
+  (declare-function org-map-entries "org")
+
+  ;;;###autoload
+  (defun j-org-id-headlines ()
+    "添加CUSTOM_ID
+  Add missing CUSTOM_ID to all headlines in current file."
+    (interactive)
+    (org-map-entries
+     (lambda () (j-org--id-get))))
+
+  ;;;###autoload
+  (defun j-org-id-headline ()
+    "Add missing CUSTOM_ID to headline at point."
+    (interactive)
+    (j-org--id-get))
+
+  (provide 'j-org)
+  ;;; j-org.el ends here
 #+end_src
 
 ** =j-emacs-fast.el= 库
