@@ -3120,45 +3120,57 @@ C-w h/j/j/k
 *** =init-org.el= 安装最新org包
 
 #+begin_src emacs-lisp :tangle "lisp/init-org.el"
-  ;;; 安装 org，这个配置一定要配置在 use-package 的初始化之前，否则无法正常安装
-  ;; (assq-delete-all 'org package--builtins)
-  ;; (assq-delete-all 'org package--builtin-versions)
-  ;; (use-package org
-  ;;   :pin gnu-elpa
-  ;;   :ensure t)
+;;; 安装 org，这个配置一定要配置在 use-package 的初始化之前，否则无法正常安装
+;; (assq-delete-all 'org package--builtins)
+;; (assq-delete-all 'org package--builtin-versions)
+;; (use-package org
+;;   :pin gnu-elpa
+;;   :ensure t)
 
-  (use-package org-contrib  ;非org的官方贡献的插件
-    :ensure t
-    :pin nongnu)
+(use-package org-contrib  ;非org的官方贡献的插件
+  :ensure t
+  :pin nongnu)
 
-  ;;; Org-mode (personal information manager)
-  (use-package org
-    :ensure nil
-    :init
-    (setq org-imenu-depth 7)
+;;; Org-mode (personal information manager)
+(use-package org
+  :ensure nil
+  :init
+  (setq org-imenu-depth 7)
 
-    (add-to-list 'safe-local-variable-values '(org-hide-leading-stars . t))
-    (add-to-list 'safe-local-variable-values '(org-hide-macro-markers . t))
-    :bind
-    ( :map global-map
-      ("C-c l" . org-store-link) ; 存储当前连接
-      ("C-c o" . org-open-at-point-global)
-      :map org-mode-map
-      ("C-c M-l" . org-insert-last-stored-link) ; 插入最近存储的连接
-      ("C-c C-M-l" . org-toggle-link-display) ; 显示连接内容
-      :map ctl-x-x-map
-      ("i" . j-org-id-headlines) ; 为标题创建属性CUSTOM_ID
-      ("h" . j-org-ox-html)      ; org导出为html
-      ))
-  ;;;; links
-  (use-package org
-    :ensure nil
-    :config
-    (require 'j-org) ; for the above commands
+  (add-to-list 'safe-local-variable-values '(org-hide-leading-stars . t))
+  (add-to-list 'safe-local-variable-values '(org-hide-macro-markers . t))
+  :bind
+  ( :map global-map
+    ("C-c l" . org-store-link) ; 存储当前连接
+    ("C-c o" . org-open-at-point-global)
+    :map org-mode-map
+    ("C-c M-l" . org-insert-last-stored-link) ; 插入最近存储的连接
+    ("C-c C-M-l" . org-toggle-link-display) ; 显示连接内容
+    :map ctl-x-x-map
+    ("i" . j-org-id-headlines) ; 为标题创建属性CUSTOM_ID
+    ("h" . j-org-ox-html)      ; org导出为html
+    ))
+;;;; links
+(use-package org
+  :ensure nil
+  :config
+  (require 'j-org) ; for the above commands
 
-    (setq org-link-context-for-files t)
-    (setq org-link-keep-stored-after-insertion nil)
-    (setq org-id-link-to-org-use-id 'create-if-interactive-and-no-custom-id))
+  (setq org-link-context-for-files t)
+  (setq org-link-keep-stored-after-insertion nil)
+  (setq org-id-link-to-org-use-id 'create-if-interactive-and-no-custom-id))
+
+;;;; code blocks
+(use-package org
+  :ensure nil
+  :config
+  ;;(setq org-confirm-babel-evaluate nil)             ; 使用Babel执行代码块时, 是否弹出确认对话框. nil 禁止弹出, 默认t弹出
+  ;;(setq org-src-window-setup 'current-window)       ; 源代码窗口的布局位置. 默认 'reorganize-frame 侧边。 'current-window 当前窗口 
+  ;;(setq org-edit-src-persistent-message nil)        ; 编辑源代码时显示持久的消息。nil 不显示, 默认 t
+  ;;(setq org-src-fontify-natively t)                 ; 源代码本地高亮。默认t
+  (setq org-src-preserve-indentation nil)             ; 编辑源代码时保留原有的缩进，t代表启用该功能。默认nil不保留. 个人觉得默认nil好点
+  ;;(setq org-src-tab-acts-natively t)                ; 源代码编辑模式下，Tab键的行为与原生代码编辑器一致，t代表启用该功能,  默认t
+  (setq org-edit-src-content-indentation 0))          ; 代码块里缩进，0不缩进，默认是2
 #+end_src
 
 *** =init-org.el= org todo
