@@ -41,6 +41,7 @@ xx.el 已经写好了，但并没有生效，需要重启一下Emacs，让Emacs�
 * =init.el= (学习)
 :PROPERTIES:
 :HEADER-ARGS: :tangle no
+:CUSTOM_ID: h:b17d4463-f9b0-43e7-b543-67b9a130db2e
 :END:
 
 开启学习
@@ -51,6 +52,9 @@ xx.el 已经写好了，但并没有生效，需要重启一下Emacs，让Emacs�
 #+end_src
 
 ** 安装
+:PROPERTIES:
+:CUSTOM_ID: h:0e90d45f-f8d6-4b1e-b32a-143e762454e8
+:END:
 
 本文emacs安装在windows环境中，使用 [[https://www.msys2.org/][msys2]] 工具安装。如安装到 =D:\msys64=, 并设置PATH变量(=D:\msys64\mingw64\bin=, =D:\msys64\usr\bin=)
 
@@ -73,6 +77,9 @@ Windows Registry Editor Version 5.00
 
 
 *** 二进制安装
+:PROPERTIES:
+:CUSTOM_ID: h:f9b3ea3c-a220-4130-9b15-7f85c2037540
+:END:
 
 安装emacs
 #+begin_src sh :tangle no :results none
@@ -80,6 +87,9 @@ pacman -S mingw-w64-x86_64-emacs
 #+end_src
 
 *** 源码安装
+:PROPERTIES:
+:CUSTOM_ID: h:04da44fe-12b5-4de9-afc1-126ff7ecfc15
+:END:
 
 - https://savannah.gnu.org/projects/emacs/ (官方地址，推荐)
 - https://github.com/emacs-mirror/emacs (github镜像)
@@ -219,6 +229,9 @@ mac 配置
 #+end_src
 
 ** 常用配置
+:PROPERTIES:
+:CUSTOM_ID: h:b8400296-41de-4401-98c6-094756c3ee53
+:END:
 
 1.光标移动
 
@@ -358,6 +371,9 @@ Emacs Lisp 是世界上第二古老高级编程语言 Lisp 专为 Emacs 打造�
 #+end_src
 
 ** 关于 lexical binding
+:PROPERTIES:
+:CUSTOM_ID: h:4a222504-05b5-4a0d-80ab-6cd04ee213a5
+:END:
 
 #+begin_src emacs-lisp :tangle no :results none
 ;; 默认没有激活。在文件最开头添加文件作用域的变量设置，设置变量的绑定方式。设置在当前文件作用域内是激活的。
@@ -394,6 +410,9 @@ Emacs Lisp 是世界上第二古老高级编程语言 Lisp 专为 Emacs 打造�
 三个分号开头的注释表示“节”，两个分号开头的注释表示“段落”。（一个分号开头的是一行代码后面的行内注释）。
 
 ** 插件源
+:PROPERTIES:
+:CUSTOM_ID: h:ef17a11a-df61-41c6-8bbd-8d92766b4273
+:END:
 
 #+begin_src emacs-lisp
 (require 'package)
@@ -417,6 +436,9 @@ Emacs Lisp 是世界上第二古老高级编程语言 Lisp 专为 Emacs 打造�
 #+end_src
 
 ** 安装补全插件
+:PROPERTIES:
+:CUSTOM_ID: h:6483447a-d63f-42b0-8c5c-48eebe7d352c
+:END:
 
 *Company插件*
 <<h:learn-completion-company>>
@@ -523,6 +545,9 @@ orderless 支持 =M-x= 模糊搜索，可以无序的。 如 edebug-defun 函数
 #+end_src
 
 ** 手工安装插件
+:PROPERTIES:
+:CUSTOM_ID: h:a10e6f11-2517-4c48-bcb7-5ee139fa2a2c
+:END:
 
 以 [[https://github.com/manateelazycat/awesome-tab][awesome-tab]]  为例
 
@@ -577,6 +602,9 @@ Other buffer group by `awesome-tab-get-group-name' with project name."
 尽量用内置的包。 =tab-bar=
 
 ** 其他小配置
+:PROPERTIES:
+:CUSTOM_ID: h:7d42306d-1ba7-468d-b67d-0d2e1894535e
+:END:
 
 *最近打开文件*
 
@@ -609,6 +637,9 @@ Other buffer group by `awesome-tab-get-group-name' with project name."
 #+end_src
 
 ** Emacs作为超级前端
+:PROPERTIES:
+:CUSTOM_ID: h:2ecf5bf5-4f3f-4ac9-8483-ff26c87b2382
+:END:
 
 可以非常快的找到文件或目录
 
@@ -808,6 +839,9 @@ Supports exporting consult-grep to wgrep, file to wdeired, and consult-location 
 - =M-x consult-locate= 回车，输入要搜索的文件. 如打包含“学习”的txt文件 =#\.txt#= 按 =s-p= 输入 =#\.txt#xx=  可以看到过滤学习的txt文件
 
 *** 更换主题
+:PROPERTIES:
+:CUSTOM_ID: h:342e2bb3-0963-4047-bbfe-9949e17d186c
+:END:
 
 customize theme 内置主题
 
@@ -821,8 +855,14 @@ customize theme 内置主题
 #+end_src
 
 ** 模块化配置
+:PROPERTIES:
+:CUSTOM_ID: h:78e61272-d6f7-45f9-aeca-948b68f16d02
+:END:
 
 *** 使用多文件存储配置文件
+:PROPERTIES:
+:CUSTOM_ID: h:dcefc61f-9fbc-4c17-b9c6-043b131b3437
+:END:
 
 创建 custom.el 文件
 
@@ -869,6 +909,9 @@ require 'init-basic
 #+end_src
 
 *** 使用Org-mode 管理 Emacs 配置
+:PROPERTIES:
+:CUSTOM_ID: h:cb5979bf-baeb-48b0-abd7-0f54495dd006
+:END:
 
 Org-mode 下的文学编程将颠覆你对于 Emacs 的看法。因为我们也可以使用 Org 来管理 Emacs 的配置文件。
 
@@ -944,6 +987,9 @@ Org-mode 下的文学编程将颠覆你对于 Emacs 的看法。因为我们也�
 #+end_src
 
 ** 模块列表
+:PROPERTIES:
+:CUSTOM_ID: h:0ef565c4-904d-4863-9c8b-7462407b2659
+:END:
 
 1
 
@@ -1021,6 +1067,9 @@ Org-mode 下的文学编程将颠覆你对于 Emacs 的看法。因为我们也�
 13.优化性能，借鉴其他人的配置
 
 ** 清理学习内容
+:PROPERTIES:
+:CUSTOM_ID: h:ce61a582-6604-448b-8fe4-087ecd41e650
+:END:
 #+begin_src emacs-lisp :tangle no
 (write-region "" nil "~/.emacs.d/init.el")
 #+end_src
@@ -1029,11 +1078,15 @@ Org-mode 下的文学编程将颠覆你对于 Emacs 的看法。因为我们也�
 * Emacs初始化 =early-init.el=
 :PROPERTIES:
 :HEADER-ARGS: :tangle early-init.el
+:CUSTOM_ID: h:680e1564-f032-4677-acdf-1d64b017cdc0
 :END:
 
 这是 Emacs 在启动时读取的第一个文件。它应该包含不依赖于任何包或 Emacs 帧比例的代码。初始化文件是为了在 Emacs 生成初始化之前设置一些基本的东西
 
 ** =early-init.el= 对启动时间和垃圾回收的调整
+:PROPERTIES:
+:CUSTOM_ID: h:d5de6908-9c6e-4fdd-8d06-4059f170abfd
+:END:
 
 #+begin_src emacs-lisp :tangle "early-init.el"
 (setq gc-cons-threshold (* 50 1000 1000))
@@ -1050,6 +1103,9 @@ Org-mode 下的文学编程将颠覆你对于 Emacs 的看法。因为我们也�
 
 
 * Emacs主配置文件 (=init.el=)
+:PROPERTIES:
+:CUSTOM_ID: h:84a797ae-9cef-4eb4-8144-4423d96d57d7
+:END:
 
 #+begin_src emacs-lisp :tangle "init.el"
 ;;; init.el --- The main init entry for Emacs -*- lexical-binding: t -*-
@@ -1064,8 +1120,14 @@ Org-mode 下的文学编程将颠覆你对于 Emacs 的看法。因为我们也�
 #+end_src
 
 ** =init.el= 加载前自定义配置
+:PROPERTIES:
+:CUSTOM_ID: h:b5675d8d-07b5-4cc1-bb53-2e13d63c652d
+:END:
 
 *** =init.el= 判断操作系统
+:PROPERTIES:
+:CUSTOM_ID: h:307ea5c9-d0cb-4458-8c72-fe27e44a52ba
+:END:
 #+begin_src emacs-lisp :tangle "init.el"
 ;;; 判断操作系统， 定义一个新变量
 (setq *is-a-mac* (eq system-type 'darwin))
@@ -1076,6 +1138,9 @@ Org-mode 下的文学编程将颠覆你对于 Emacs 的看法。因为我们也�
 #+end_src
 
 ** =init.el= 基础配置禁用备份和锁定文件
+:PROPERTIES:
+:CUSTOM_ID: h:8a5ac6bd-d9f2-43f8-b0a4-64c758a747aa
+:END:
 
 默认情况下，Emacs 会尝试锁定文件，以免它们被其他程序修改。它还保留备份。这些是我不需要的功能
 
@@ -1087,6 +1152,9 @@ Org-mode 下的文学编程将颠覆你对于 Emacs 的看法。因为我们也�
 #+end_src
 
 ** =init.el= 指定自定义文件 custom.el
+:PROPERTIES:
+:CUSTOM_ID: h:10a19e0f-2d8a-4e63-b394-f8eadd628aea
+:END:
 
 默认情况下，Emacs 将持久自定义写入用户的 init 文件末尾。当用户 =M-x customize= 或与之相关时，Emacs 都会写这些内容。指定自定义文件位置与init.el区分开。
 
@@ -1097,6 +1165,9 @@ Org-mode 下的文学编程将颠覆你对于 Emacs 的看法。因为我们也�
 #+end_src
 
 ** =init.el= 始终从 =*scratch*= 缓冲区开始
+:PROPERTIES:
+:CUSTOM_ID: h:fdc495f8-e664-4284-a21d-bd34d0c39823
+:END:
 
 #+begin_src emacs-lisp :tangle "init.el"
 ;;; 始终从 *scratch* 缓冲区开始
@@ -1175,6 +1246,9 @@ early-init.el 处激活缓存[[#h:package-cache][(=early-init.el= 初始化包�
 #+end_src
 
 *** =init.el= use-pacakge 插件
+:PROPERTIES:
+:CUSTOM_ID: h:4e302b04-678d-492a-941e-5cc805b8f8a2
+:END:
 
 29版本后内置包
 
@@ -1270,6 +1344,9 @@ early-init.el 处激活缓存[[#h:package-cache][(=early-init.el= 初始化包�
 #+end_src
 
 ** =init.el= 计算启动时间
+:PROPERTIES:
+:CUSTOM_ID: h:048fe6a9-b02a-46fd-8907-78c8c3366234
+:END:
 
 #+begin_src emacs-lisp :tangle "init.el"
 (defun efs/display-startup-time ()
@@ -1294,6 +1371,9 @@ early-init.el 处激活缓存[[#h:package-cache][(=early-init.el= 初始化包�
 =init.el= 部分中，通过 ~load-path~ 让 Emacs 可以运行他们的代码[[#h:i-dir][(=init.el= 加载目录)]]。本章的副标题定义了模块，每个模块都加载在我的 =init.el= 末尾调用[[#h:i-modules][(=init.el= 加载各模块)]]
 
 ** =init-packages.el=
+:PROPERTIES:
+:CUSTOM_ID: h:20c90145-9293-4c6e-9ac5-7cd73353ed70
+:END:
 
 #+begin_src emacs-lisp :tangle "lisp/init-packages.el" :mkdirp yes
 ;;; config
@@ -1421,6 +1501,9 @@ early-init.el 处激活缓存[[#h:package-cache][(=early-init.el= 初始化包�
 #+end_src
 
 ** =init-basic.el=
+:PROPERTIES:
+:CUSTOM_ID: h:eeccf037-bcb1-4a96-b965-0339735c3105
+:END:
 *** =init-basic.el= 一些默认的配置
 :PROPERTIES:
 :CUSTOM_ID: h:basic-default
@@ -1468,6 +1551,9 @@ early-init.el 处激活缓存[[#h:package-cache][(=early-init.el= 初始化包�
 #+end_src
 
 *** =init-basic.el= 最近编辑过的文件 =recentf=
+:PROPERTIES:
+:CUSTOM_ID: h:3bd70b80-cd07-4c49-b8c0-202f525a46d6
+:END:
 
 #+begin_src emacs-lisp :tangle "lisp/init-basic.el"
 ;;; 最近编辑过的文件
@@ -1687,6 +1773,9 @@ org-mode
 :END:
 
 **** =init-basic.el= 输入法 =pyim=
+:PROPERTIES:
+:CUSTOM_ID: h:a7b816c8-da82-4210-856e-07e2edd6e2c2
+:END:
 
 在学习章节提到过[[#h:learn-tools-search-pinyin][(使用拼音进行搜索)]]
 
@@ -1697,6 +1786,9 @@ org-mode
 #+END_SRC
 
 ** =init-ui.el=
+:PROPERTIES:
+:CUSTOM_ID: h:1a9f33d6-5ff3-4048-872d-80243061b6cb
+:END:
 
 *** =init-ui.el= 内置配置
 :PROPERTIES:
@@ -1787,11 +1879,14 @@ org-mode
 
 
 #+begin_src emacs-lisp :tangle "lisp/init-ui.el"
-  (message "Load init-ui done...")
-  (provide 'init-ui)
+(message "Load init-ui done...")
+(provide 'init-ui)
 #+end_src
 
 ** =init-modeline.el=
+:PROPERTIES:
+:CUSTOM_ID: h:800b1175-68ac-43cc-a556-6c4e0d2eccbc
+:END:
 
 
 #+begin_src emacs-lisp :tangle "lisp/init-modeline.el" :mkdirp yes
@@ -1852,6 +1947,9 @@ modeline上显示我的所有的按键和执行的命令
 #+end_src
 
 ** =init-completion.el=
+:PROPERTIES:
+:CUSTOM_ID: h:c3c253e7-a1f2-44b3-8e07-adc5ec6271db
+:END:
 
 *** =init-completion.el= 内置补全
 :PROPERTIES:
@@ -2516,8 +2614,14 @@ general插件中global-definer在init-basic.el中定义[[#h:basic-general][(=ini
 参考配置： https://github.com/zilongshanren/emacs.d/blob/eglot/lisp/init-keybindings.el 实现自己的文件、窗口、项目多种快捷键绑定
 
 *** 相关插件列表
+:PROPERTIES:
+:CUSTOM_ID: h:36d15ff2-87fc-47f2-a385-ddca88f7c2f0
+:END:
 
 **** evil-escape插件回退到normal state
+:PROPERTIES:
+:CUSTOM_ID: h:2186eba8-72bf-4c04-b439-168680e1055e
+:END:
 
 任何状态下按 =kj= 就能回到normal state。很实用，相当于把esc键集中在右手, 一只手就可以操作vim常用功能。
 #+begin_src emacs-lisp :tangle "lisp/init-evil.el"
@@ -2536,6 +2640,9 @@ general插件中global-definer在init-basic.el中定义[[#h:basic-general][(=ini
 #+end_src
 
 **** evil-anzu
+:PROPERTIES:
+:CUSTOM_ID: h:ff29f09d-cec5-488a-a62e-2e96a9327958
+:END:
 
 小功能ui。 当用 =Shift *= 查找单词重复出现几次时，下方状态栏会多一个标识显示，显示当前重复出现单词的位置和总重复次数。
 #+begin_src emacs-lisp :tangle "lisp/init-evil.el"
@@ -2550,6 +2657,9 @@ general插件中global-definer在init-basic.el中定义[[#h:basic-general][(=ini
 #+end_src
 
 **** COMMENT evil-collections
+:PROPERTIES:
+:CUSTOM_ID: h:4ab86f63-e3dc-4b10-a730-72d12d10555a
+:END:
 
 使用社区的按键绑定。相对稳定不会改变
 
@@ -2574,19 +2684,25 @@ general插件中global-definer在init-basic.el中定义[[#h:basic-general][(=ini
 #+end_src
 
 **** evil-surround
+:PROPERTIES:
+:CUSTOM_ID: h:efec661d-88ef-4d35-8545-e33a71e60c04
+:END:
 
 S用法，选中一个单词后加引号。
 - =viw S "= 相当于原生vim text object用法 =viw Shift i "= 操作 
 
 #+begin_src emacs-lisp :tangle "lisp/init-evil.el"
-  ;;; S用法，选中一个单词后加引号。viw S " 相当于原生vim text object用法 viw Shift i " 
-  (use-package evil-surround
-    :ensure t
-    :init
-    (global-evil-surround-mode 1))
+;;; S用法，选中一个单词后加引号。viw S " 相当于原生vim text object用法 viw Shift i " 
+(use-package evil-surround
+  :ensure t
+  :init
+  (global-evil-surround-mode 1))
 #+end_src
 
 **** evil-nerd-commenter
+:PROPERTIES:
+:CUSTOM_ID: h:5748be0d-f8c4-45d6-89c0-3fd42e880a2c
+:END:
 
 对不同语言加的注释
 
@@ -2607,6 +2723,9 @@ S用法，选中一个单词后加引号。
 - 多行注释，选中行 =,/=
 
 **** evil-snipe
+:PROPERTIES:
+:CUSTOM_ID: h:c63ca6bf-d489-49a3-90b9-0826c2bc5f20
+:END:
 
 小功能ui。高亮查找的字符。 如查找m字符。 =fm= 当前行的m字符高亮。按 =;= 重复查找动作
 #+begin_src emacs-lisp :tangle "lisp/init-evil.el"
@@ -2619,6 +2738,9 @@ S用法，选中一个单词后加引号。
 #+end_src
 
 **** evil-matchit
+:PROPERTIES:
+:CUSTOM_ID: h:270a82c8-9426-4829-b6b8-2037a2121fdf
+:END:
 
 按 =%= 可以在函数、括号之间跳转
 
@@ -2633,6 +2755,9 @@ S用法，选中一个单词后加引号。
 #+end_src
 
 *** 高阶用法（自定义 text-obj 或者 自定义 commands)
+:PROPERTIES:
+:CUSTOM_ID: h:78a0a60e-dfaf-4aeb-9f4d-6bbaefd6ae1d
+:END:
 
 - https://github.com/noctuid/evil-guide#modes
 - https://evil.readthedocs.io/en/latest/overview.html
@@ -2648,6 +2773,9 @@ S用法，选中一个单词后加引号。
 使用emacs原生按键。 用多了evil，你还是个vim用户，无法轻松操作无配置或精简内置配置的emacs。
 
 ** =init-tools.el=
+:PROPERTIES:
+:CUSTOM_ID: h:b9b5d584-8a46-49ab-91c7-94c1503a12f5
+:END:
 
 *** =init-tools.el= 多光标操作 =iedit= & =evil-multiedit=
 :PROPERTIES:
@@ -2801,10 +2929,10 @@ highlight-global是github插件，使用quelpa插件辅助安装[[#h:packages-qu
 #+end_src
 
 #+begin_src emacs-lisp :tangle "lisp/init-tools.el"
-  (use-package symbol-overlay
-    :ensure t
-    :config
-    (define-key symbol-overlay-map (kbd "h") 'nil))
+(use-package symbol-overlay
+  :ensure t
+  :config
+  (define-key symbol-overlay-map (kbd "h") 'nil))
 #+end_src
 
 #+begin_src emacs-lisp :tangle "lisp/init-tools.el"
@@ -2835,6 +2963,9 @@ Evil 的窗口选择操作
 C-w h/j/j/k
 
 *** =init-window.el= =window numbering=
+:PROPERTIES:
+:CUSTOM_ID: h:526c9704-5d7a-47e9-96ca-8310e01fa809
+:END:
 
 - <https://github.com/nschum/window-numbering.el>
 
@@ -2870,6 +3001,9 @@ C-w h/j/j/k
 - 删除所有其他窗口 =SPC w m=
 
 *** =init-window.el= =es-windows=
+:PROPERTIES:
+:CUSTOM_ID: h:98d343f7-9e3d-43b7-8402-a4b3ee20db5b
+:END:
 
 - <https://github.com/sabof/es-windows>
 
@@ -2881,6 +3015,9 @@ C-w h/j/j/k
 #+end_src
 
 *** =init-window.el= =Buffer move=
+:PROPERTIES:
+:CUSTOM_ID: h:ec506a8e-4641-40a6-800a-a13ba8187433
+:END:
 
 - <https://github.com/nschum/window-numbering.el>
 
@@ -2894,6 +3031,9 @@ C-w h/j/j/k
 =SPC w s= 指定交的换窗口
 
 *** =init-window.el= =Resize windows=
+:PROPERTIES:
+:CUSTOM_ID: h:f27bcd87-7576-4c88-94b5-cd0c3760b649
+:END:
 - <https://github.com/dpsutton/resize-window>
 
 调整窗口大小
@@ -2922,6 +3062,9 @@ Main data structure of the dispatcher with the form:
 #+end_src
 
 *** =init-window.el= =Winner(builtin)=
+:PROPERTIES:
+:CUSTOM_ID: h:ca4c214b-2e05-4d97-95cf-9fd95fd01771
+:END:
 
 内置插件。用来切换2个不同窗口布局
 #+begin_src emacs-lisp :tangle "lisp/init-window.el"
@@ -2946,6 +3089,9 @@ Main data structure of the dispatcher with the form:
 - 'winner-redo           ; SPC w z 撤销返回布局。 和返回布局结合实现2个布局间切换
 
 *** =init-window.el= 关闭弹窗 =Popper=
+:PROPERTIES:
+:CUSTOM_ID: h:7c339d63-4318-4073-b826-b7a6eca2b694
+:END:
 
 - <https://github.com/karthink/popper>
 
@@ -3126,6 +3272,9 @@ Main data structure of the dispatcher with the form:
 #+end_src
 
 *** =init-org.el= 安装最新org包
+:PROPERTIES:
+:CUSTOM_ID: h:bd869f5d-b960-4a71-a831-455165c3b55e
+:END:
 
 #+begin_src emacs-lisp :tangle "lisp/init-org.el"
 ;;; 安装 org，这个配置一定要配置在 use-package 的初始化之前，否则无法正常安装
@@ -3705,6 +3854,9 @@ M-left/right/up/down
 #+end_example
 
 *** =init-org.el= 双链笔记 =org-Roam=
+:PROPERTIES:
+:CUSTOM_ID: h:005568af-5e29-4582-9ba1-85eb4a7c4bc2
+:END:
 
 双链笔记系统
 
@@ -3780,6 +3932,9 @@ M-left/right/up/down
 - 手动更新 =M-x org-roam-db-sync=
 
 **** =init-org.el= org =org-roam-ui=
+:PROPERTIES:
+:CUSTOM_ID: h:d15ff21d-1471-4613-9ec9-8a9273665175
+:END:
 org-roam-ui 在pc下安装存在问题。系统默认按linux 系统安装tar解压. windows 上面需要使用 system32/tar 这个程序去解压。
   
 解决方式： 使用vc来安装. 在emacs30已经集成(package-vc.el)
@@ -3809,8 +3964,8 @@ org-roam-ui 在pc下安装存在问题。系统默认按linux 系统安装tar解
 实时显示链接
 
 #+begin_src emacs-lisp :tangle "lisp/init-org.el"
-  (message "Load init-org done...")
-  (provide 'init-org)
+(message "Load init-org done...")
+(provide 'init-org)
 #+end_src
 
 ** =init-persp.el= 工作区间管理
@@ -3819,6 +3974,9 @@ org-roam-ui 在pc下安装存在问题。系统默认按linux 系统安装tar解
 :END:
 
 *** =init-window.el= 窗口 =tab-bar(built-in)=
+:PROPERTIES:
+:CUSTOM_ID: h:dbb5227a-09bd-44ff-a2c9-59ab9c5b6f11
+:END:
 
 #+begin_src emacs-lisp :tangle "lisp/init-persp.el" :mkdirp yes
 (use-package tab-bar
@@ -3952,6 +4110,9 @@ org-roam-ui 在pc下安装存在问题。系统默认按linux 系统安装tar解
 #+end_src
 
 ** =init-programming.el=
+:PROPERTIES:
+:CUSTOM_ID: h:48550b88-bb99-44c6-a4a3-2442cc2d0443
+:END:
 
 *** =init-programming.el= c++
 :PROPERTIES:
@@ -4173,6 +4334,9 @@ https://github.com/renzmann/treesit-auto
 - =SPC s j= 跳转函数列表
 
 **** =init-programming.el= 查找定义和引用
+:PROPERTIES:
+:CUSTOM_ID: h:2be86b5f-655e-4bd6-b2a8-c39eb68c690f
+:END:
 
 vim 模式是
 - gd 跳转函数定义
@@ -4188,6 +4352,9 @@ vim 模式是
 #+end_example
 
 **** =init-programming.el= 添加 snippets 支持
+:PROPERTIES:
+:CUSTOM_ID: h:0adb5e48-1781-4780-a991-0ac87c8ae529
+:END:
 
 #+begin_src emacs-lisp :tangle "lisp/init-programming.el"
 (use-package yasnippet
@@ -4232,6 +4399,9 @@ vim 模式是
 - =M-x yas-visit-snippet-file= 编辑
 
 **** =init-programming.el= 在头文件和源文件之间进行跳转
+:PROPERTIES:
+:CUSTOM_ID: h:cc34dec7-c21d-47ef-8cc1-519de991bd8d
+:END:
 
 ff-find-related-file
 
@@ -4244,6 +4414,9 @@ ff-find-related-file
 #+end_src
 
 ** =init-keybindings.el=
+:PROPERTIES:
+:CUSTOM_ID: h:696bce89-99d1-4716-80c0-cf1b36844fa8
+:END:
 
 *** =init-keybindings.el= 文件搜索
 :PROPERTIES:
@@ -4405,6 +4578,9 @@ general插件中global-definer在init-basic.el中定义[[#h:basic-general][(=ini
 #+end_src
 
 ** =init-funcs.el=
+:PROPERTIES:
+:CUSTOM_ID: h:05e889c3-381b-4d1a-8647-9df6277d8301
+:END:
 
 
 #+begin_src emacs-lisp :tangle "lisp/init-funcs.el" :mkdirp yes
@@ -4434,6 +4610,9 @@ general插件中global-definer在init-basic.el中定义[[#h:basic-general][(=ini
 
 
 * 我的自定义库(=j-lisp/=)
+:PROPERTIES:
+:CUSTOM_ID: h:19b981f0-0e13-46d5-b573-9d8e52aefd33
+:END:
 
 一个自定义库会对某一个软件包做扩展，软件包配置文件会分别引用它们。
 
@@ -5119,16 +5298,25 @@ the current layouts buffers."
 
 
 * Emacs 配置问题排查
+:PROPERTIES:
+:CUSTOM_ID: h:43ed0760-cc70-475c-9da8-a9caa7f67657
+:END:
 
 配置最好用git管理起来。
 
 ** 配置有问题，启动不了怎么办？
+:PROPERTIES:
+:CUSTOM_ID: h:2fee1b0f-3633-4d2c-9301-8b08562a07aa
+:END:
 
 #+begin_src sh
 emacs-debug –init
 #+end_src
 
 ** 不能安装包，提示签名错误
+:PROPERTIES:
+:CUSTOM_ID: h:a95b56f5-efc0-44a0-b9be-1a054b419bde
+:END:
 
 Failed to verify signature archive-contents.sig
 
@@ -5137,6 +5325,9 @@ Failed to verify signature archive-contents.sig
 #+end_example
 
 ** 包解压失败，
+:PROPERTIES:
+:CUSTOM_ID: h:1576a87a-4eda-419a-8e88-46629c6044a4
+:END:
 
 a pax extended header, 包解压失败，可以使用 use-package :vc 直接安装
 
@@ -5149,16 +5340,25 @@ mv /usr/bin/tar /usr/bin/tarbak
 
 
 * 优化性能，借鉴其他人的配置
+:PROPERTIES:
+:CUSTOM_ID: h:fcadef90-7310-40d6-aaa0-de74737e0940
+:END:
 
 how to Profile performace
 
 ** 运行时性能
+:PROPERTIES:
+:CUSTOM_ID: h:558eed58-5e30-476b-acd3-ad1a46949b1b
+:END:
 
 - =M-x profiler-start= 选择cpu+mem
 - 复现卡的操作。比如光标移动卡顿，反复重现
 - =M-x profiler-report= 打开报告，分析
 
 ** 度量启动性能
+:PROPERTIES:
+:CUSTOM_ID: h:da6bbc1a-043f-45e9-8aca-f565c8454588
+:END:
 
 #+begin_src emacs-lisp :tangle no
 (use-package benchmark-init
@@ -5212,6 +5412,9 @@ use-package 哪些操作可以优化性能, 几种不同的方法来延迟包加
 <https://systemcrafters.net/emacs-from-scratch/cut-start-up-time-in-half/>
 
 ** 借鉴大佬的配置，作为框架
+:PROPERTIES:
+:CUSTOM_ID: h:d923bc80-6e8b-4832-b177-156188d0cdad
+:END:
 
 社区配置
 
@@ -5225,6 +5428,9 @@ Spacemacs & DoomEmacs
 - https://github.com/zilongshanren/emacs.d （子龙山人）
 
 ** 小技巧：
+:PROPERTIES:
+:CUSTOM_ID: h:33962756-e6d0-4b81-887d-cd51a76eded0
+:END:
 
 #+begin_src emacs-lisp :tangle no :results none
 ;;; 返回上一个buffer
