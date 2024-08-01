@@ -1257,10 +1257,10 @@ early-init.el 处激活缓存[[#h:package-cache][(=early-init.el= 初始化包�
 ;; make use-package default behavior better
 ;; with `use-package-always-ensure' you won't need ":ensure t" all the time
 ;; with `use-package-always-defer' you won't need ":defer t" all the time
-(setq use-package-always-ensure t           ; 自动安装
-     use-package-always-defer t            ; 软件包延迟加载 
-     use-package-enable-imenu-support t
-     use-package-expand-minimally t)
+;; (setq use-package-always-ensure t           ; 自动安装
+;;      use-package-always-defer t            ; 软件包延迟加载 
+;;      use-package-enable-imenu-support t
+;;      use-package-expand-minimally t)
 #+end_src
 
 使用样例
@@ -1322,8 +1322,9 @@ early-init.el 处激活缓存[[#h:package-cache][(=early-init.el= 初始化包�
   (add-hook 'after-init-hook 'benchmark-init/deactivate))
 
 ;; Core
-(require 'init-basic)
 (require 'init-ui)
+(require 'init-essentials)
+(require 'init-basic)
 (require 'init-modeline)
 (require 'init-completion)
 (require 'init-evil)
@@ -1498,6 +1499,137 @@ early-init.el 处激活缓存[[#h:package-cache][(=early-init.el= 初始化包�
 #+begin_src emacs-lisp :tangle "lisp/init-packages.el"
 (message "Load init-packages done...")
 (provide 'init-packages)
+#+end_src
+
+** =init-ui.el=
+:PROPERTIES:
+:CUSTOM_ID: h:1a9f33d6-5ff3-4048-872d-80243061b6cb
+:END:
+
+*** =init-ui.el= 内置配置
+:PROPERTIES:
+:CUSTOM_ID: h:ui-built-in
+:END:
+
+在学习章节提到过[[h:learn-ui-built-in][(外观配置)]]
+
+#+begin_src emacs-lisp :tangle "lisp/init-ui.el" :mkdirp yes
+(setq inhibit-startup-screen t) ; 尝试关掉启动界面
+(setq-default cursor-type 'bar)              ; 更改光标的样式，默认比较粗. 更多C-h v 查询帮助
+;;(setq cursor-type 'bar)                    ;; 更改光标的样式。setq当前buffer生效，不能全局生效
+
+(global-hl-line-mode t)                      ;; 高亮当前行
+
+(global-display-line-numbers-mode 1) ;显示行号 29版本。29之前用(global-linum-mode 1)
+(setq frame-title-format
+      `((buffer-file-name "%f" "%b")
+        ,(format " - GNU Emacs %s" emacs-version)))
+
+
+;;(toggle-frame-maximized)                     ; 全屏编辑器
+(setq  initial-frame-alist (quote ((fullscreen . maximized))))
+
+
+;;(set-face-attribute 'default nil :height 150) ; 修改字号，大小为16pt
+;;让鼠标滚动更好用。默认滚动很快
+(setq mouse-wheel-scroll-amount '(3 ((shift) . 1) ((control) . nil)))
+(setq mouse-wheel-progressive-speed nil)
+
+(tool-bar-mode -1)                           ;; 关闭工具栏，tool-bar-mode 即为一个 Minor Mode
+(scroll-bar-mode -1)                         ;; 关闭文件滑动控件
+;; (menu-bar-mode -1)                        ;; 关闭菜单栏 (不关闭，使用插件时会用到)
+
+
+;;主题
+;;(load-theme 'tango-dark) ;这里使用doom-theme
+
+
+#+end_src
+
+*** =init-ui.el= 主题 =doom-emacs=
+:PROPERTIES:
+:CUSTOM_ID: h:ui-doom-emacs
+:END:
+
+#+begin_src emacs-lisp :tangle no :results none
+;; 这里的执行顺序非常重要，doom-modeline-mode 的激活时机一定要在设置global-mode-string 之后‘
+(use-package doom-themes
+  :ensure t)
+(load-theme 'doom-one 1)
+
+(use-package doom-modeline
+  :ensure t
+  :custom-face
+  (mode-line ((t (:height 0.9))))
+  (mode-line-inactive ((t (:height 0.9))))
+  :init
+  (doom-modeline-mode t))
+
+(use-package nerd-icons
+  :ensure t)
+#+end_src
+
+现在更推荐用 [[https://github.com/rainstormstudio/nerd-icons.el][rainstormstudio/nerd-icons.el (github.com)]] 。直接下载一个nerd fonts就可以 (=M-x nerd-icons-install-fonts=)或者手动下载fonts目录中的 =NFM.ttf= 。GUI和terminal都可以显示icon，大小也更统一。
+
+#+begin_src emacs-lisp :tangle "lisp/init-ui.el"
+;; 这里的执行顺序非常重要，doom-modeline-mode 的激活时机一定要在设置global-mode-string 之后‘
+(use-package doom-themes
+  :ensure t
+  :init
+  (if (display-graphic-p)
+      (load-theme 'doom-solarized-light t) ; t表示自动确认运行代码
+    (load-theme 'doom-tomorrow-night t)))
+
+;; (set-face-attribute 'default nil :height 150) ; 修改字号，大小为16pt
+(set-face-attribute 'default nil :height 130) ; 修改字号，大小为16pt
+
+(use-package doom-modeline
+  :ensure t
+  :init
+  (setq doom-modeline-minor-modes t)
+  :custom-face
+  (mode-line ((t (:height 0.95))))
+  (mode-line-inactive ((t (:height 0.95))))
+  :hook (after-init . doom-modeline-mode))
+#+end_src
+
+
+#+begin_src emacs-lisp :tangle "lisp/init-ui.el"
+(message "Load init-ui done...")
+(provide 'init-ui)
+#+end_src
+
+** =init-essentials.el=
+:PROPERTIES:
+:CUSTOM_ID: h:8c9e81fb-48a0-41da-b9e0-1e3cfdee7f51
+:END:
+
+
+#+begin_src emacs-lisp :tangle "lisp/init-essentials.el" :mkdirp yes
+;;;; 常规设置和常用自定义函数(j-simple.el)
+#+end_src
+
+*** =init-essentials.el= 自定义命令 =j-simple.el=
+:PROPERTIES:
+:CUSTOM_ID: h:d5590309-993e-442e-93ac-e0a6d11763af
+:END:
+
+
+自定义命令([[#h:1ff292d7-21a0-4f9b-a00d-52a6be5ef3f6][ =j-simple.el= 库]])
+#+begin_src emacs-lisp :tangle "lisp/init-essentials.el"
+(use-package j-simple
+  :ensure nil
+  :demand t
+  :bind
+  ( ("ESC ESC" . j-simple-keyboard-quit-dwim)
+    ("C-g" . j-simple-keyboard-quit-dwim)
+    ("C-M-SPC" . j-simple-mark-sexp)   ; 选中区域
+    ))
+#+end_src
+
+#+begin_src emacs-lisp :tangle "lisp/init-essentials.el"
+(message "Load init-essentials done...")
+(provide 'init-essentials)
 #+end_src
 
 ** =init-basic.el=
@@ -1784,104 +1916,6 @@ org-mode
 (use-package pyim
   :ensure t)
 #+END_SRC
-
-** =init-ui.el=
-:PROPERTIES:
-:CUSTOM_ID: h:1a9f33d6-5ff3-4048-872d-80243061b6cb
-:END:
-
-*** =init-ui.el= 内置配置
-:PROPERTIES:
-:CUSTOM_ID: h:ui-built-in
-:END:
-
-在学习章节提到过[[h:learn-ui-built-in][(外观配置)]]
-
-#+begin_src emacs-lisp :tangle "lisp/init-ui.el" :mkdirp yes
-(setq inhibit-startup-screen t) ; 尝试关掉启动界面
-(setq-default cursor-type 'bar)              ; 更改光标的样式，默认比较粗. 更多C-h v 查询帮助
-;;(setq cursor-type 'bar)                    ;; 更改光标的样式。setq当前buffer生效，不能全局生效
-
-(global-hl-line-mode t)                      ;; 高亮当前行
-
-(global-display-line-numbers-mode 1) ;显示行号 29版本。29之前用(global-linum-mode 1)
-(setq frame-title-format
-      `((buffer-file-name "%f" "%b")
-        ,(format " - GNU Emacs %s" emacs-version)))
-
-
-;;(toggle-frame-maximized)                     ; 全屏编辑器
-(setq  initial-frame-alist (quote ((fullscreen . maximized))))
-
-
-;;(set-face-attribute 'default nil :height 150) ; 修改字号，大小为16pt
-;;让鼠标滚动更好用。默认滚动很快
-(setq mouse-wheel-scroll-amount '(3 ((shift) . 1) ((control) . nil)))
-(setq mouse-wheel-progressive-speed nil)
-
-(tool-bar-mode -1)                           ;; 关闭工具栏，tool-bar-mode 即为一个 Minor Mode
-(scroll-bar-mode -1)                         ;; 关闭文件滑动控件
-;; (menu-bar-mode -1)                        ;; 关闭菜单栏 (不关闭，使用插件时会用到)
-
-
-;;主题
-;;(load-theme 'tango-dark) ;这里使用doom-theme
-
-
-#+end_src
-
-*** =init-ui.el= 主题 =doom-emacs=
-:PROPERTIES:
-:CUSTOM_ID: h:ui-doom-emacs
-:END:
-
-#+begin_src emacs-lisp :tangle no :results none
-;; 这里的执行顺序非常重要，doom-modeline-mode 的激活时机一定要在设置global-mode-string 之后‘
-(use-package doom-themes
-  :ensure t)
-(load-theme 'doom-one 1)
-
-(use-package doom-modeline
-  :ensure t
-  :custom-face
-  (mode-line ((t (:height 0.9))))
-  (mode-line-inactive ((t (:height 0.9))))
-  :init
-  (doom-modeline-mode t))
-
-(use-package nerd-icons
-  :ensure t)
-#+end_src
-
-现在更推荐用 [[https://github.com/rainstormstudio/nerd-icons.el][rainstormstudio/nerd-icons.el (github.com)]] 。直接下载一个nerd fonts就可以 (=M-x nerd-icons-install-fonts=)或者手动下载fonts目录中的 =NFM.ttf= 。GUI和terminal都可以显示icon，大小也更统一。
-
-#+begin_src emacs-lisp :tangle "lisp/init-ui.el"
-;; 这里的执行顺序非常重要，doom-modeline-mode 的激活时机一定要在设置global-mode-string 之后‘
-(use-package doom-themes
-  :ensure t
-  :init
-  (if (display-graphic-p)
-      (load-theme 'doom-solarized-light t) ; t表示自动确认运行代码
-    (load-theme 'doom-tomorrow-night t)))
-
-;; (set-face-attribute 'default nil :height 150) ; 修改字号，大小为16pt
-(set-face-attribute 'default nil :height 130) ; 修改字号，大小为16pt
-
-(use-package doom-modeline
-  :ensure t
-  :init
-  (setq doom-modeline-minor-modes t)
-  :custom-face
-  (mode-line ((t (:height 0.95))))
-  (mode-line-inactive ((t (:height 0.95))))
-  :hook (after-init . doom-modeline-mode))
-#+end_src
-
-
-#+begin_src emacs-lisp :tangle "lisp/init-ui.el"
-(message "Load init-ui done...")
-(provide 'init-ui)
-#+end_src
 
 ** =init-modeline.el=
 :PROPERTIES:
@@ -4615,6 +4649,101 @@ general插件中global-definer在init-basic.el中定义[[#h:basic-general][(=ini
 :END:
 
 一个自定义库会对某一个软件包做扩展，软件包配置文件会分别引用它们。
+
+** =j-simple.el= 库
+:PROPERTIES:
+:CUSTOM_ID: h:1ff292d7-21a0-4f9b-a00d-52a6be5ef3f6
+:END:
+
+
+#+begin_src emacs-lisp :tangle "j-lisp/j-simple.el" :mkdirp yes
+;;; j-simple.el --- Extensions for Consult -*- lexical-binding: t -*-
+
+;; Copyright (C) 2024  Jasper Hsu
+
+;; Author: Jasper Hsu <xcwhome@163.com>
+;; URL: https://xuchangwei.com/lisp/jasper-emacs.html
+;; Version: 0.1.0
+;; Package-Requires: ((emacs "30.1"))
+
+;; This file is NOT part of GNU Emacs.
+
+;; This program is free software; you can redistribute it and/or modify
+;; it under the terms of the GNU General Public License as published by
+;; the Free Software Foundation, either version 3 of the License, or (at
+;; your option) any later version.
+;;
+;; This program is distributed in the hope that it will be useful,
+;; but WITHOUT ANY WARRANTY; without even the implied warranty of
+;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+;; GNU General Public License for more details.
+;;
+;; You should have received a copy of the GNU General Public License
+;; along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+;;; Commentary:
+;;
+;; Remember that every piece of Elisp that I write is for my own
+;; educational and recreational purposes.  I do not recommend that
+;; you copy any of this if you are not certain of what it does.
+
+;;; Code:
+
+;;; Commands
+
+;;;; General commands
+
+(defun j-simple--mark (bounds)
+  "Mark between BOUNDS as a cons cell of beginning and end positions."
+  (push-mark (car bounds))
+  (goto-char (cdr bounds))
+  (activate-mark))
+
+;;; autoload这是一个文档字符串的前缀，表示这个函数可以通过 Emacs 的自动加载机制被加载。当用户在 Emacs 命令行中输入函数名时，Emacs 会尝试自动加载这个函数的定义。
+;;;###autoload
+(defun j-simple-mark-sexp ()
+  "Mark symbolic expression at or near point.
+Repeat to extend the region forward to the next symbolic
+expression. 选中区域"
+  (interactive)
+  (if (and (region-active-p)
+           (eq last-command this-command))
+      (ignore-errors (forward-sexp 1))
+    (when-let ((thing (cond
+                       ((thing-at-point 'url) 'url)
+                       ((thing-at-point 'sexp) 'sexp)
+                       ((thing-at-point 'string) 'string)
+                       ((thing-at-point 'word) 'word))))
+      (j-simple--mark (bounds-of-thing-at-point thing)))))
+
+;;;###autoload
+(defun j-simple-keyboard-quit-dwim ()
+  "Do-What-I-Mean behaviour for a general `keyboard-quit'.
+
+The generic `keyboard-quit' does not do the expected thing when
+the minibuffer is open.  Whereas we want it to close the
+minibuffer, even without explicitly focusing it.
+
+The DWIM behaviour of this command is as follows:
+
+- When the region is active, disable it.
+- When a minibuffer is open, but not focused, close the minibuffer.
+- When the Completions buffer is selected, close it.
+- In every other case use the regular `keyboard-quit'."
+  (interactive)
+  (cond
+   ((region-active-p)
+    (keyboard-quit))
+   ((derived-mode-p 'completion-list-mode)
+    (delete-completion-window))
+   ((> (minibuffer-depth) 0)
+    (abort-recursive-edit))
+   (t
+    (keyboard-quit))))
+
+(provide 'j-simple)
+;;; j-simple.el ends here
+#+end_src
 
 ** =j-consult.el= 库
 :PROPERTIES:

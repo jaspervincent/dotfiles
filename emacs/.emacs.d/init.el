@@ -71,10 +71,10 @@
 ;; make use-package default behavior better
 ;; with `use-package-always-ensure' you won't need ":ensure t" all the time
 ;; with `use-package-always-defer' you won't need ":defer t" all the time
-(setq use-package-always-ensure t           ; 自动安装
-     use-package-always-defer t            ; 软件包延迟加载 
-     use-package-enable-imenu-support t
-     use-package-expand-minimally t)
+;; (setq use-package-always-ensure t           ; 自动安装
+;;      use-package-always-defer t            ; 软件包延迟加载 
+;;      use-package-enable-imenu-support t
+;;      use-package-expand-minimally t)
 
 ;; 加载模块
 (load (locate-user-emacs-file "jasper-emacs-pre-custom.el") :no-error :no-message)
@@ -89,8 +89,9 @@
   (add-hook 'after-init-hook 'benchmark-init/deactivate))
 
 ;; Core
-(require 'init-basic)
 (require 'init-ui)
+(require 'init-essentials)
+(require 'init-basic)
 (require 'init-modeline)
 (require 'init-completion)
 (require 'init-evil)
