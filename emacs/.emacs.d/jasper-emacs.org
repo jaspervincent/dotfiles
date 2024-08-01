@@ -1387,6 +1387,8 @@ early-init.el 处激活缓存[[#h:package-cache][(=early-init.el= 初始化包�
 
 在学习章节提到过[[h:learn-module-up-packages][(精选 packages, 大大提升你的 Emacs 编辑效率)]]
 
+emacs30版本提供vc内置包，拉取非elpa源软件包
+
 #+begin_comment :tangle no
 ,#+begin_src emacs-lisp :tangle no :results none
 #+end_comment
@@ -1420,6 +1422,9 @@ early-init.el 处激活缓存[[#h:package-cache][(=early-init.el= 初始化包�
 :CUSTOM_ID: h:packages-vc
 :END:
 
+https://github.com/slotThe/vc-use-package
+
+emacs30版本后vc内置。可以直接使用。
 
 #+begin_src emacs-lisp :tangle no
 ;;; 添加vc宏方便安装非elpa源包
