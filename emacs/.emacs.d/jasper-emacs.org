@@ -163,10 +163,6 @@ DLL 添加到 Emacs 的 bin/ 目录中。 否则，TLS 等功能会导致
 请右键选择新建快捷方式，选择bin\runemacs.exe, 并起个名。 右键快捷方式 =属性= ，目标处添加命令行选项 =--debug-init= 
 
 
-追加参数启动 --debug-init
-
-
-
 ** 改键
 :PROPERTIES:
 :CUSTOM_ID: h:learn-key
@@ -913,10 +909,11 @@ require 'init-basic
 :CUSTOM_ID: h:cb5979bf-baeb-48b0-abd7-0f54495dd006
 :END:
 
+官方文档：<https://orgmode.org/manual/Extracting-Source-Code.html>
+
 Org-mode 下的文学编程将颠覆你对于 Emacs 的看法。因为我们也可以使用 Org 来管理 Emacs 的配置文件。
 
 我们可以让我们的配置文件更加清晰有序，并且可以添加很多注释之外的资料、链接等，让我们的配置更加易读和可管理。
-
 
 - 创建org文件。如 =~/.emacs.d/emacs-config.org=
 - 代码块
@@ -946,9 +943,12 @@ Org-mode 下的文学编程将颠覆你对于 Emacs 的看法。因为我们也�
 :END
 #+end_src
 
-不想写入文件
-- 直接在对应代码块或者标题参数行写上 :tangle no
-  
+  支持的参数
+- 代码不写到文件 :tangle no
+- 创建目录,  :mkdir yes
+
+  =C-c C-v C-d= org-babel-demarcate-block 代码划分为2块
+
 *添加代码块*
 
 - 旧版使用快捷键 ~< + 快捷码 + TAB~ 。
