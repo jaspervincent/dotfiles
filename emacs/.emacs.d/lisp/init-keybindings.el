@@ -11,8 +11,8 @@
     "SPC" 'execute-extended-command   ; 按2下空格SPC-SPC就可以实现 M-x 的效果
     "TAB" 'spacemacs/alternate-buffer ; SPC TAB 在最近的2个buffer之间切换
     "'" 'vertico-repeat
-    "+" 'text-scale-increase
-    "-" 'text-scale-decrease
+    "+" 'text-scale-increase   ; SPC + 放大，相当于C-x C-+
+    "-" 'text-scale-decrease   ; SPC - 缩小
     "u" 'universal-argument    ; SPC u 相当于emacs的C-u 
     "hdf" 'describe-function   ; SPC hdf 相当于emacs的C-h f
     "hdv" 'describe-variable   ; SPC hdv 相当于emacs的C-h v
@@ -54,7 +54,7 @@
           :which-key "messages-buffer") ; SPC b M查看*Message*缓冲区(常用 配合SPC b b快速切换)
     "n" 'next-buffer
     "i" 'ibuffer
-    "f" 'my-open-current-directory
+    "f" 'my-open-current-directory ; SPC b f 从外部打开当前buffer对应的目录 
     "k" 'kill-buffer
     "y" 'fast/copy-buffer-name
     "K" 'fast/kill-other-buffers)

@@ -75,6 +75,22 @@
   :init
   (global-anzu-mode t))
 
+;;; 使用社区稳定的按键绑定。 并设置不同模式中默认的evil状态
+(use-package evil-collection
+  :ensure t
+  :after evil
+  :config
+  (setq evil-collection-mode-list (remove 'lispy evil-collection-mode-list)) ; 移除社区中插件的改键对你键位影响
+  (evil-collection-init)
+
+  ;; 设置进入mode时对应的vim 模式
+  (cl-loop for (mode . state) in
+           '((org-agenda-mode . normal) ;进入agenda时默认Normal State状态
+             (Custom-mode . emacs)
+             (eshell-mode . emacs) ;进入eshell模式时默认Emacs State状态
+             (makey-key-mode . motion))
+           do (evil-set-initial-state mode state)))
+
 ;;; S用法，选中一个单词后加引号。viw S " 相当于原生vim text object用法 viw Shift i " 
 (use-package evil-surround
   :ensure t

@@ -19,8 +19,8 @@
   (defvar resize-window-dispatch-alist
     '((?n resize-window--enlarge-down " 向下Resize - Expand down " t)
       (?p resize-window--enlarge-up " 向上Resize - Expand up" t)
-      (?f resize-window--enlarge-horizontally " 向右Resize - horizontally" t)
-      (?b resize-window--shrink-horizontally " 向左Resize - shrink horizontally" t)
+      (?f resize-window--enlarge-horizontally " 放大Resize - horizontally" t)
+      (?b resize-window--shrink-horizontally " 缩小Resize - shrink horizontally" t)
       (?r resize-window--reset-windows " 重置Resize - reset window layout" nil)
       (?w resize-window--cycle-window-positive "  选择分屏Resize - cycle window" nil)
       (?W resize-window--cycle-window-negative " Resize - cycle window" nil)

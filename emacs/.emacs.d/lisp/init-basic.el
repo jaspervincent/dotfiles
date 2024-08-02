@@ -23,6 +23,20 @@
 (set-keyboard-coding-system 'utf-8)
 (setq default-buffer-file-coding-system 'utf-8)
 
+;; emoji
+;; (set-fontset-font "fontset-default"
+;;                   'unicode
+;;                   (font-spec :family "Segoe UI Emoji" :size 12))
+
+;;; emoji表情符号
+;; Noto Emoji Font 是google开源项目https://fonts.google.com/noto/specimen/Noto+Emoji
+;; 下载所有表情符号
+;; MacOS
+;;(set-fontset-font t 'symbol (font-spec :family "Apple Color Emoji") nil 'prepend)
+;; Windows
+(when (eq system-type 'windows-nt)
+  (set-frame-font "Segoe UI Emoji-12" nil t))
+
 ;; 开启服务
 (server-mode 1)
 

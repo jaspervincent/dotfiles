@@ -983,8 +983,6 @@ Org-mode 下的文学编程将颠覆你对于 Emacs 的看法。因为我们也�
 (setq org-src-tab-acts-natively t)                ; 源代码编辑模式下，Tab键的行为与原生代码编辑器一致，t代表启用该功能,  默认t
 (setq org-edit-src-content-indentation 0)          ; 代码块里缩进，0不缩进，默认是2 (重要)
 #+end_src
-#+begi
-#+end_src
 
 ** 模块列表
 :PROPERTIES:
@@ -1556,6 +1554,8 @@ emacs30版本后vc内置。可以直接使用。
 :CUSTOM_ID: h:ui-doom-emacs
 :END:
 
+在我的学习文章提到过([[#h:0ef565c4-904d-4863-9c8b-7462407b2659][模块列表]])
+
 #+begin_src emacs-lisp :tangle no :results none
 ;; 这里的执行顺序非常重要，doom-modeline-mode 的激活时机一定要在设置global-mode-string 之后‘
 (use-package doom-themes
@@ -1674,6 +1674,20 @@ emacs30版本后vc内置。可以直接使用。
 (set-keyboard-coding-system 'utf-8)
 (setq default-buffer-file-coding-system 'utf-8)
 
+;; emoji
+;; (set-fontset-font "fontset-default"
+;;                   'unicode
+;;                   (font-spec :family "Segoe UI Emoji" :size 12))
+
+;;; emoji表情符号
+;; Noto Emoji Font 是google开源项目https://fonts.google.com/noto/specimen/Noto+Emoji
+;; 下载所有表情符号
+;; MacOS
+;;(set-fontset-font t 'symbol (font-spec :family "Apple Color Emoji") nil 'prepend)
+;; Windows
+(when (eq system-type 'windows-nt)
+  (set-frame-font "Segoe UI Emoji-12" nil t))
+
 ;; 开启服务
 (server-mode 1)
 
@@ -1715,6 +1729,8 @@ emacs30版本后vc内置。可以直接使用。
 :CUSTOM_ID: h:basic-session
 :END:
 
+在我的学习文章提到过([[#h:0ef565c4-904d-4863-9c8b-7462407b2659][模块列表]])
+
 savehist-mode  默认开启，重启 emacs 会记住使用过的命令，同时会保存到 =~/.emacs.d/history= 文件中。 history 文件还保存了 minibuffer 的变量、查找过的文件等。相当于记住了上次的工作状态。
 
 save-place-mode 开启后，会记住光标所在文件的位置，下次打开文件时自动光标指向这个位置
@@ -1750,6 +1766,8 @@ save-place-mode 开启后，会记住光标所在文件的位置，下次打开�
 :PROPERTIES:
 :CUSTOM_ID: h:basic-simple
 :END:
+
+在我的学习文章提到过([[#h:0ef565c4-904d-4863-9c8b-7462407b2659][模块列表]])
 
 modeline上显示文件大小、列号
 
@@ -1936,6 +1954,8 @@ org-mode
 :PROPERTIES:
 :CUSTOM_ID: h:modeline-keycast
 :END:
+
+在我的学习文章提到过([[#h:0ef565c4-904d-4863-9c8b-7462407b2659][模块列表]])
 
 modeline上显示我的所有的按键和执行的命令
 
@@ -2695,7 +2715,7 @@ general插件中global-definer在init-basic.el中定义[[#h:basic-general][(=ini
   (global-anzu-mode t))
 #+end_src
 
-**** COMMENT evil-collections
+**** evil-collections
 :PROPERTIES:
 :CUSTOM_ID: h:4ab86f63-e3dc-4b10-a730-72d12d10555a
 :END:
@@ -3084,8 +3104,8 @@ C-w h/j/j/k
   (defvar resize-window-dispatch-alist
     '((?n resize-window--enlarge-down " 向下Resize - Expand down " t)
       (?p resize-window--enlarge-up " 向上Resize - Expand up" t)
-      (?f resize-window--enlarge-horizontally " 向右Resize - horizontally" t)
-      (?b resize-window--shrink-horizontally " 向左Resize - shrink horizontally" t)
+      (?f resize-window--enlarge-horizontally " 放大Resize - horizontally" t)
+      (?b resize-window--shrink-horizontally " 缩小Resize - shrink horizontally" t)
       (?r resize-window--reset-windows " 重置Resize - reset window layout" nil)
       (?w resize-window--cycle-window-positive "  选择分屏Resize - cycle window" nil)
       (?W resize-window--cycle-window-negative " Resize - cycle window" nil)
@@ -3283,7 +3303,7 @@ Main data structure of the dispatcher with the form:
 :CUSTOM_ID: h:org-built-in
 :END:
 
-在学习章节提到过[[h:learn-org-built-in][(还想使用)]]
+在学习章节提到过[[h:learn-org-built-in][(learn org)]]
 
 #+begin_src emacs-lisp :tangle "lisp/init-org.el" :mkdirp yes
 ;;; config
@@ -3374,6 +3394,7 @@ Main data structure of the dispatcher with the form:
 :CUSTOM_ID: h:org-todo
 :END:
 
+在我的学习文章提到过([[#h:0ef565c4-904d-4863-9c8b-7462407b2659][模块列表]])
 
 #+begin_src emacs-lisp :tangle "lisp/init-org.el"
 
@@ -3618,6 +3639,8 @@ SCHEDULED: <2022-06-17 Fri 10:00 +1d>
 :CUSTOM_ID: h:org-jietu
 :END:
 
+在我的学习文章提到过([[#h:0ef565c4-904d-4863-9c8b-7462407b2659][模块列表]])
+
 - org-download 29版本支持不友好
 - 自定义函数，灵活点
 
@@ -3738,6 +3761,7 @@ imw后按TAB键补全
 :CUSTOM_ID: h:org-protocol
 :END:
 
+在我的学习文章提到过([[#h:0ef565c4-904d-4863-9c8b-7462407b2659][模块列表]])
 
 官方文档：<https://orgmode.org/worg/org-contrib/org-protocol.html>
 
@@ -3812,6 +3836,7 @@ javascript:location.href='org-protocol://capture?template=x&url=%27+encodeURICom
 :CUSTOM_ID: h:org-spell
 :END:
 
+在我的学习文章提到过([[#h:0ef565c4-904d-4863-9c8b-7462407b2659][模块列表]])
 
 #+begin_src emacs-lisp :tangle "lisp/init-org.el"
 (use-package flyspell-correct
@@ -3853,6 +3878,7 @@ pacman -S mingw64/mingw-w64-x86_64-aspell-en #英语语法检查文件
 :CUSTOM_ID: h:org-fanyi
 :END:
 
+在我的学习文章提到过([[#h:0ef565c4-904d-4863-9c8b-7462407b2659][模块列表]])
 
 有多种翻译工具，这里使用fanyi软件包
 
@@ -4012,6 +4038,9 @@ org-roam-ui 在pc下安装存在问题。系统默认按linux 系统安装tar解
 :CUSTOM_ID: h:personspace
 :END:
 
+
+在我的学习文章提到过([[#h:0ef565c4-904d-4863-9c8b-7462407b2659][模块列表]])
+
 *** =init-window.el= 窗口 =tab-bar(built-in)=
 :PROPERTIES:
 :CUSTOM_ID: h:dbb5227a-09bd-44ff-a2c9-59ab9c5b6f11
@@ -4162,6 +4191,8 @@ org-roam-ui 在pc下安装存在问题。系统默认按linux 系统安装tar解
 :PROPERTIES:
 :CUSTOM_ID: h:c++-eglot
 :END:
+
+在我的学习文章提到过([[#h:0ef565c4-904d-4863-9c8b-7462407b2659][模块列表]])
 
 使用 eglot 来编写、运行和调试 C/C++ 代码
 
@@ -4314,6 +4345,7 @@ Emacs29新特性介绍：<https://emacs.liujiacai.net/post/031-emacs-29-feature-
 :CUSTOM_ID: h:c++-treesit-auto
 :END:
 
+在我的学习文章提到过([[#h:0ef565c4-904d-4863-9c8b-7462407b2659][模块列表]])
 
 https://github.com/renzmann/treesit-auto
 
@@ -4484,6 +4516,8 @@ consult-ripgrep 需要安装 consult 和 ripgrep ， 方便查找关键字
 :CUSTOM_ID: h:keybindings-general
 :END:
 
+在我的学习文章提到过([[#h:0ef565c4-904d-4863-9c8b-7462407b2659][模块列表]])
+
 general插件中global-definer在init-basic.el中定义[[#h:basic-general][(=init-basic.el= general)]]
 
 #+begin_src emacs-lisp :tangle "lisp/init-keybindings.el"
@@ -4495,8 +4529,8 @@ general插件中global-definer在init-basic.el中定义[[#h:basic-general][(=ini
     "SPC" 'execute-extended-command   ; 按2下空格SPC-SPC就可以实现 M-x 的效果
     "TAB" 'spacemacs/alternate-buffer ; SPC TAB 在最近的2个buffer之间切换
     "'" 'vertico-repeat
-    "+" 'text-scale-increase
-    "-" 'text-scale-decrease
+    "+" 'text-scale-increase   ; SPC + 放大，相当于C-x C-+
+    "-" 'text-scale-decrease   ; SPC - 缩小
     "u" 'universal-argument    ; SPC u 相当于emacs的C-u 
     "hdf" 'describe-function   ; SPC hdf 相当于emacs的C-h f
     "hdv" 'describe-variable   ; SPC hdv 相当于emacs的C-h v
@@ -4538,7 +4572,7 @@ general插件中global-definer在init-basic.el中定义[[#h:basic-general][(=ini
           :which-key "messages-buffer") ; SPC b M查看*Message*缓冲区(常用 配合SPC b b快速切换)
     "n" 'next-buffer
     "i" 'ibuffer
-    "f" 'my-open-current-directory
+    "f" 'my-open-current-directory ; SPC b f 从外部打开当前buffer对应的目录 
     "k" 'kill-buffer
     "y" 'fast/copy-buffer-name
     "K" 'fast/kill-other-buffers)
@@ -5055,6 +5089,7 @@ wdeired, and consult-location to occur-edit."
 :CUSTOM_ID: h:j-highlight-global
 :END:
 
+在我的学习文章提到过([[#h:0ef565c4-904d-4863-9c8b-7462407b2659][模块列表]])
 
 - symbol-overlay & highlight-global[[#h:j-highlight-global][(=j-highlight-global.el= 库)]] [[#h:tools-highlight-global][(=init-tools.el= 文本高亮 =symbol-overlay= & =highlight-global=)]]
 
