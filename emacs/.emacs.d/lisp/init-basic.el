@@ -30,6 +30,7 @@
 
 ;;; emoji表情符号
 ;; Noto Emoji Font 是google开源项目https://fonts.google.com/noto/specimen/Noto+Emoji
+;; Segoe UI Emoji 字体 https://www.freefontdownload.org/ch/segoe-ui-emoji.font
 ;; 下载所有表情符号
 ;; MacOS
 ;;(set-fontset-font t 'symbol (font-spec :family "Apple Color Emoji") nil 'prepend)
