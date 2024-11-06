@@ -18,9 +18,9 @@
 (setq backup-inhibited nil) ; Not sure if needed, given `make-backup-files'
 (setq create-lockfiles nil)
 
-;;; 指定自己义配置
+;;; 指定自己义配置, 通过使它变成一次性的来禁用它
 (setq custom-file (make-temp-file "emacs-custom-")) ;没有则自动创建emacs-custom-开头随机文件
-(load custom-file 'no-error 'no-message)
+;;(load custom-file 'no-error 'no-message)
 
 ;;; 始终从 *scratch* 缓冲区开始
 (setq initial-buffer-choice t)
