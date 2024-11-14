@@ -73,6 +73,23 @@
   (setq org-src-tab-acts-natively t)                ; 源代码编辑模式下，Tab键的行为与原生代码编辑器一致，t代表启用该功能,  默认t
   (setq org-edit-src-content-indentation 0))          ; 代码块里缩进，0不缩进，默认是2(重要)
 
+;;; Bael: Languages
+;;https://orgmode.org/worg/org-contrib/babel/languages/
+(org-babel-do-load-languages
+ 'org-babel-load-languages
+ '((perl . t)
+   (ruby . t)
+   (shell . t)
+   (dot . t)
+   ;; (typescript . t)
+   (js . t)
+   (latex .t)
+   (python . t)
+   (emacs-lisp . t)
+   (plantuml . t)
+   (C . t)
+   (ditaa . t)))
+
 (with-eval-after-load 'org  ; 启动org文件时加载
   ;; 自定义org todo  C-c C-t 
   (setq org-todo-keywords

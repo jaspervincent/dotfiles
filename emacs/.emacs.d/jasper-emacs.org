@@ -1853,44 +1853,6 @@ Create prefix map: +general-global-NAME. Prefix bindings in BODY with INFIX-KEY.
 #+end_src
 
 
-python-mode
-#+begin_src emacs-lisp :tangle no
-(use-package python
-  :ensure t
-  :hook (inferior-python-mode . (lambda ()
-                                  (process-query-on-exit-flag
-                                   (get-process "Python"))))
-  :init
-  ;; Disable readline based native completion
-  (setq python-shell-completion-native-enable nil)
-  :config
-  (global-leader
-    :major-modes
-    '(python-mode t)
-    ;;and the keymaps:
-    :keymaps
-    '(python-mode-map)
-    "e" 'live-py-set-version)
-  (setq python-shell-interpreter "python3")
-
-  ;; Live Coding in Python
-  (use-package live-py-mode))
-#+end_src
-
-rust-mode
-#+begin_src emacs-lisp :tangle no
-(global-leader
-  :major-modes
-  '(rust-mode t)
-  ;;and the keymaps:
-  :keymaps
-  '(rust-mode-map)
-  "=" 'rust-format-buffer
-  "c" 'rust-compile
-  "r" 'rust-run
-  "t" 'rust-test)
-#+end_src
-
 org-mode
 #+begin_src emacs-lisp :tangle no
 ;; mode specific major key
@@ -3391,6 +3353,32 @@ Main data structure of the dispatcher with the form:
   (setq org-edit-src-content-indentation 0))          ; 代码块里缩进，0不缩进，默认是2(重要)
 #+end_src
 
+*** =init-org.el= org 编程语言支持
+:PROPERTIES:
+:CUSTOM_ID: h:0934bafe-c508-40e7-8312-64fcb0af71fe
+:END:
+
+参考：[[https://orgmode.org/worg/org-contrib/babel/languages/][Babel: Languages]]
+
+#+begin_src emacs-lisp :tangle "lisp/init-org.el"
+;;; Bael: Languages
+;;https://orgmode.org/worg/org-contrib/babel/languages/
+(org-babel-do-load-languages
+ 'org-babel-load-languages
+ '((perl . t)
+   (ruby . t)
+   (shell . t)
+   (dot . t)
+   ;; (typescript . t)
+   (js . t)
+   (latex .t)
+   (python . t)
+   (emacs-lisp . t)
+   (plantuml . t)
+   (C . t)
+   (ditaa . t)))
+#+end_src
+
 *** =init-org.el= org todo
 :PROPERTIES:
 :CUSTOM_ID: h:org-todo
@@ -4478,6 +4466,48 @@ vim 模式是
 
 ff-find-related-file
 
+*** =init-programming.el= python
+:PROPERTIES:
+:CUSTOM_ID: h:8c03c26f-8593-46d5-a278-ff1f2d20dbef
+:END:
+
+python-mode
+#+begin_src emacs-lisp :tangle "lisp/init-programming.el"
+(use-package python
+  :ensure t
+  :hook (inferior-python-mode . (lambda ()
+                                  (process-query-on-exit-flag
+                                   (get-process "Python"))))
+  :init
+  ;; Disable readline based native completion
+  (setq python-shell-completion-native-enable nil)
+  :config
+  (global-leader
+    :major-modes
+    '(python-mode t)
+    ;;and the keymaps:
+    :keymaps
+    '(python-mode-map)
+    "e" 'live-py-set-version)
+  (setq python-shell-interpreter "python3")
+
+  ;; Live Coding in Python
+  (use-package live-py-mode :ensure t))
+#+end_src
+
+rust-mode
+#+begin_src emacs-lisp :tangle no
+(global-leader
+  :major-modes
+  '(rust-mode t)
+  ;;and the keymaps:
+  :keymaps
+  '(rust-mode-map)
+  "=" 'rust-format-buffer
+  "c" 'rust-compile
+  "r" 'rust-run
+  "t" 'rust-test)
+#+end_src
 
 
 
