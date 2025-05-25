@@ -1,6 +1,7 @@
-#+title: GNU Emacs 配置
+#+title: 我的 Emacs 配置
 #+author: Jasper Hsu
 #+email: xcwhome@163.com
+#+Date: <2023-12-17 Sun>
 #+options: ':t toc:nil num:t author:t email:t H:5
 #+startup: content indent
 #+macro: latest-export-date (eval (format-time-string "%F %T %z"))
@@ -5258,7 +5259,8 @@ wdeired, and consult-location to occur-edit."
   (insert (concat "\n#+DOWNLOADED: screenshot @ "
                   (format-time-string "%Y-%m-%d %a %H:%M:%S" (current-time))
                   "\n#+CAPTION: \n#+ATTR_ORG: :width "
-                  width
+		  "30%"
+                  ;;width
                   "\n#+ATTR_LATEX: :width "
                   (if (>= (/ (string-to-number width) 800.0) 1.0)
                       "1.0"

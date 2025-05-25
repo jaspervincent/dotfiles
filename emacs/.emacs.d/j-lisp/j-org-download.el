@@ -67,7 +67,8 @@
   (insert (concat "\n#+DOWNLOADED: screenshot @ "
                   (format-time-string "%Y-%m-%d %a %H:%M:%S" (current-time))
                   "\n#+CAPTION: \n#+ATTR_ORG: :width "
-                  width
+		  "30%"
+                  ;;width
                   "\n#+ATTR_LATEX: :width "
                   (if (>= (/ (string-to-number width) 800.0) 1.0)
                       "1.0"
