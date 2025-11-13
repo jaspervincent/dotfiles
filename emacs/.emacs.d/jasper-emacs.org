@@ -1074,6 +1074,15 @@ Org-mode 下的文学编程将颠覆你对于 Emacs 的看法。因为我们也�
 #+end_src
 
 
+* 预安装程序
+:PROPERTIES:
+:CUSTOM_ID: h:97184f00-6c31-4b26-8e03-cc4d4d06738f
+:END:
+- [[#h:org-spell][aspell]]
+- [[#h:c++-treesit-auto][ =init-programming.el= 语法高亮 =treesit-auto= ]] 
+- 提前创建 ~/org 目录
+
+
 * Emacs初始化 =early-init.el=
 :PROPERTIES:
 :HEADER-ARGS: :tangle early-init.el
