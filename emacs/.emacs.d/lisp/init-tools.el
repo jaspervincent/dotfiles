@@ -17,7 +17,9 @@
   :ensure t
   :config
   ;; 定义子菜单
-  (defadvice er/prepare-for-more-expansions-internal
+  ;;(defadvice er/prepare-for-more-expansions-internal
+  ;;lisp/init-tools.el: Warning: ‘defadvice’ is an obsolete macro (as of 30.1); use ‘advice-add’ or ‘define-advice’
+  (advice-add er/prepare-for-more-expansions-internal
       (around helm-ag/prepare-for-more-expansions-internal activate)
     ad-do-it
     (let ((new-msg (concat (car ad-return-value)
