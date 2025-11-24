@@ -504,6 +504,20 @@ Org-mode 下的文学编程将颠覆你对于 Emacs 的看法。因为我们也�
 - 提前创建 ~/org 目录
 
 
+* 配置概览
+:PROPERTIES:
+:CUSTOM_ID: h:277ae533-2af0-44bc-b100-82b7e6564686
+:END:
+
+使用 =jasper-emacs.org= 文件来生成配置文件。
+- =early-init.el= ，早期初始化文件，放置一些自定义设置，比标准的初始化文件更早生效。
+- =init.el= ，它包含我的基础模块系统，即我定义的 Lisp 宏，并加载各个配置模块。
+- =lisp= 目录，它包含了我所有的模块配置模块。每个模块都针对特定类型的配置模块。
+- =j-lisp= 目录，这里是我自定义的库。
+- =jasper-emacs-pre-custom.el= 文件，它在 /before/ 之前被评估模块已加载。
+- =jasper-emacs-post-custom.el= 文件， 与上述文件类似，此文件是适用于我的配置用户。它是在我的其他配置之后评估的。
+  设置已加载。用户可以在其中包含他们想要的任何代码。文件用于覆盖现有功能或定义新功能。
+  
 * Emacs初始化 =early-init.el=
 :PROPERTIES:
 :HEADER-ARGS: :tangle early-init.el
@@ -729,6 +743,9 @@ early-init.el 处激活缓存[[#h:package-cache][(=early-init.el= 初始化包�
 #+end_src
 
 ** =init.el= 安装软件包的宏 (~j-emacs-install~)
+:PROPERTIES:
+:CUSTOM_ID: h:c3481607-1d9f-4bfb-9962-d9436ccfdb9c
+:END:
 
 这个j-emacs-install宏可以实现我想要的功能，即从软件包归档文件或直接从源代码安装软件包。以下是一些使用示例，完整的代码以注释的形式呈现。简而言之，该宏会根据实际情况选择使用 `install` package-install、package-vc-install`install` 或 `install` 函数package-vc-install-from-checkout
 
@@ -825,6 +842,9 @@ At all times, do nothing if PACKAGE is already installled."
 #+end_src
 
 ** =init.el= 配置软件包的宏 (~j-emacs-configure~)
+:PROPERTIES:
+:CUSTOM_ID: h:502c41f8-c764-43d9-9c95-624a027681d8
+:END:
 
 这j-emacs-configure是一个简单的封装器 condition-case。其理念是为给定的软件包添加任意配置代码，并捕获任何错误，以便 Emacs 即使没有该软件包的代码也能正常加载。
 
@@ -2843,7 +2863,7 @@ Main data structure of the dispatcher with the form:
   :bind
   ( :map global-map
     ("C-c l" . org-store-link) ; 存储当前连接
-    ("C-c o" . org-open-at-point-global)
+    ("C-c o" . org-open-at-point-global) ; 打开当前连接位置
     :map org-mode-map
     ("C-c M-l" . org-insert-last-stored-link) ; 插入最近存储的连接
     ("C-c C-M-l" . org-toggle-link-display) ; 显示连接内容

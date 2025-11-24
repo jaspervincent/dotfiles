@@ -43,7 +43,7 @@
   :bind
   ( :map global-map
     ("C-c l" . org-store-link) ; 存储当前连接
-    ("C-c o" . org-open-at-point-global)
+    ("C-c o" . org-open-at-point-global) ; 打开当前连接位置
     :map org-mode-map
     ("C-c M-l" . org-insert-last-stored-link) ; 插入最近存储的连接
     ("C-c C-M-l" . org-toggle-link-display) ; 显示连接内容
