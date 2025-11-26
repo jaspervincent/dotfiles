@@ -17,9 +17,9 @@
   :ensure t
   :config
   ;; 定义子菜单
-  ;;(defadvice er/prepare-for-more-expansions-internal
+  (defadvice er/prepare-for-more-expansions-internal
   ;;lisp/init-tools.el: Warning: ‘defadvice’ is an obsolete macro (as of 30.1); use ‘advice-add’ or ‘define-advice’
-  (advice-add er/prepare-for-more-expansions-internal
+  ;;(advice-add er/prepare-for-more-expansions-internal
       (around helm-ag/prepare-for-more-expansions-internal activate)
     ad-do-it
     (let ((new-msg (concat (car ad-return-value)
@@ -85,6 +85,11 @@
 
 (use-package j-highlight-global
   :ensure nil)
+
+(use-package hyperbole
+  :ensure t
+  :config
+  (hyperbole-mode 1))  ; 启用 Hyperbole 模式
 
 (message "Load init-tools done...")
 (provide 'init-tools)

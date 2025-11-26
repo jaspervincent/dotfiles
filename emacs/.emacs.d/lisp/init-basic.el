@@ -138,9 +138,9 @@ Create prefix map: +general-global-NAME. Prefix bindings in BODY with INFIX-KEY.
     :prefix ","
     "" '(:ignore t :which-key (lambda (arg) `(,(cadr (split-string (car arg) " ")) . ,(replace-regexp-in-string "-mode$" "" (symbol-name major-mode)))))))
 
-(message "Load init-basic done...")
-(provide 'init-basic)
-
 ;;; 输入法 (pyim)
 (use-package pyim
   :ensure t)
+
+(message "Load init-basic done...")
+(provide 'init-basic)

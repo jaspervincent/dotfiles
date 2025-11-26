@@ -1071,6 +1071,13 @@ emacs30版本后vc内置。可以直接使用。
   :vc (:fetcher "github" :repo "org-roam/org-roam-ui"))
 #+end_src
 
+*** =ini-package.el= 中的 ~provide~ 调用
+:PROPERTIES:
+:CUSTOM_ID: h:641255c9-f35f-49cd-89c8-39b01b826703
+:END:
+
+最后，我们 ~provide~ 这个模块。这是 ~require~ 的镜像函数 ([[#h:e6c4acf5-5b51-4b38-a86a-bf3f698ac872][加载各个模块的 init.el 最终部分]])。
+
 #+begin_src emacs-lisp :tangle "lisp/init-packages.el"
 (message "Load init-packages done...")
 (provide 'init-packages)
@@ -1120,10 +1127,15 @@ emacs30版本后vc内置。可以直接使用。
 
 #+end_src
 
-*** =init-ui.el= 主题 =doom-emacs=
+*** =init-ui.el= 主题 =doom-themes=
 :PROPERTIES:
 :CUSTOM_ID: h:ui-doom-emacs
 :END:
+
++ 软件包名称（GNU ELPA）： ~doom-theme~
++ 官方手册：<https://github.com/doomemacs/themes>
++ Git 仓库：
+  - GitHub：<https://github.com/doomemacs/themes>
 
 #+begin_src emacs-lisp :tangle no :results none
 ;; 这里的执行顺序非常重要，doom-modeline-mode 的激活时机一定要在设置global-mode-string 之后‘
@@ -1167,12 +1179,17 @@ emacs30版本后vc内置。可以直接使用。
   :hook (after-init . doom-modeline-mode))
 #+end_src
 
+*** =ini-ui.el= 中的 ~provide~ 调用
+:PROPERTIES:
+:CUSTOM_ID: h:e5a892d5-40da-491f-a77e-14761106603d
+:END:
+
+最后，我们 ~provide~ 这个模块。这是 ~require~ 的镜像函数 ([[#h:i-modules][ =init.el= 加载各个模块)]]。
 
 #+begin_src emacs-lisp :tangle "lisp/init-ui.el"
 (message "Load init-ui done...")
 (provide 'init-ui)
 #+end_src
-
 ** =init-essentials.el=
 :PROPERTIES:
 :CUSTOM_ID: h:8c9e81fb-48a0-41da-b9e0-1e3cfdee7f51
@@ -1201,11 +1218,17 @@ emacs30版本后vc内置。可以直接使用。
     ))
 #+end_src
 
+*** =ini-essentials.el= 中的 ~provide~ 调用
+:PROPERTIES:
+:CUSTOM_ID: h:7c7d05d5-7734-4cbd-a5a0-98e3408bc4cb
+:END:
+
+最后，我们 ~provide~ 这个模块。这是 ~require~ 的镜像函数 ([[#h:i-modules][ =init.el= 加载各个模块)]]。
+
 #+begin_src emacs-lisp :tangle "lisp/init-essentials.el"
 (message "Load init-essentials done...")
 (provide 'init-essentials)
 #+end_src
-
 ** =init-basic.el=
 :PROPERTIES:
 :CUSTOM_ID: h:eeccf037-bcb1-4a96-b965-0339735c3105
@@ -1447,11 +1470,6 @@ org-mode
   "p" 'org-pomodoro)
 #+end_src
 
-#+begin_src emacs-lisp :tangle "lisp/init-basic.el"
-(message "Load init-basic done...")
-(provide 'init-basic)
-#+end_src
-
 *** =init-basic.el= 输入法
 :PROPERTIES:
 :CUSTOM_ID: h:basic-input
@@ -1468,6 +1486,17 @@ org-mode
 (use-package pyim
   :ensure t)
 #+END_SRC
+*** =ini-essentials.el= 中的 ~provide~ 调用
+:PROPERTIES:
+:CUSTOM_ID: h:fbf21fce-6343-48fa-bed0-261db7faab95
+:END:
+
+最后，我们 ~provide~ 这个模块。这是 ~require~ 的镜像函数 ([[#h:i-modules][ =init.el= 加载各个模块)]]。
+
+#+begin_src emacs-lisp :tangle "lisp/init-basic.el"
+(message "Load init-basic done...")
+(provide 'init-basic)
+#+end_src
 
 ** =init-modeline.el=
 :PROPERTIES:
@@ -1527,6 +1556,13 @@ modeline上显示我的所有的按键和执行的命令
       (message "Keycast ON"))))
   ;; 这里的执行顺序非常重要，doom-modeline-mode 的激活时机一定要在设置global-mode-string 之后
 #+end_src
+
+*** =ini-modeline.el= 中的 ~provide~ 调用
+:PROPERTIES:
+:CUSTOM_ID: h:52656a44-8f51-4156-bc71-a249c681341a
+:END:
+
+最后，我们 ~provide~ 这个模块。这是 ~require~ 的镜像函数 ([[#h:i-modules][ =init.el= 加载各个模块)]]。
 
 #+begin_src emacs-lisp :tangle "lisp/init-modeline.el"
 (message "Load init-modeline done...")
@@ -1942,6 +1978,12 @@ orderless 支持 =M-x= 模糊搜索，可以无序的。 如 edebug-defun 函数
   )
 #+end_src
 
+*** =ini-completion.el= 中的 ~provide~ 调用
+:PROPERTIES:
+:CUSTOM_ID: h:db406a59-0bfc-4d80-aadf-36b42cf2aedc
+:END:
+
+最后，我们 ~provide~ 这个模块。这是 ~require~ 的镜像函数 ([[#h:i-modules][ =init.el= 加载各个模块)]]。
 
 #+begin_src emacs-lisp :tangle "lisp/init-completion.el"
 (message "Load init-completion done...")
@@ -2324,14 +2366,12 @@ S用法，选中一个单词后加引号。
   (global-evil-matchit-mode 1))
 #+end_src
 
-*** 高阶用法（自定义 text-obj 或者 自定义 commands)
+*** =ini-evil.el= 中的 ~provide~ 调用
 :PROPERTIES:
-:CUSTOM_ID: h:78a0a60e-dfaf-4aeb-9f4d-6bbaefd6ae1d
+:CUSTOM_ID: h:31f2ad3f-a001-4354-8867-74c819d7fbcf
 :END:
 
-- https://github.com/noctuid/evil-guide#modes
-- https://evil.readthedocs.io/en/latest/overview.html
-
+最后，我们 ~provide~ 这个模块。这是 ~require~ 的镜像函数 ([[#h:i-modules][ =init.el= 加载各个模块)]]。
 
 #+begin_src emacs-lisp :tangle "lisp/init-evil.el"
 (message "Load init-evil done...")
@@ -2341,6 +2381,14 @@ S用法，选中一个单词后加引号。
 *我的建议*
 
 使用emacs原生按键。 用多了evil，你还是个vim用户，无法轻松操作无配置或精简内置配置的emacs。
+
+*** 高阶用法（自定义 text-obj 或者 自定义 commands)
+:PROPERTIES:
+:CUSTOM_ID: h:78a0a60e-dfaf-4aeb-9f4d-6bbaefd6ae1d
+:END:
+
+- https://github.com/noctuid/evil-guide#modes
+- https://evil.readthedocs.io/en/latest/overview.html
 
 ** =init-tools.el=
 :PROPERTIES:
@@ -2390,9 +2438,9 @@ edit操作：
   :ensure t
   :config
   ;; 定义子菜单
-  ;;(defadvice er/prepare-for-more-expansions-internal
+  (defadvice er/prepare-for-more-expansions-internal
   ;;lisp/init-tools.el: Warning: ‘defadvice’ is an obsolete macro (as of 30.1); use ‘advice-add’ or ‘define-advice’
-  (advice-add er/prepare-for-more-expansions-internal
+  ;;(advice-add er/prepare-for-more-expansions-internal
       (around helm-ag/prepare-for-more-expansions-internal activate)
     ad-do-it
     (let ((new-msg (concat (car ad-return-value)
@@ -2512,6 +2560,28 @@ highlight-global是github插件，使用quelpa插件辅助安装[[#h:packages-qu
   - general 快捷键 =SPC v= =SPC hh=
 - =M-x clear-highlight-frame= 清除颜色，或者 =SPC hc= 清除高亮颜色
 
+*** =init-tools.el= 超文本管理系统 =hyperbole=
+:PROPERTIES:
+:CUSTOM_ID: h:6494e2de-2931-4163-8482-997a5942d0fb
+:END:
+
+[[https://www.gnu.org/software/hyperbole/][GNU Hyperbole]] 。
+
+在 Emacs 中使用 Hyperbole 可以极大地提升你管理信息和导航的效率。它是一个功能强大的超文本信息管理系统，通过直观的“按钮”机制，让你能快速创建链接、执行操作并跳转到各种资源。
+
+#+begin_src emacs-lisp :tangle "lisp/init-tools.el"
+(use-package hyperbole
+  :ensure t
+  :config
+  (hyperbole-mode 1))  ; 启用 Hyperbole 模式
+#+end_src
+
+*** =ini-init-tools.el= 中的 ~provide~ 调用
+:PROPERTIES:
+:CUSTOM_ID: h:7fc74209-7797-4eb7-ac42-31d2aee64c47
+:END:
+
+最后，我们 ~provide~ 这个模块。这是 ~require~ 的镜像函数 ([[#h:i-modules][ =init.el= 加载各个模块)]]。
 
 #+begin_src emacs-lisp :tangle "lisp/init-tools.el"
 (message "Load init-tools done...")
@@ -2794,6 +2864,13 @@ Main data structure of the dispatcher with the form:
   "K" 'buf-move-up)          ; SPC w K 窗口上移
 #+end_src
 
+*** =ini-init-window.el= 中的 ~provide~ 调用
+:PROPERTIES:
+:CUSTOM_ID: h:27c27d56-28f5-42ce-a461-7d634cbb817d
+:END:
+
+最后，我们 ~provide~ 这个模块。这是 ~require~ 的镜像函数 ([[#h:i-modules][ =init.el= 加载各个模块)]]。
+
 #+begin_src emacs-lisp :tangle "lisp/init-window.el"
 (message "Load init-window done...")
 (provide 'init-window)
@@ -2835,7 +2912,7 @@ Main data structure of the dispatcher with the form:
 )
 #+end_src
 
-*** =init-org.el= 安装最新org包
+*** =init-org.el= 安装最新Org包
 :PROPERTIES:
 :CUSTOM_ID: h:bd869f5d-b960-4a71-a831-455165c3b55e
 :END:
@@ -2851,7 +2928,13 @@ Main data structure of the dispatcher with the form:
 (use-package org-contrib  ;非org的官方贡献的插件
   :ensure t
   :pin nongnu)
+#+end_src
 
+*** =init-org.el= 基础Org配置
+:PROPERTIES:
+:CUSTOM_ID: h:60da1a64-0afb-4959-884a-ae9a17fbce4c
+:END:
+#+begin_src emacs-lisp :tangle "lisp/init-org.el"
 ;;; Org-mode (personal information manager)
 (use-package org
   :ensure nil
@@ -2871,6 +2954,9 @@ Main data structure of the dispatcher with the form:
     ("i" . j-org-id-headlines) ; 为标题创建属性CUSTOM_ID
     ("h" . j-org-ox-html)      ; org导出为html
     ))
+#+end_src
+
+#+begin_src emacs-lisp :tangle "lisp/init-org.el"
 ;;;; links
 (use-package org
   :ensure nil
@@ -3550,6 +3636,13 @@ org-roam-ui 在pc下安装存在问题。系统默认按linux 系统安装tar解
 
 实时显示链接
 
+*** =ini-init-org.el= 中的 ~provide~ 调用
+:PROPERTIES:
+:CUSTOM_ID: h:ee448d35-e55e-40e4-9a67-16de42817a5e
+:END:
+
+最后，我们 ~provide~ 这个模块。这是 ~require~ 的镜像函数 ([[#h:i-modules][ =init.el= 加载各个模块)]]。
+
 #+begin_src emacs-lisp :tangle "lisp/init-org.el"
 (message "Load init-org done...")
 (provide 'init-org)
@@ -3560,9 +3653,7 @@ org-roam-ui 在pc下安装存在问题。系统默认按linux 系统安装tar解
 :CUSTOM_ID: h:personspace
 :END:
 
-
-
-*** =init-window.el= 窗口 =tab-bar(built-in)=
+*** =init-persp.el= 窗口 =tab-bar(built-in)=
 :PROPERTIES:
 :CUSTOM_ID: h:dbb5227a-09bd-44ff-a2c9-59ab9c5b6f11
 :END:
@@ -3691,7 +3782,12 @@ org-roam-ui 在pc下安装存在问题。系统默认按linux 系统安装tar解
 
 每一个工作空间都可以有布局
 
+*** =ini-init-persp.el= 中的 ~provide~ 调用
+:PROPERTIES:
+:CUSTOM_ID: h:d7943323-c3ad-442b-a5be-89c2ad5d707d
+:END:
 
+最后，我们 ~provide~ 这个模块。这是 ~require~ 的镜像函数 ([[#h:i-modules][ =init.el= 加载各个模块)]]。
 
 #+begin_src emacs-lisp :tangle "lisp/init-persp.el"
 (message "Load init-persp done...")
@@ -4034,7 +4130,12 @@ rust-mode
   "t" 'rust-test)
 #+end_src
 
+*** =ini-init-programming.el= 中的 ~provide~ 调用
+:PROPERTIES:
+:CUSTOM_ID: h:4d9aa004-c53c-4043-b9ce-f93971e0ed49
+:END:
 
+最后，我们 ~provide~ 这个模块。这是 ~require~ 的镜像函数 ([[#h:i-modules][ =init.el= 加载各个模块)]]。
 
 #+begin_src emacs-lisp :tangle "lisp/init-programming.el"
 (message "Load init-programming done...")
@@ -4199,6 +4300,12 @@ general插件中global-definer在init-basic.el中定义[[#h:basic-general][(=ini
 
 参考配置： https://github.com/zilongshanren/emacs.d/blob/eglot/lisp/init-keybindings.el 实现自己的文件、窗口、项目多种快捷键绑定
 
+*** =ini-init-keybindings.el= 中的 ~provide~ 调用
+:PROPERTIES:
+:CUSTOM_ID: h:e520f1fa-6f0d-4322-a78e-719816315557
+:END:
+
+最后，我们 ~provide~ 这个模块。这是 ~require~ 的镜像函数 ([[#h:i-modules][ =init.el= 加载各个模块)]]。
 
 #+begin_src emacs-lisp :tangle "lisp/init-keybindings.el"
 (message "Load init-keybindings done...")
@@ -4230,6 +4337,13 @@ general插件中global-definer在init-basic.el中定义[[#h:basic-general][(=ini
     ("<f4>" . fast/open-my-init-file) ; 快速打开配置文件
     ))
 #+end_src
+
+*** =ini-init-funcs.el= 中的 ~provide~ 调用
+:PROPERTIES:
+:CUSTOM_ID: h:ca631a71-5f7b-4d45-8697-8c6aafb68f04
+:END:
+
+最后，我们 ~provide~ 这个模块。这是 ~require~ 的镜像函数 ([[#h:i-modules][ =init.el= 加载各个模块)]]。
 
 #+begin_src emacs-lisp :tangle "lisp/init-funcs.el"
 (message "Load init-funcs done...")
