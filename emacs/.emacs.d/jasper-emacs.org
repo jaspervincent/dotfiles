@@ -120,7 +120,7 @@ cd emacs
 git config core.autocrlf false
 #+end_src
 
-编译 Emac
+编译 Emacs
 #+begin_src sh :tangle no :results none
 ./autogen.sh  #如果提示版本不够 pacman -Su autoconf
 ./configure --prefix=/d/programs/emacs --without-dbus
