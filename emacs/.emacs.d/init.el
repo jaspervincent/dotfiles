@@ -55,11 +55,6 @@
   (setq package-enable-at-startup nil)          ; To prevent initializing twice
   (package-initialize))
 
-;; Setup `use-package'
-(unless (package-installed-p 'use-package)
-  (package-refresh-contents)
-  (package-install 'use-package))
-
 (defvar j-emacs-my-packages
   '(vertico tmr)
   "List of symbols representing the packages I develop/maintain.")
@@ -71,13 +66,20 @@
              (cons package "gnu-elpa-devel"))
            j-emacs-my-packages)))
 
-;; make use-package default behavior better
-;; with `use-package-always-ensure' you won't need ":ensure t" all the time
-;; with `use-package-always-defer' you won't need ":defer t" all the time
-;; (setq use-package-always-ensure t           ; 自动安装
-;;      use-package-always-defer t            ; 软件包延迟加载 
-;;      use-package-enable-imenu-support t
-;;      use-package-expand-minimally t)
+;; Setup `use-package'
+(unless (package-installed-p 'use-package)
+  (package-refresh-contents)
+  (package-install 'use-package))
+
+;; Should set before loading `use-package'
+;; (eval-and-compile
+;;   (setq use-package-always-ensure t)
+;;   (setq use-package-always-defer t)
+;;   (setq use-package-expand-minimally t)
+;;   (setq use-package-enable-imenu-support t))
+
+(eval-when-compile
+  (require 'use-package))
 
 (defmacro prot-emacs-install (package &rest vc-args)
   "Prepare to install PACKAGE.
