@@ -50,12 +50,15 @@
         ("melpa" . 2)
         ("nongnu" . 1)))
 
-(unless (bound-and-true-p package--initialized)
-  (package-initialize)) ;; 刷新软件源索引
+;; Initialize packages
+(unless (bound-and-true-p package--initialized) ; To avoid warnings in 27
+  (setq package-enable-at-startup nil)          ; To prevent initializing twice
+  (package-initialize))
 
-;;防止反复调用 package-refresh-contents 会影响加载速度
-(when (not package-archive-contents)
-  (package-refresh-contents))
+;; Setup `use-package'
+(unless (package-installed-p 'use-package)
+  (package-refresh-contents)
+  (package-install 'use-package))
 
 (defvar j-emacs-my-packages
   '(vertico tmr)
