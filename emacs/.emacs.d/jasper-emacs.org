@@ -2567,12 +2567,16 @@ highlight-global是github插件，使用quelpa插件辅助安装[[#h:packages-qu
 
 在 Emacs 中使用 Hyperbole 可以极大地提升你管理信息和导航的效率。它是一个功能强大的超文本信息管理系统，通过直观的“按钮”机制，让你能快速创建链接、执行操作并跳转到各种资源。
 
+这里设置不启动 =hyperbole-mode= 模式，需要时再启用。
 #+begin_src emacs-lisp :tangle "lisp/init-tools.el"
 (use-package hyperbole
   :ensure t
   :config
-  (hyperbole-mode 1))  ; 启用 Hyperbole 模式
+  (hyperbole-mode nil) ; 不启动。需要时再启动。
+  )
 #+end_src
+
+=M-RET= 执行动作
 
 *** =ini-init-tools.el= 中的 ~provide~ 调用
 :PROPERTIES:
