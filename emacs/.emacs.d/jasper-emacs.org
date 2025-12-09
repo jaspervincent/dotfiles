@@ -2577,7 +2577,7 @@ highlight-global是github插件，使用quelpa插件辅助安装[[#h:packages-qu
 (use-package hyperbole
   :ensure t
   :config
-  (hyperbole-mode nil) ; 不启动。需要时再启动。
+  (hyperbole-mode -1) ; 不启动。需要时再启动。
   )
 #+end_src
 

@@ -89,7 +89,7 @@
 (use-package hyperbole
   :ensure t
   :config
-  (hyperbole-mode nil) ; 不启动。需要时再启动。
+  (hyperbole-mode -1) ; 不启动。需要时再启动。
   )
 
 (message "Load init-tools done...")
