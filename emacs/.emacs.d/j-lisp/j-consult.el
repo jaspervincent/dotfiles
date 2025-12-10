@@ -40,7 +40,7 @@
 ;;   (setq consult-locate-args (encode-coding-string "es.exe -i -p -r" 'gbk))
 ;;   (add-to-list 'process-coding-system-alist '("es" gbk . gbk))
 ;;   )
-  (if (eq system-type 'windows-nt)
+  (if sys/win32p
       (progn
         (add-to-list 'process-coding-system-alist '("es" gbk . gbk))
         (add-to-list 'process-coding-system-alist '("explorer" gbk . gbk))

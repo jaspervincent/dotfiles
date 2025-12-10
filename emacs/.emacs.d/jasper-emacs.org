@@ -567,17 +567,47 @@ Org-mode 下的文学编程将颠覆你对于 Emacs 的看法。因为我们也�
 :CUSTOM_ID: h:b5675d8d-07b5-4cc1-bb53-2e13d63c652d
 :END:
 
-*** =init.el= 判断操作系统
+*** =init.el= 判断操作系统与用户
 :PROPERTIES:
 :CUSTOM_ID: h:307ea5c9-d0cb-4458-8c72-fe27e44a52ba
 :END:
 #+begin_src emacs-lisp :tangle "init.el"
 ;;; 判断操作系统， 定义一个新变量
-(setq *is-a-mac* (eq system-type 'darwin))
-(setq *win64* (eq system-type 'windows-nt))
-(setq *cygwin* (eq system-type 'cygwin) )
-(setq *linux* (or (eq system-type 'gnu/linux) (eq system-type 'linux)) )
-(setq *unix* (or *linux* (eq system-type 'usg-unix-v) (eq system-type 'berkeley-unix)) )
+(defvar sys/win32p (eq system-type 'windows-nt)
+  "Are we running on a WinTel system?")
+(defconst sys/linuxp (eq system-type 'gnu/linux) "Are we running on a GNU/Linux system?")
+(defconst sys/macp (eq system-type 'darwin) "Are we running on a Mac system?")
+(defconst  sys/mac-x-p (and (display-graphic-p) sys/macp) "Are we running  under X on a Mac system?")
+(defconst sys/mac-ns-p (eq window-system 'ns) "Are we running on a GNUstep or Macintosh Cocoa display?")
+(defconst sys/mac-cocoa-p (featurep 'cocoa) "Are we running with Cocoa on a Mac system?")
+(defconst sys/mac-port-p (eq window-system 'mac) "Are we running a macport build on a Mac system?")
+(defconst sys/linux-x-p (and (display-graphic-p) sys/linuxp) "Are we running under X on a GNU/Linux system?")
+(defconst sys/cygwinp (eq system-type 'cygwin) "Are we running on a Cygwin system?")
+;;(setq *linux* (or (eq system-type 'gnu/linux) (eq system-type 'linux)) )
+;;(setq *unix* (or *linux* (eq system-type 'usg-unix-v) (eq system-type 'berkeley-unix)) )
+;;; 判断系统用户
+(defconst sys/rootp (string-equal "root" (getenv "USER")) "Are you using ROOT user?")
+(message "操作系统: %s" system-type)
+#+end_src
+*** =init.el= 判断emacs版本
+:PROPERTIES:
+:CUSTOM_ID: h:9ce8e227-dc8a-4aa0-bfa8-41cb1eaa42e8
+:END:
+#+begin_src emacs-lisp :tangle "init.el"
+(defconst emacs/>=25p (>= emacs-major-version 25))
+(defconst emacs/>=26p (>= emacs-major-version 26))
+(defconst emacs/>=25.3p
+  (or emacs/>=26p
+      (and (= emacs-major-version 25)
+           (>= emacs-minor-version 3))))
+(defconst emacs/>=25.2p
+  (or emacs/>=26p
+      (and (= emacs-major-version 25)
+           (>= emacs-minor-version 2))))
+(defconst emacs/>=27p
+  (>= emacs-major-version 27))
+(defconst emacs/>=28p
+  (>= emacs-major-version 28))
 #+end_src
 
 ** =init.el= 基础配置禁用备份和锁定文件
@@ -1706,7 +1736,7 @@ Error running timer: (file-missing "Searching for program" "No such file or dire
 
 *配置搜索中文文件*
 
-everythin工具可以快速搜索本地文件。下载地址： <https://www.voidtools.com/zh-cn/downloads/>
+everything工具可以快速搜索本地文件。下载地址： <https://www.voidtools.com/zh-cn/downloads/>
 
 安装好后，同时下载 ES.exe 客户端工具加入环境变量。
 
@@ -4511,7 +4541,7 @@ The DWIM behaviour of this command is as follows:
 ;;   (setq consult-locate-args (encode-coding-string "es.exe -i -p -r" 'gbk))
 ;;   (add-to-list 'process-coding-system-alist '("es" gbk . gbk))
 ;;   )
-  (if (eq system-type 'windows-nt)
+  (if sys/win32p
       (progn
         (add-to-list 'process-coding-system-alist '("es" gbk . gbk))
         (add-to-list 'process-coding-system-alist '("explorer" gbk . gbk))

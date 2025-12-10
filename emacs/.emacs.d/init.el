@@ -7,11 +7,36 @@
 ;;; Code:
 
 ;;; 判断操作系统， 定义一个新变量
-(setq *is-a-mac* (eq system-type 'darwin))
-(setq *win64* (eq system-type 'windows-nt))
-(setq *cygwin* (eq system-type 'cygwin) )
-(setq *linux* (or (eq system-type 'gnu/linux) (eq system-type 'linux)) )
-(setq *unix* (or *linux* (eq system-type 'usg-unix-v) (eq system-type 'berkeley-unix)) )
+(defvar sys/win32p (eq system-type 'windows-nt)
+  "Are we running on a WinTel system?")
+(defconst sys/linuxp (eq system-type 'gnu/linux) "Are we running on a GNU/Linux system?")
+(defconst sys/macp (eq system-type 'darwin) "Are we running on a Mac system?")
+(defconst  sys/mac-x-p (and (display-graphic-p) sys/macp) "Are we running  under X on a Mac system?")
+(defconst sys/mac-ns-p (eq window-system 'ns) "Are we running on a GNUstep or Macintosh Cocoa display?")
+(defconst sys/mac-cocoa-p (featurep 'cocoa) "Are we running with Cocoa on a Mac system?")
+(defconst sys/mac-port-p (eq window-system 'mac) "Are we running a macport build on a Mac system?")
+(defconst sys/linux-x-p (and (display-graphic-p) sys/linuxp) "Are we running under X on a GNU/Linux system?")
+(defconst sys/cygwinp (eq system-type 'cygwin) "Are we running on a Cygwin system?")
+;;(setq *linux* (or (eq system-type 'gnu/linux) (eq system-type 'linux)) )
+;;(setq *unix* (or *linux* (eq system-type 'usg-unix-v) (eq system-type 'berkeley-unix)) )
+;;; 判断系统用户
+(defconst sys/rootp (string-equal "root" (getenv "USER")) "Are you using ROOT user?")
+(message "操作系统: %s" system-type)
+
+(defconst emacs/>=25p (>= emacs-major-version 25))
+(defconst emacs/>=26p (>= emacs-major-version 26))
+(defconst emacs/>=25.3p
+  (or emacs/>=26p
+      (and (= emacs-major-version 25)
+           (>= emacs-minor-version 3))))
+(defconst emacs/>=25.2p
+  (or emacs/>=26p
+      (and (= emacs-major-version 25)
+           (>= emacs-minor-version 2))))
+(defconst emacs/>=27p
+  (>= emacs-major-version 27))
+(defconst emacs/>=28p
+  (>= emacs-major-version 28))
 
 ;;; 禁用备份和锁定文件
 (setq make-backup-files nil)
