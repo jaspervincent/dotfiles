@@ -1111,7 +1111,7 @@ emacs30版本后vc内置。可以直接使用。
 :CUSTOM_ID: h:641255c9-f35f-49cd-89c8-39b01b826703
 :END:
 
-最后，我们 ~provide~ 这个模块。这是 ~require~ 的镜像函数 ([[#h:e6c4acf5-5b51-4b38-a86a-bf3f698ac872][加载各个模块的 init.el 最终部分]])。
+最后，我们 ~provide~ 这个模块。这是 ~require~ 的镜像函数 ([[#h:i-modules][ =init.el= 加载各个模块)]]。
 
 #+begin_src emacs-lisp :tangle "lisp/init-packages.el"
 (message "Load init-packages done...")
