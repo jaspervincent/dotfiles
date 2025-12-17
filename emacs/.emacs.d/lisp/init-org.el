@@ -21,6 +21,20 @@
                              (if (char-equal c ?\<) t (,electric-pair-inhibit-predicate c))))))
 )
 
+;;定义无需确认即可加载的远程资源，完美解决你遇到的下载确认问题。
+(with-eval-after-load 'org
+  (setq org-safe-remote-resources nil) ; 清空原有列表
+  (setq org-safe-remote-resources
+        (append org-safe-remote-resources
+                '(;; 信任该域名的HTTP/HTTPS资源
+                  "xuchangwei.com/*"
+                  ;; 信任整个域名
+                  "https://example.org/*"
+                  ;; 信任另一单个资源
+                  "https://xxx.com/org/another.setup"
+                  )))
+  )
+
 ;;; 安装 org，这个配置一定要配置在 use-package 的初始化之前，否则无法正常安装
 ;; (assq-delete-all 'org package--builtins)
 ;; (assq-delete-all 'org package--builtin-versions)
