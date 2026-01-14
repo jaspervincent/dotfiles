@@ -7,7 +7,7 @@
 #+macro: latest-export-date (eval (format-time-string "%F %T %z"))
 #+macro: word-count (eval (count-words (point-min) (point-max)))
 
-*最后修改时间 {{{latest-export-date}}}  {{{word-count}}}字.*
+[ 最后修订与导出时间： *{{{latest-export-date}}}*  ，总字数： *{{{word-count}}}* ]
 
 
 在Org文件里，写好了代码块，保存文件的时候，Org mode是不会帮你自动写入文件的（未来我们可以通过配置实现），现在，我们需要通过  =C-c C-v C-t= or =M-x org-babel-tangle= 命令来触发 tangle 这个动作。
