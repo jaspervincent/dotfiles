@@ -1597,12 +1597,33 @@ org-mode
 :CUSTOM_ID: h:a7b816c8-da82-4210-856e-07e2edd6e2c2
 :END:
 
+Pyim 一个 emacs 中文输入法，支持全拼，双拼，五笔，仓颉和Rime
 
+需要安装 [[https://github.com/tumashu/pyim][pyim]] 中文输入法 和 [[https://github.com/tumashu/pyim-wbdict][pyim-wbdict]] 五笔词库包
 #+begin_src emacs-lisp :tangle "lisp/init-basic.el"
 ;;; 输入法 (pyim)
 (use-package pyim
   :ensure t)
+(use-package pyim-wbdict
+  :ensure t
+  :config
+  (setq pyim-default-scheme 'wubi) ;; 手动设置 M-x pyim-default-scheme RET wubi
+  (pyim-wbdict-v86-enable) ;86版五笔用户使用这个命令 手动设置 M-x pyim-wbdict-v86-enable
+  ;; (pyim-wbdict-v86-single-enable) ;86版五笔用户使用这个命令，该词库为单字词库，以尽可能不重码减少选词需要为目的
+  )
 #+END_SRC
+
+输入法选择：
+- =C-\= : 启用或关闭已选中的输入方法 (~toggle-input-method~) 。
+- =C-x RET C-\ 输入法名 RET= : 为当前缓冲区选择新的输入方法  (~set-input-method~)  。或者 =C-u C-\=
+
+pyim五笔使用， =C-x RET C-\ pyim RET= 切换 pyim 输入法。手动指定全拼或五笔：
+- =M-x pyim-default-scheme RET wubi= : 使用五笔
+- =M-x pyim-wbdict-v86-enable= : 使用 86 版五笔
+
+常用快捷键
+- =C-n= 或 =M-n= 或 =+= 或 =.=	向下翻页
+- =C-p= 或 =M-p= 或 =-= 或 =,=	向上翻页
 *** =ini-essentials.el= 中的 ~provide~ 调用
 :PROPERTIES:
 :CUSTOM_ID: h:fbf21fce-6343-48fa-bed0-261db7faab95
@@ -3842,9 +3863,14 @@ org-roam-ui 在pc下安装存在问题。系统默认按linux 系统安装tar解
 
 配置生效后，可以看到窗口上方有tab页。
 
-通过 =M-x tab-bar-new-tab= 生成一个的 =tab-bar= 。
-
-=M-x tab-bar-rename= 保持tab-bar名字不变，不跟随文件变化 。
+文档：[[https://www.gnu.org/software/emacs/manual/html_node/emacs/Tab-Bars.html][Tab Bars]]
+- =C-x t 2= : 新建一个标签 (~tab-new~) 。可通过自定义变量 ~tab-bar-new-tab-choice~ ，控制新标签中默认显示的缓冲区；也可通过自定义变量 ~tab-bar-tab-name-function~ ，设置新标签的默认命名规则。
+  - 通过 =M-x tab-bar-new-tab= 生成一个的 =tab-bar= 。 
+- =C-x t 0= : 关闭当前选中的标签 (~tab-close~) 。若标签栏中仅有一个标签，该操作默认无效果，除非将变量 ~tab-bar-close-last-tab-choice~ 自定义为非默认值。
+- =C-x t 1= : 关闭当前选中框架中，除当前标签外的所有其他标签。
+- 命令 ~tab-undo~ 可恢复最后一个被关闭的标签。
+- =C-TAB= : 切换至下一个标签  (~tab-next~) 
+- =M-x tab-bar-rename= 保持tab-bar名字不变，不跟随文件变化 。
 
 *** =init-persp.el= 工作区间 =tabspaces=
 :PROPERTIES:

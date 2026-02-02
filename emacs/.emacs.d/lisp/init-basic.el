@@ -141,6 +141,13 @@ Create prefix map: +general-global-NAME. Prefix bindings in BODY with INFIX-KEY.
 ;;; 输入法 (pyim)
 (use-package pyim
   :ensure t)
+(use-package pyim-wbdict
+  :ensure t
+  :config
+  (setq pyim-default-scheme 'wubi) ;; 手动设置 M-x pyim-default-scheme RET wubi
+  (pyim-wbdict-v86-enable) ;86版五笔用户使用这个命令 手动设置 M-x pyim-wbdict-v86-enable
+  ;; (pyim-wbdict-v86-single-enable) ;86版五笔用户使用这个命令，该词库为单字词库，以尽可能不重码减少选词需要为目的
+  )
 
 (message "Load init-basic done...")
 (provide 'init-basic)
