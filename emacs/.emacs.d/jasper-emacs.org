@@ -1,7 +1,9 @@
+#+Date: <2023-12-17 Sun>
 #+title: 我的 Emacs 配置
+#+description: 我的 Emacs 配置
+#+keywords: 计算机, 语言, lisp, elisp
 #+author: Jasper Hsu
 #+email: xcwhome@163.com
-#+Date: <2023-12-17 Sun>
 #+options: ':t toc:nil num:t author:t email:t H:5
 #+startup: content indent
 #+macro: latest-export-date (eval (format-time-string "%F %T %z"))
