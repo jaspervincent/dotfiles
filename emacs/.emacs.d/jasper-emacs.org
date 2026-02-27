@@ -1,4 +1,4 @@
-#+Date: <2023-12-17 Sun>
+#+Date: <2024-03-12 Tue>
 #+title: 我的 Emacs 配置
 #+description: 我的 Emacs 配置
 #+keywords: 计算机, 语言, lisp, elisp
@@ -35,7 +35,7 @@ xx.el 已经写好了，但并没有生效，需要重启一下Emacs，让Emacs�
 - =C-x C-s= 文件保存
 
 
-+ Website: <https://xuchangwei.com/lisp/jasper-emacs.html>
++ Website: <https://xuchangwei.com/emacs/jasper-emacs.html>
 + Git repositories:
   - GitHub: <https://github.com/jaspervincent/dotfiles>
 
@@ -803,7 +803,7 @@ early-init.el 处激活缓存[[#h:package-cache][(=early-init.el= 初始化包�
   (package-initialize))
 #+end_src
 
-强制指定某些软件的源
+强制指定某些软件的源(见[[https://www.gnu.org/software/emacs/manual/html_node/emacs/Package-Installation.html][Package-Installation]])
 #+begin_src emacs-lisp :tangle "init.el"
 (defvar j-emacs-my-packages
   '(vertico tmr)
@@ -4121,7 +4121,11 @@ Emacs29新特性介绍：<https://emacs.liujiacai.net/post/031-emacs-29-feature-
 :CUSTOM_ID: h:c++-treesit-auto
 :END:
 
-https://github.com/renzmann/treesit-auto
+原生支持 [[https://github.com/tree-sitter/tree-sitter][tree-sitter]]，编译时指定 =./configure --with-tree-sitter= ， ~(treesit-available-p)~ 返回 =t= 说明配置成功。但这只是完成了核心部分，不同语言的解析器需要单独安装，可以用别人整理好的。
+- 方法1-直接下载文件：https://github.com/emacs-tree-sitter/tree-sitter-langs/releases
+- 方法2-自动安装包：https://github.com/renzmann/treesit-auto （本节使用）
+
+Emacs 默认从 ~treesit-extra-load-path~ 指定的路径去加载动态链接库，如果这个值是 =nil= ，它默认会从 ~user-emacs-directory~ 下的 =tree-sitter= 目录内加载。
 
 语法高亮, =*ts-mode= , 性能要比原生的好。
 
@@ -4138,7 +4142,7 @@ https://github.com/renzmann/treesit-auto
 
 安装完之后运行 =M-x treesit-auto-install-all= , 它自动下载编译好的各种语言 =.dll= 文件, 文件安装在 =~/.emacs.d/tree-sitter=
 
-重启emacs，打开一个c++程序，查看当前的主模式 =C-h v= major=mode 可以看到是 =c++-ts-mode= ，而不是原先的 =c++-mode=
+重启emacs，打开一个c++程序，查看当前的主模式 =C-h v= major-mode 可以看到是 =c++-ts-mode= ，而不是原先的 =c++-mode=
 
 默认情况下，treesit会对所有语言做映射 =*ts.mode=, 如果需要指定某些语言不映射，可这样写
 
