@@ -4132,12 +4132,12 @@ Emacs 默认从 ~treesit-extra-load-path~ 指定的路径去加载动态链接�
 #+begin_src emacs-lisp :tangle "lisp/init-programming.el"
 ;;; treesit-auto
 ;; 语法高亮, *ts-mode , M-x treesit-auto-install-all
-(use-package treesit-auto
-  :ensure t
-  :demand t
-  :config
-  (setq treesit-auto-install 'prompt)
-  (global-treesit-auto-mode))
+;; (use-package treesit-auto
+;;   :ensure t
+;;   :demand t
+;;   :config
+;;   (setq treesit-auto-install 'prompt)
+;;   (global-treesit-auto-mode))
 #+end_src
 
 安装完之后运行 =M-x treesit-auto-install-all= , 它自动下载编译好的各种语言 =.dll= 文件, 文件安装在 =~/.emacs.d/tree-sitter=
